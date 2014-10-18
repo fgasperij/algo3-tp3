@@ -1,0 +1,138 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage{verbatim} 
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{caratula}
+\usepackage{listings}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish, activeacute]{babel}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage[width=15.5cm, left=3cm, top=2.5cm, height= 24.5cm]{geometry}
+\usepackage{graphicx}
+%\usepackage{subcaption}
+\usepackage[all]{xy}
+\usepackage{multicol}
+\usepackage{subfig}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{cancel}
+\usepackage{float}
+\usepackage{xcolor}
+\usepackage{color,hyperref}
+\setcounter{secnumdepth}{3} %%agrego subsubsection
+\usepackage[nottoc,notlot,notlof]{tocbibind}
+
+\newtheorem{lema}{Lema}
+\newtheorem{teorema}{Teorema}
+\newtheorem{corolario}{Corolario}
+\newtheorem*{correctitud}{Correctitud del algoritmo}
+\newtheorem*{notacion}{Notación}
+
+\lstset{basicstyle=\small\ttfamily, breaklines=true, breakatwhitespace=true}
+\lstset{numbers=left, numberstyle=\scriptsize}
+\lstset{
+     literate=%
+         {á}{{\'a}}1
+         {í}{{\'i}}1
+         {é}{{\'e}}1
+         {ý}{{\'y}}1
+         {ú}{{\'u}}1
+         {ó}{{\'o}}1
+         {ě}{{\v{e}}}1
+         {š}{{\v{s}}}1
+         {č}{{\v{c}}}1
+         {ř}{{\v{r}}}1
+         {ž}{{\v{z}}}1
+         {ď}{{\v{d}}}1
+         {ť}{{\v{t}}}1
+         {ñ}{{\~n}}1                
+         {ů}{{\r{u}}}1
+         {Á}{{\'A}}1
+         {Í}{{\'I}}1
+         {É}{{\'E}}1
+         {Ý}{{\'Y}}1
+         {Ú}{{\'U}}1
+         {Ó}{{\'O}}1
+         {Ě}{{\v{E}}}1
+         {Š}{{\v{S}}}1
+         {Č}{{\v{C}}}1
+         {Ř}{{\v{R}}}1
+         {Ž}{{\v{Z}}}1
+         {Ď}{{\v{D}}}1
+         {Ť}{{\v{T}}}1
+         {Ň}{{\v{N}}}1                
+         {Ů}{{\r{U}}}1    
+}
+
+
+%%%%%%%%%%%%%% ALGUNAS MACROS %%%%%%%%%%%%%%
+% For \url{SOME_URL}, links SOME_URL to the url SOME_URL
+\providecommand*\url[1]{\href{#1}{#1}}
+
+\setlength{\parskip}{10pt plus 1pt minus 1pt}
+\usepackage{tikz}
+\def\checkmark{\tikz\fill[scale=0.4](0,.35) -- (.25,0) -- (1,.7) -- (.25,.15) -- cycle;}
+
+% Same as above, but pretty-prints SOME_URL in teletype fixed-width font
+\renewcommand*\url[1]{\href{#1}{\texttt{#1}}}
+
+% Comando para poner el simbolo de Reales
+\newcommand{\real}{\hbox{\bf R}}
+
+\providecommand*\code[1]{\texttt{#1}}
+
+%uso: \ponerGrafico{file}{caption}{scale}{label}
+\newcommand{\ponerGrafico}[4]
+{\begin{figure}[H]
+	\centering
+	\subfloat{\includegraphics[scale=#3]{#1}}
+	\caption{#2} \label{fig:#4}
+\end{figure}
+}
+
+\renewcommand{\algorithmiccomment}[1]{\hfill #1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\materia{Algoritmos y Estructuras de Datos III}
+
+\titulo{Trabajo práctico 3}
+%\fecha{fecha de entrega}
+%\grupo{Nro grupo}
+\integrante{Sebastián Fernandez Ledesma}{392/06}{sfernandezledesma@gmail.com}
+\integrante{Fernando Gasperi Jabalera}{56/09}{fgasperijabalera@gmail.com}
+\integrante{Maximiliano Wortman}{892/10}{maxifwortman@gmail.com}
+\integrante{Santiago Camacho}{110/09}{santicamacho90@gmail.com}
+
+
+\include{templates}
+
+\begin{document}
+\pagestyle{myheadings}
+\maketitle
+%\markboth{Nombre materia}{Nombre TP}
+
+\thispagestyle{empty}
+\tableofcontents
+
+%\setcounter{section}{-1}
+
+\newpage
+% Bibliografía
+%\addcontentsline{toc}{section}{Referencias}
+\begin{thebibliography}{11}
+
+\bibitem{cormen}
+  Thomas H. Cormen,
+  \emph{Introduction to Algorithms}.
+  The MIT Press, Massachusetts,
+  3rd edition,
+  2009.
+
+\end{thebibliography}
+%\bibliographystyle{plain}
+%\bibliography{referencias}
+
+\end{document}
