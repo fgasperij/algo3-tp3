@@ -1,3 +1,9 @@
+# Latex OH
+*.aux
+*.toc
+*.log
+*.gz
+
 # Compiled Object files
 *.slo
 *.lo
@@ -26,3 +32,9 @@
 *.exe
 *.out
 *.app
+
+# Temporary files
+*~
+
+# Misc
+main.pdf
