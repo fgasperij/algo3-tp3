@@ -3,8 +3,7 @@
 
 #include <vector>
 #include <set>
-
-typedef std::vector<std::vector<int>> Grafo;
+#include "grafo.h"
 
 class Heuristica
 {
@@ -15,7 +14,6 @@ class Heuristica
         std::vector<std::set<int>> resolver();
     
     private:
-        int pesoEnGrafo(int vertice);
         int pesoEnSubconjunto(int vertice, std::set<int> & conjuntoVertices);
         std::vector<int> ordenarPorPesoEnGrafo();
     

@@ -3,8 +3,11 @@ CC = g++
 
 all: testHeuristica
 	
-testHeuristica: heuristica.o testHeuristica.o
-	$(CC) $(CXXFLAGS) testHeuristica.o heuristica.o -o testHeuristica
+testHeuristica: grafo.o heuristica.o testHeuristica.o
+	$(CC) $(CXXFLAGS) testHeuristica.o heuristica.o grafo.o -o testHeuristica
+	
+grafo.o: grafo.cpp
+	$(CC) -c $(CXXFLAGS) grafo.cpp
 	
 heuristica.o: heuristica.cpp
 	$(CC) -c $(CXXFLAGS) heuristica.cpp
