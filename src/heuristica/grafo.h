@@ -10,6 +10,8 @@ class Grafo
         virtual ~Grafo();
         
         int getCantidadVertices();
+        
+        // Los vertices se numeran de 0 a n-1 en los siguientes tres metodos
         void setPesoArista(int u, int v, int weight);
         int getPesoArista(int u, int v);
         int getPesoAristasIncidentes(int u);
