@@ -1,6 +1,6 @@
 \section{Ejercicio 3}
 
-Definimos el peso de un nodo como la suma de los pesos de las aristas que inciden sobre él. La idea de la heurística golosa constructiva es entonces "aislar" a los nodos más pesados, bajo la premisa de que éstos son los más problemáticos y deben ser los primeros en procesarse.
+Definimos el peso de un nodo como la suma de los pesos de las aristas que inciden sobre él. La idea de la heurística golosa constructiva es entonces ``aislar'' a los nodos más pesados, bajo la premisa de que éstos son los más problemáticos y deben ser los primeros en procesarse.
 
 Lo que se hace en un principio es agarrar el nodo más pesado, y agregarlo a un conjunto. Después, se busca el nodo más pesado de los no asignados, y se pone en el mejor conjunto disponible. El criterio para elegir a un conjunto es el peso del nodo en ese conjunto. Y así siguiendo hasta que no haya mas nodos. El pseudocódigo es:
 \begin{algorithm}[H]
@@ -43,7 +43,7 @@ Por ejemplo, en el grafo de la Figura \ref{fig:ej3_ejemplo} (para cada nodo se a
 
 El problema de la heurística es que solamente compara el peso de un nodo con los conjuntos, sin tener en cuenta el resto de los nodos aún no asignados. Esto puede dar soluciones tan alejadas de la óptima como queramos. A saber:
 
-Sea G un grafo cuyas aristas tienen peso 1, y k el parámetro de k-PMP. Es decir, el grado de un vértice es igual a su peso. G tiene dos tipos diferentes de nodos (pero podría tener más nodos que no cumplan con las características de estos):
+Sea G un grafo cuyas aristas tienen peso 1, y k el parámetro de k-PMP. Es decir, el grado de un vértice es igual a su peso. G tiene dos tipos diferentes de nodos:
 \begin{itemize}
     \item Los nodos $P_1, ..., P_k$ forman un subgrafo completo. Entonces, $d(P_i) = k-1$ en ese subgrafo.
     \item Los nodos $L_1, ..., L_N$ verifican que cada $L_i$ es solamente adyacente a todos los nodos $P_i$. Es decir, $d(L_i) = k$ para todo $i = 1, ..., N$.
@@ -55,13 +55,13 @@ N+k-1 > k \Longleftrightarrow N > 1
 Supongamos entonces que hay más de un nodo de tipo $L$. Notemos además que el conjunto $\{L_1, ..., L_N\}$ tiene peso cero, ya que ningún par de nodos es adyacente entre sí.
 Como el algoritmo ordena por peso de mayor a menor, el orden será del tipo 
 \begin{align*}
-\{P_{i_1},...,P_{i_k},L_{j_i},...,L_{j_N}\}
+[P_{i_1},...,P_{i_k},L_{j_1},...,L_{j_N}]
 \end{align*}
-Entonces, si N > 1, el algoritmo va a elegir un nodo $P$ hasta que se terminen. A $P_{i_1}$ lo va a poner en $S_1$. A $P_{i_2}$ no lo puede poner en $S_1$ porque tiene peso 1 ahí (es adyacente a $P_{i_1}$, por lo tanto lo pone en $S_2$ que está vacío. A $P_{i_3}$ no puede ponerlo ni en $S_1$ ni en $S_2$ por la misma razón, entonces lo pone $S_3$. Así, una vez terminados todos los nodos $P$, la partición es
+Entonces, si N $>$ 1, el algoritmo va a elegir un nodo $P$ hasta que se terminen. A $P_{i_1}$ lo va a poner en $S_1$. A $P_{i_2}$ no lo puede poner en $S_1$ porque tiene peso 1 ahí (es adyacente a $P_{i_1}$, por lo tanto lo pone en $S_2$ que está vacío. A $P_{i_3}$ no puede ponerlo ni en $S_1$ ni en $S_2$ por la misma razón, entonces lo pone $S_3$. Así, una vez terminados todos los nodos $P$, la partición es
 \begin{align*}
 \{\{P_{i_1}\},\{P_{i_2}\},...,\{P_{i_k}\}\}
 \end{align*}
-Queda insertar los N nodos restantes, que son los $L_{j_i},...,L_{j_N}$. Pero para cualquiera de estos nodos, su peso en $S_x$ es 1 porque es adyacente a $P_{i_x}$. Como el algoritmo elige al primer conjunto y después chequea si eligiendo los demás mejora, y no lo hace en este caso, todos van a ir a $S_1$. Por lo tanto, la solución dada por el algoritmo será
+Queda insertar los N nodos restantes, que son los $L_{j_1},...,L_{j_N}$. Pero para cualquiera de estos nodos, su peso en $S_x$ es 1 porque es adyacente a $P_{i_x}$. Como el algoritmo elige al primer conjunto y después chequea si eligiendo los demás mejora, y no lo hace en este caso, todos van a ir a $S_1$. Por lo tanto, la solución dada por el algoritmo será
 \begin{align*}
 \{ \{P_{i_1}, L_1, L_2, ..., L_N\}, \{P_{i_2}\}, ..., \{P_{i_k}\} \}
 \end{align*}
