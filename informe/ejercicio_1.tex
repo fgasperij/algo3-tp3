@@ -95,7 +95,7 @@ Se llama coloreo válido de un grafo a una asignación $f:V \rightarrow C$ tal q
 \begin{displaymath}
 f(v) \neq f(u) \quad \forall (u, v) \in E
 \end{displaymath}
-donde los elementos de $C$ son llamados colores. Además se denomina $k$-coloreo de un grafo G a un coloreo
+donde los elementos de $C$ son llamados colores. Además se denomina $k$-coloreo de un grafo $G$ a un coloreo
 válido de un grafo que usa exactamente $k$ colores, es decir $\left\vert{C}\right\vert = k$. El problema de coloreo
 de un grafo consta de encontrar su coloreo mínimo, un coloreo válido que utilice la mínima cantidad de colores. Podemos
 modelar el problema de coloreo de forma tal que si resolvemos $k$-PMP resolvemos coloreo de un grafo.
@@ -104,9 +104,60 @@ será asignarle a sus aristas peso 1:
 \begin{displaymath}
 \omega(v) = 1 \quad \forall v \in V
 \end{displaymath}
+El procedimiento que realizaremos para obtener el coloreo mínimo de $G$ es resolver $k$-PMP para $k = 1,...,n$ y quedarnos
+con el mínimo $k_{min}$ tal que el peso total de la partición es igual a 0:
+\begin{displaymath}
+  k_{min} = \min_{1 \leq i \leq n} \omega(S_{i-PMP})
+\end{displaymath}
+con $S_{i-PMP}$ igual a la partición correspondiente a $i$-PMP. Veamos que efectivamente con la partición correspondiente a $k_{min}$-PMP podemos
+obtener el coloreo mínimo de $G$. Tenemos que comprobar dos puntos:
+\begin{enumerate}
+  \item La partición representa un coloreo válido.
+  \item El coloreo representado es mínimo.
+\end{enumerate}
 
+\paragraph{1)}
+Si a cada uno de los $k_{min}$ subconjuntos los pintamos de un color distinto tenemos todo el grafo coloreado
+porque todos los nodos pertenecen a algun subconjunto de la partición. Como el peso total de la partición
+es igual a 0, $\omega(S_{k_{min}}) = 0$, no puede ser que haya dos nodos adyacentes en la misma partición
+porque les habíamos asignado a todas las aristas un peso de 1. Si hubiera dos nodos $u$ y $v$ en una misma
+partición tal que $(u, v) \in E$ como $\omega((u,v)) =  1$ y es una arista intrapartición porque estamos
+suponiendo que $u$ y $v$ pertenecen a la misma: $\omega(S_{k_{min}}) \geq 1$. Lo cual es absurdo porque 
+sabemos que es igual a 0. Por lo tanto, tenemos un coloreo válido porque les asignamos un color a cada nodo 
+y nodos con un mismo color no son adyacentes.
 
+\paragraph{2)}
+Demostraremos por absurdo que es mínimo. Supongamos que existe un coloreo válido $C$ de $G$ que utiliza $c < k_{min}$ colores.
+Si tomamos la partición inducida por el coloreo $C$, es decir tomamos la partición de $V$ que resulta de colocar a los nodos de
+colores iguales en el mismo subconjunto, obtenemos una partición con $c < k_{min}$ subconjuntos que tiene un peso total de 0 ya que
+los nodos en cada una de las particiones no son adyacentes entre sí. Esto es absurdo porque partimos asumiendo que $k_{min}$ era
+la mínima cantidad de subconjuntos necesaria para que el peso total de la partición sea 0.
 
+Así queda demostrado que podemos tomar cualquier grafo $G$ y obtener su coloreo resolviendo $k$-PMP a lo sumo $n$ veces, ya que no
+puedo tener una partición con más $n$ subconjuntos, en el grafo obtenido luego de asignarle un peso de 1 a cada una de sus aristas.
+
+Veamos qué sucede si resolvemos coloreo en un grafo para el cual necesitábamos obtener su $k$-PMP. Resulta que el número cromático de 
+$G$ $\chi(G)$ se corresponde con $k_{min}$, es decir el mínimo $k$ para el cual el peso total de $k$-PMP es 0. Esto se puede demostrar
+con un razonamiento muy parecido al que realizamos para demostrar que el coloreo representado por la partición correspondiente a
+$k_{min}$-PMP es mínimio. En primer lugar, construimos la partición correspondiente a algún $\chi(G)$-coloreo ubicando los nodos
+de cada color en subconjuntos distintos. Como los nodos de un subconjunto $s_i$ son todos del mismo color y pertenecen a un coloreo válido
+entonces no son adyacentes. Por lo tanto, no existen aristas intrapartición. Lo cual implica que el peso total de la partición obtenida
+es igual a 0. Desmostramos que es mínimo por absurdo, suponemos:
+\begin{displaymath}
+  \exists \quad k < \chi(G) \quad | \quad \omega(S_{k}) = 0
+\end{displaymath}
+pero sabemos que a partir de una partición con peso total igual a 0 podemos obtener un coloreo válido porque las aristas tienen peso 
+estrictamente mayor a 0:
+\begin{displaymath}
+  \omega(e) > 0 \quad \forall e \in E
+\end{displaymath}
+pero entonces obtendríamos un coloreo válido que utiliza $k < \chi(G)$ colores ya que la cantidad de colores es igual a la cantidad de 
+subconjuntos de la partición. Lo cual es absurdo porque por definición $\chi(G)$ es mínimo.
+No sólo resolviendo coloreo en un grafo $G$ obtenemos $k_{min}$ y su partición correspondiente, además obtenemos $k$-PMP para todo
+$k > k_{min}$ ya que como no podemos obtener un partición con peso estrictamente menor que 0 porque las aristas tiene todas
+peso positivo necesariamente la partición correspondiente a $k_{min}$-PMP es mínima para cualquier $k$ mayor. $k_{min}$-PMP
+es una partición válida para $k$-PMP con $k > k_{min}$ porque asumimos que tenemos $(k-k_{min})$ subconjuntos vacíos para completar
+los $k$ necesarios.
 
 \subsection{Un día en la vida de $k$-PMP}
 
