@@ -1,3 +1,6 @@
+# vim
+*.swp
+
 # Latex OH
 *.aux
 *.toc
