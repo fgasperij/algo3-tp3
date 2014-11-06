@@ -12,7 +12,7 @@ Lo que se hace en un principio es agarrar el nodo más pesado, y agregarlo a un 
     \STATE pesoMinimo $\leftarrow$ $+ \infty$
     \STATE mejorConjunto $\leftarrow$ 0
     \FOR {i = 0 \TO n - 1}
-        \STATE pesoEnConjunto $\leftarrow$ PesoVerticeEnSubconjunto(vértice, conjuntos$[$i$]$)
+        \STATE pesoEnConjunto $\leftarrow$ PesoVerticeEnConjunto(vértice, conjuntos$[$i$]$)
         \IF { pesoEnConjunto $<$ pesoMinimo }
             \STATE pesoMinimo $\leftarrow$ pesoEnConjunto
             \STATE mejorConjunto $\leftarrow$ i
@@ -93,3 +93,35 @@ el peso total sería 1. Es decir, la solución dada por la heurística golosa pu
 		\label{fig:ej3_rotura_optima}
 	\end{minipage}
 \end{figure}
+
+\subsection{Análisis de complejidad temporal}
+
+Sea $n$ la cantidad de vértices del grafo de entrada, y $k$ el parámetro de k-PMP. Vamos a usar el pseudocódigo ya introducido para el cálculo de complejidad:
+\begin{enumerate}
+    \item En la primera línea se crean $k$ conjuntos vacíos. Esto cuesta $O(k)$. Llamaremos $C_i$ al i-ésimo conjunto.
+    \item Luego, se crea un vector de tamaño $n$, con los vértices ordenados por peso en el grafo, de mayor a menor. Preguntarle a un vértice su peso en el grafo cuesta $O(n)$ porque representamos al grafo con una matriz de adyacencia, entonces en total es $O(n^2)$ saber el peso de todos los nodos. Finalmente, ordenar las tuplas $<nodo,peso(nodo)>$ cuesta $O(n \log n)$. Por lo tanto, todo esto cuesta $O(n^2)$. Al nodo i-ésimo de este nuevo ordenamiento lo llamaremos $u_i$.
+    \item Ahora para cada $u_i$ se hace lo siguiente:
+        \begin{enumerate}
+            \item Inicializar las variables $pesoMinimo$ y $mejorConjunto$ cuesta $O(1)$.
+            \item Para cada conjunto $C_i$ de la partición, se calcula el peso de $u_i$ en él y se chequea si es mejor para cambiar el $mejorConjunto$. El peso en un $C_i$ se calcula simplemente sumando los pesos de la aristas adyacentes entre $u_i$ y los vértices del conjunto, lo cual lleva $O(|C_i|)$. Sabemos que
+            \begin{align*}
+                \sum\limits_{\substack{i = 1}}^k |C_i| &= i - 1
+            \end{align*}
+            (pues sólo se asignaron $i - 1$ nodos en la iteración i-ésima). Por otro lado, estamos iterando sobre $k$ conjuntos, entonces el costo de este paso es $O(k) + O(i - 1)$.
+            \item Insertar el nodo en $mejorConjunto$ cuesta $O(\log |mejorConjunto|)$ que podemos acotar por $O(\log (i - 1))$.
+        \end{enumerate}
+        En total, todo este paso cuesta
+        \begin{align*}
+                \sum\limits_{\substack{i = 1}}^n (O(k) + O(i-1) + O(\log (i - 1))) &= O(nk) + O(n^2) + O(\log n!)
+        \end{align*}
+        Por la aproximación de Stirling del factorial ($\log n! = n \log(n) - n + O(\log n)$), tenemos que $O(\log n!) = O(n \log n)$, entonces la complejidad total de este paso es $O(nk) + O(n^2)$.
+\end{enumerate}
+Tenemos entonces que la complejidad temporal de la heurística golosa es
+\begin{align*}
+    T(n,k) &= O(k) + O(n^2) + O(nk) + O(n^2) \\
+    T(n,k) &= O(nk) + O(n^2)
+\end{align*}
+Como tomar valores $k \geq n$ no tiene sentido, ya que una solución óptima es trivial (se toma la partición $\{\{v_1\}, \{v_2\}, ..., \{v_n\}, \{\}, ..., \{\}\}$ que tiene peso total cero), entonces siendo $k < n$ vale que $O(nk) = O(n^2)$. Por lo tanto, la complejidad temporal de peor caso de la heurística para un tamaño de entrada de $n$ vértices es
+\begin{align*}
+    T(n) &= O(n^2)
+\end{align*}
