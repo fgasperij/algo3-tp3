@@ -33,8 +33,6 @@ int main (int argc, char *argv[])
     adym[v][u] = w;
   }
 
-  cout << "Input parsed succesfully." << endl;
-
   vector<list<int> > partition(k, list<int>());
   vector<list<int> > min_partition(k, list<int>());
   partition[0].push_back(0);
@@ -62,16 +60,6 @@ void kpmp(vector<vector<float> > &adym, vector<list<int> > &partition,
     vector<list<int> > &min_partition, int node, int k, int max_k_used, 
     float total_weight, float &min_weight)
 {
-  cout << "kpmp call with:" << endl;
-  cout << "node: " << node << endl; 
-  cout << "k: " << k << endl; 
-  cout << "max_k_used: " << max_k_used << endl; 
-  cout << "total_weight: " << total_weight << endl; 
-  cout << "min_weight: " << min_weight << endl; 
-  show_list_vector(partition);
-  cout << endl;
-
-
   if (node == adym.size()) {
     if (total_weight < min_weight) {
       min_partition = partition;
