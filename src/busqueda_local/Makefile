@@ -1,5 +1,5 @@
 CC=g++
-SRC=busqueda_local.cpp
+SRC=busqueda_local_swap.cpp
 OBJ=$(SRC:cpp=o)
 OUT=busqueda_local
 .PHONY: clean build
