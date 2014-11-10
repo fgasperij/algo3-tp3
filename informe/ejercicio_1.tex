@@ -159,8 +159,29 @@ peso positivo necesariamente la partición correspondiente a $k_{min}$-PMP es m�
 es una partición válida para $k$-PMP con $k > k_{min}$ porque asumimos que tenemos $(k-k_{min})$ subconjuntos vacíos para completar
 los $k$ necesarios.
 
-\subsection{Un día en la vida de $k$-PMP}
-
+\subsection{$k$-PMP en la vida real}
+Como vimos antes $k$-PMP es un problema de optimización combinatoria y cumple con la división de partes definida en el primer punto.
+Para cada ejemplo definiremos las partes pertinentes:
 \begin{itemize}
-  \item pabellones de un hospital. enfermedades nodos y compatibilidad entre cada una.
+  \item \textit{Pabellones de un Hospital}: Se quiere construir un hospital con a lo sumo $k$ pabellones y hay que especializar cada pabellon en áreas de enfermedades lo más compatibles posible. Definimos Las enfermedades como nodos y se analiza un coeficiente de compatibilidad o parentezco entre ellas.
+
+  $X$: Todos los conjuntos k-particiones (se aceptan particiones vacias) son los pabellones en los cuales divido el hospital.
+
+  $P$ e $Y$: Todas las divisiones posibles de menos de $k$ pabellones forman una solución factible.
+
+  $f$: Que la suma de los coeficientes de parentezco entre enfermedades sea mínima.
+  \item \textit{Union Deportiva Nacional}: En un país hay que crear a lo sumo $k$ distintas uniones/federaciones de un deporte y quiero que las distancias (aristas) entre las instituciones/entidades (nodos) que conforman la Unión sea mínima.
+
+  $X$: Todos los conjuntos k-particiones (se aceptan particiones vacias) son las Uniones en las cuales divido al pais.
+
+  $P$ e $Y$: Todas las divisiones posibles de menos de $k$ Uniones forman una solución factible.
+
+  $f$: Que la suma de las distancias entre clubes de las uniones sea mínima.
+  \item \textit{Impresora}: Una impresora tiene que elegir $k$ colores para imprimir y agrupa los colores más parecidos para usar una tinta de color $k$.
+
+  $X$: Todos los conjuntos k-particiones (se aceptan particiones vacias) son los colores disponibles en la impresora.
+
+  $P$ e $Y$: Todas las divisiones posibles de menos de $k$ colores son una solución posible.
+  
+  $f$: Que los colores que se imprimen con el mismo color sean lo mas parecidos posibles.
 \end{itemize}
