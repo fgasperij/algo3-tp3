@@ -7,19 +7,23 @@ Lo que se hace en un principio es agarrar el nodo más pesado, y agregarlo a un 
 \begin{algorithmic}[1]
 \caption{HeuristicaGolosaConstructiva(Grafo G, nat k)}
 \STATE Vector$<$Conjunto$<$Nat$>>$ conjuntos(k, vacío)
-\STATE Vector$<$Nat$>$ nodosOrdenados $\leftarrow$ OrdenarNodosPorPesoEnGrafoDeMayorAMenor(G)
-\FOR {\textbf{each} vértice de nodosOrdenados}
-    \STATE pesoMinimo $\leftarrow$ $+ \infty$
-    \STATE mejorConjunto $\leftarrow$ 0
-    \FOR {i = 0 \TO n - 1}
-        \STATE pesoEnConjunto $\leftarrow$ PesoVerticeEnConjunto(vértice, conjuntos$[$i$]$)
-        \IF { pesoEnConjunto $<$ pesoMinimo }
-            \STATE pesoMinimo $\leftarrow$ pesoEnConjunto
-            \STATE mejorConjunto $\leftarrow$ i
-        \ENDIF
+\IF {k $\geq$ n}
+    \STATE CompletarConSolucionTrivial(conjuntos, n) \textcolor{CadetBlue}{// conjuntos$[$i$]$ $=$ i $\forall$ nodo i $\in$ G}
+\ELSE
+    \STATE Vector$<$Nat$>$ nodosOrdenados $\leftarrow$ OrdenarNodosPorPesoMayorAMenor(G)
+    \FOR {\textbf{each} vértice de nodosOrdenados}
+        \STATE pesoMinimo $\leftarrow$ $+ \infty$
+        \STATE mejorConjunto $\leftarrow$ 0
+        \FOR {i = 0 \TO k - 1}
+            \STATE pesoEnConjunto $\leftarrow$ PesoVerticeEnConjunto(vértice, conjuntos$[$i$]$)
+            \IF { pesoEnConjunto $<$ pesoMinimo }
+                \STATE pesoMinimo $\leftarrow$ pesoEnConjunto
+                \STATE mejorConjunto $\leftarrow$ i
+            \ENDIF
+        \ENDFOR
+        \STATE conjuntos$[$mejorConjunto$]$.insertar(vértice)
     \ENDFOR
-    \STATE conjuntos$[$mejorConjunto$]$.insertar(vértice)
-\ENDFOR
+\ENDIF
 \RETURN conjuntos
 \end{algorithmic}
 \end{algorithm}
@@ -98,8 +102,12 @@ el peso total sería 1. Es decir, la solución dada por la heurística golosa pu
 
 Sea $n$ la cantidad de vértices del grafo de entrada, y $k$ el parámetro de k-PMP. Vamos a usar el pseudocódigo ya introducido para el cálculo de complejidad:
 \begin{enumerate}
-    \item En la primera línea se crean $k$ conjuntos vacíos. Esto cuesta $O(k)$. Llamaremos $C_i$ al i-ésimo conjunto.
-    \item Luego, se crea un vector de tamaño $n$, con los vértices ordenados por peso en el grafo, de mayor a menor. Preguntarle a un vértice su peso en el grafo cuesta $O(n)$ porque representamos al grafo con una matriz de adyacencia, entonces en total es $O(n^2)$ saber el peso de todos los nodos. Finalmente, ordenar las tuplas $<nodo,peso(nodo)>$ cuesta $O(n \log n)$. Por lo tanto, todo esto cuesta $O(n^2)$. Al nodo i-ésimo de este nuevo ordenamiento lo llamaremos $u_i$.
+    \item En la primera línea se crean $k$ conjuntos vacíos. Esto cuesta $O(k)$. Llamaremos $C_i$ al i-ésimo conjunto. El caso poco interesante es que sea $k \geq n$. Se toma como solución (que de hecho es óptima) la partición 
+    \begin{align*}
+    \{\{v_1\}, \{v_2\}, ..., \{v_n\}, \{\}, ..., \{\}\}
+    \end{align*}
+    que tiene peso total cero. Insertar los nodos cuesta $O(n)$, y ahí terminaría el algoritmo, cuya complejidad temporal total sería $O(k)$. Pasemos al caso relevante, que es $k < n$.
+    \item Se crea un vector de tamaño $n$, con los vértices ordenados por peso en el grafo, de mayor a menor. Preguntarle a un vértice su peso en el grafo cuesta $O(n)$ porque representamos al grafo con una matriz de adyacencia, entonces en total es $O(n^2)$ saber el peso de todos los nodos. Finalmente, ordenar las tuplas $<nodo,peso(nodo)>$ cuesta $O(n \log n)$. Por lo tanto, todo esto cuesta $O(n^2)$. Al nodo i-ésimo de este nuevo ordenamiento lo llamaremos $u_i$.
     \item Ahora para cada $u_i$ se hace lo siguiente:
         \begin{enumerate}
             \item Inicializar las variables $pesoMinimo$ y $mejorConjunto$ cuesta $O(1)$.
@@ -121,7 +129,22 @@ Tenemos entonces que la complejidad temporal de la heurística golosa es
     T(n,k) &= O(k) + O(n^2) + O(nk) + O(n^2) \\
     T(n,k) &= O(nk) + O(n^2)
 \end{align*}
-Como tomar valores $k \geq n$ no tiene sentido, ya que una solución óptima es trivial (se toma la partición $\{\{v_1\}, \{v_2\}, ..., \{v_n\}, \{\}, ..., \{\}\}$ que tiene peso total cero), entonces siendo $k < n$ vale que $O(nk) = O(n^2)$. Por lo tanto, la complejidad temporal de peor caso de la heurística para un tamaño de entrada de $n$ vértices es
+Como tomar valores $k \geq n$ no tiene sentido, ya que una solución óptima es trivial, entonces siendo $k < n$ vale que $O(nk) = O(n^2)$. Por lo tanto, la complejidad temporal de peor caso de la heurística para un tamaño de entrada de $n$ vértices es
 \begin{align*}
     T(n) &= O(n^2)
 \end{align*}
+
+\subsection{Test de complejidad}
+
+Construimos 100 instancias aleatorias de grafos de $n$ vértices, para cada $n = {1, ... , 100}$. Para cada instancia, se calculó el tiempo de ejecución de la heurística con parámetro $k = {10, 20, ..., 100}$ cinco veces (tomando el mínimo), para luego calcular el promedio para cada $n$ separando por $k$. Así, para cada $n$ tenemos el tiempo de ejecución promedio de cada $k$. Como esperamos que la complejidad temporal sea $O(n^2)$ se dividió la muestra por $n$, esperando ver una recta, que es lo que efectivamente ocurre. Veamos el gráfico de los resultados del test:
+
+\begin{figure}[H]
+    \begin{minipage}[t]{\linewidth}
+		\centering
+		\frame{\includegraphics[width=\textwidth]{ejercicio-3-complejidad-dividida-n.jpg}}
+		\label{fig:ejercicio_3_complejidad_dividida_n}
+    \end{minipage}
+\end{figure}
+
+Podemos observar que para cada $n \leq k$, el tiempo dividido por $n$ es una constante, lo cual tiene sentido porque habíamos acotado por $O(k)$ construir la solución trivial, y $O(n) \subseteq O(k)$ porque $n \leq k$. Recién a partir de $n = k+1$ el tiempo dividido $n$ se vuelve apreciable, y como esperábamos es una recta, lo que indica que es $O(n^2)$ como era nuestra hipótesis.
+

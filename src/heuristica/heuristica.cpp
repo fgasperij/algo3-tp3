@@ -48,18 +48,25 @@ int Heuristica::pesoEnSubconjunto(int vertice, std::set<int> & conjuntoVertices)
 
 std::vector<std::set<int>> Heuristica::resolverGolosoPuro() {
     std::vector<std::set<int>> res(k_);
-    std::vector<int> verticesOrdenadosPorPeso = ordenarPorPesoEnGrafo();
-    for (auto & v : verticesOrdenadosPorPeso) {
-        int mejorPeso = INT_MAX;
-        int mejorSubconjunto = 0;
-        for (int i = 0; i < k_; i++) {
-            int pesoEnSubconj = pesoEnSubconjunto(v, res[i]);
-            if ( pesoEnSubconj < mejorPeso ) {
-                mejorPeso = pesoEnSubconj;
-                mejorSubconjunto = i;
-            }
+    int n = grafo_.getCantidadVertices();
+    if (n <= k_) {
+        for (int i = 0; i < n; i++) {
+            res[i].insert(i);
         }
-        res[mejorSubconjunto].insert(v);
+    } else {
+        std::vector<int> verticesOrdenadosPorPeso = ordenarPorPesoEnGrafo();
+        for (auto & v : verticesOrdenadosPorPeso) {
+            int mejorPeso = INT_MAX;
+            int mejorSubconjunto = 0;
+            for (int i = 0; i < k_; i++) {
+                int pesoEnSubconj = pesoEnSubconjunto(v, res[i]);
+                if ( pesoEnSubconj < mejorPeso ) {
+                    mejorPeso = pesoEnSubconj;
+                    mejorSubconjunto = i;
+                }
+            }
+            res[mejorSubconjunto].insert(v);
+        }
     }
     return res;
 }
