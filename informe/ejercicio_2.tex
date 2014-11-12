@@ -1,11 +1,28 @@
 \section{Algoritmo exacto}
 
 \subsection{Descripción del algoritmo}
-La idea es recorrer todas las particiones de k conjuntos ordenadamente, irlas generando.
-Probar que siempre conviene usar todas las particiones.
-Para sólo generar las de 4 y no las de 3 cada vez que me queden i elementos e i particiones 
-sólo voy a considerar de ubicar los i elementos restante en las i particiones vacías.
+El algoritmo utilizado para obtener la $k$-PMP de un grafo $G$ consiste en construir 
+todas las posibles soluciones de manera ordenada para no repetirlas mediante backtracking.
+Veamos que contiene el conjunto de soluciones posibles $S$ asociado a un grafo $G = (V, E)$.
+Sea $P_V$ el conjunto con todas las particiones posibles del conjunto $V$:
+\begin{displaymath}
+  S = \left\{p \quad | \quad p \in P_V \land \left\vert{p}\right\vert \leq k\right\}
+\end{displaymath}
+Se puede ver que 
+
 \subsection{Podas y estrategias}
+Podas:
+\begin{itemize}
+  \item no considerar particiones que utilicen menos de $k$ subconjuntos.
+  \item guardar el menor obtenido hasta el momento y dejar de recorrer una rama si llego a ese valor
+  \item si ya existen elementos en los $k$ subconjuntos calculo el peso de agregar cada uno de los 
+    restantes al más barato. Si la suma de todos los pesos más el peso actual es mayor al mínimo
+    obtenido hasta el momento dejo de recorrer esa rama.
+\end{itemize}
+
+\subsection{Complejidad temporal}
+
+
 \subsection{Experimentación}
 \begin{itemize}
   \item un gráfico sin podas
