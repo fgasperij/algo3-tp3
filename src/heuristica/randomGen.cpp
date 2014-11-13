@@ -1,4 +1,4 @@
-// Este programa va a mostrar por pantalla CANT_INSTANCIAS grafos aleatorios de N vértices, para cada N = 1, ..., MAX_VERTICES.
+// Este programa va a mostrar por pantalla CANT_INSTANCIAS grafos aleatorios de N vértices, para cada N = MIN_VERTICES, ..., MAX_VERTICES.
 // Hay que usar ./randomGen > textFile para guardar a disco.
 // g++ -O3 randomGen.cpp -o randomGen
 
@@ -7,16 +7,19 @@
 #include <cstdlib>
 #include <vector>
 #include <set>
+#include <climits>
+#include <cfloat>
 
 using namespace std;
 
 typedef int Vertice;
 
 const int CANT_INSTANCIAS = 100;
+const int MIN_VERTICES = 2;
 const int MAX_VERTICES = 100;
-const int MAX_COSTO_ARISTA = 100;
+const float MAX_COSTO_ARISTA = 1000.f;
 
-Vertice seleccionarVerticeRandom(set<Vertice> & conjunto) {
+Vertice seleccionarVerticeRandom(const set<Vertice> & conjunto) {
     int i = rand() % conjunto.size();
     auto it = conjunto.begin();
     for(int j = 0; j < i; j++) it++;
@@ -25,15 +28,16 @@ Vertice seleccionarVerticeRandom(set<Vertice> & conjunto) {
 
 int main(int argc, const char* argv[]) {
     srand(time(NULL) + getpid()); // Seedeo
-    for (int n = 1; n <= MAX_VERTICES; n++) {
+    cout.precision(4);
+    for (int n = MIN_VERTICES; n <= MAX_VERTICES; n++) {
         for (int i = 1; i <= CANT_INSTANCIAS; i++) {
             int m = rand() % (1 + n * (n - 1) / 2); // m es un valor aleatorio entre 0 y n(n-1)/2
             cout << n << " " << m << endl;
-            set<Vertice> vertices; // Acá voy a tener el conjunto de vértices que todavía al menos una arista disponible.
+            set<Vertice> vertices; // Vértices que todavía tienen al menos una arista disponible
             for (int i = 0; i < n; i++) {
                 vertices.insert(i); // Los vertices van a ser enteros entre 0 y n-1, tengo que sumarles uno al imprimir
             }
-            vector< set<Vertice> > vecinosPosibles(n);
+            vector<set<Vertice>> vecinosPosibles(n);
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
                     if (i != j) {
@@ -50,7 +54,11 @@ int main(int argc, const char* argv[]) {
                     Vertice w = seleccionarVerticeRandom(vecinosPosibles[v]);
                     vecinosPosibles[v].erase(w);
                     vecinosPosibles[w].erase(v);
-                    cout << v + 1 << " " << w + 1 << " " << (rand() % MAX_COSTO_ARISTA) + 1 << endl;
+                    float weight = MAX_COSTO_ARISTA * (static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
+                    if (weight == 0.f) { // 0.f es equivalente a no tener arista, hay que arreglarlo
+                        weight += 0.0001; // Esto sólo tiene sentido para cout.precision(r) con r >= 4
+                    }
+                    cout << v + 1 << " " << w + 1 << " " << fixed << weight << endl;
                 }
             }
         }

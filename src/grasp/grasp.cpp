@@ -1,55 +1,6 @@
 #include "grasp.h"
 #include <iostream>
 
-void Grasp::busquedaLocalUnNodo() {
-  int k = h_.getK();
-  int n = h_.getGrafo().getCantidadVertices();
-  //cout << "Starting with a total weight of " << pesoParticionActual_ << endl;
-  vector<int> node_indexed_partition(n, 0);
-  for ( int i = 0; i < k; i++) {
-      for (auto & v : particionActual_[i]) {
-          node_indexed_partition[v] = i;
-      }
-  }
-  bool has_improved = true;
-  while (has_improved) {
-    has_improved = false;
-    for (int i = 0; i < n; ++i) {
-      float node_weight_in_current_subset = h_.pesoEnSubconjunto(i, particionActual_[node_indexed_partition[i]]);
-      bool swapped = false;
-      int subset = 0;
-      while (!swapped && subset < k) {
-        if (subset != node_indexed_partition[i]) {
-          //cout << "Considering swapping node " << i << " from subset " << node_indexed_partition[i] << " to subset " << subset << endl;
-          float node_weight_in_subset_j = h_.pesoEnSubconjunto(i, particionActual_[subset]);
-          if (node_weight_in_current_subset > node_weight_in_subset_j) {
-            //cout << "FOUND IMPROVEMENT!" << endl;
-            //cout << " Swapping node " << i << " from subset " << node_indexed_partition[i] << " to subset " << subset << endl;
-            particionActual_[node_indexed_partition[i]].erase(i);
-            particionActual_[subset].insert(i);
-            node_indexed_partition[i] = subset;
-            pesoParticionActual_ = pesoParticionActual_ - node_weight_in_current_subset + node_weight_in_subset_j;
-            //cout << "New total weight is: " << pesoParticionActual_ << endl;
-            has_improved = true;
-            swapped = true;
-          }
-        }
-        ++subset;
-      }
-    }
-  }
-
-  //cout << "Minimum weight reached: " << pesoParticionActual_ << endl;
-  //cout << "PARTITION" << endl;
-  //for (int i = 0; i < k; ++i) {
-    //cout << "Partition " << i << ": ";
-    //for(set<int>::iterator it = particionActual_[i].begin(); it != particionActual_[i].end(); ++it) {
-      //cout << *it << ' ';
-    //}
-    //cout << endl;
-  //}
-}
-
 Grasp::Grasp(Heuristica h) : h_(h), particionActual_(h_.getK()), mejorParticion_(h_.getK()) {
     int n = h_.getGrafo().getCantidadVertices();
     for (int i = 0; i < n; i++) {
@@ -60,8 +11,38 @@ Grasp::Grasp(Heuristica h) : h_(h), particionActual_(h_.getK()), mejorParticion_
     pesoMejorParticion_ = pesoParticionActual_;
 }
 
-Grasp::~Grasp() {
-    
+void Grasp::busquedaLocalUnNodo() {
+    int k = h_.getK();
+    int n = h_.getGrafo().getCantidadVertices();
+    vector<int> node_indexed_partition(n, 0);
+    for ( int i = 0; i < k; i++) {
+        for (auto & v : particionActual_[i]) {
+            node_indexed_partition[v] = i;
+        }
+    }
+    bool has_improved = true;
+    while (has_improved) {
+        has_improved = false;
+        for (int i = 0; i < n; ++i) {
+            float node_weight_in_current_subset = h_.pesoEnSubconjunto(i, particionActual_[node_indexed_partition[i]]);
+            bool swapped = false;
+            int subset = 0;
+            while (!swapped && subset < k) {
+                if (subset != node_indexed_partition[i]) {
+                    float node_weight_in_subset_j = h_.pesoEnSubconjunto(i, particionActual_[subset]);
+                    if (node_weight_in_current_subset > node_weight_in_subset_j) {
+                        particionActual_[node_indexed_partition[i]].erase(i);
+                        particionActual_[subset].insert(i);
+                        node_indexed_partition[i] = subset;
+                        pesoParticionActual_ = pesoParticionActual_ - node_weight_in_current_subset + node_weight_in_subset_j;
+                        has_improved = true;
+                        swapped = true;
+                    }
+                }
+                ++subset;
+            }
+        }
+    }
 }
 
 bool Grasp::parar(int criterio) {
@@ -69,9 +50,9 @@ bool Grasp::parar(int criterio) {
         case Grasp::pararPorMaximoIteraciones:
             return iteracionActual_ >= paradaMaximoIteraciones_; 
         case Grasp::pararPorIteracionesSinMejora:
-            return (iteracionActual_ - ultimaIteracionConMejora_ >= paradaIteracionesSinMejora_);
+            return (iteracionActual_ - ultimaIteracionConMejora_) >= paradaIteracionesSinMejora_;
         case Grasp::pararPorMaximoYPorSinMejora:
-            return ( (iteracionActual_ >= paradaMaximoIteraciones_) || ( (iteracionActual_ - ultimaIteracionConMejora_) >= paradaIteracionesSinMejora_) );
+            return (iteracionActual_ >= paradaMaximoIteraciones_) || ( (iteracionActual_ - ultimaIteracionConMejora_) >= paradaIteracionesSinMejora_);
         default:
             return true;
     }
@@ -104,12 +85,19 @@ void Grasp::setParadaIteracionesSinMejora(int paradaIteracionesSinMejora) {
 void Grasp::setProfundidadEleccionVertice(int profundidadEleccionVertice) {
     h_.setProfundidadEleccionVertice(profundidadEleccionVertice);
 }
+
 void Grasp::setProfundidadEleccionConjunto(int profundidadEleccionConjunto) {
     h_.setProfundidadEleccionConjunto(profundidadEleccionConjunto);
 }
 
+vector<set<int>> Grasp::getMejorParticion() {
+    return mejorParticion_;
+}
+
 void Grasp::ejecutar(int criterioParada) {
     cout.precision(4);
+    iteracionActual_ = 0;
+    ultimaIteracionConMejora_ = 0;
     cout << "Peso total del grafo: " << fixed << pesoParticionActual_ << endl;
     while( ! parar(criterioParada) ) {
         iteracionActual_++;

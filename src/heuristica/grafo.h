@@ -9,14 +9,14 @@ class Grafo
         Grafo(int n);
         virtual ~Grafo();
         
-        int getCantidadVertices();
+        int getCantidadVertices() const;
         
         // Los vertices se numeran de 0 a n-1 en los siguientes tres metodos
-        void setPesoArista(int u, int v, int weight);
-        int getPesoArista(int u, int v);
-        int getPesoAristasIncidentes(int u);
+        void setPesoArista(int u, int v, float weight);
+        float getPesoArista(int u, int v) const;
+        float getPesoAristasIncidentes(int u) const;
     private:
-        std::vector<std::vector<int>> matrizAdyacencia_;
+        std::vector<std::vector<float>> matrizAdyacencia_;
 };
 
 #endif /* GRAFO_H */ 

@@ -4,17 +4,19 @@
 #include <climits>
 
 const int CANT_INSTANCIAS = 100;
+const int MIN_VERTICES = 2;
 const int MAX_VERTICES = 100;
-const int CANT_REPETICIONES_CALCULO_INSTANCIA = 10;
+const int CANT_REPETICIONES_CALCULO_INSTANCIA = 5;
 const int MAX_K = 100;
 const int K_STEP = 10;
 
 int main(int argc, const char* argv[]) {
-    for (int cantVertices = 1; cantVertices <= MAX_VERTICES; cantVertices++) {
+    for (int cantVertices = MIN_VERTICES; cantVertices <= MAX_VERTICES; cantVertices++) {
         std::cout << cantVertices << " ";
         std::vector<int> sumaTiemposPorK(MAX_K / K_STEP);
         for (int instancia = 1; instancia <= CANT_INSTANCIAS; instancia++) {
-            int n, m, u, v, w;
+            int n, m, u, v;
+            float w;
             std::cin >> n >> m;
             Grafo g(n);
             for (int i = 0; i < m; i++) {

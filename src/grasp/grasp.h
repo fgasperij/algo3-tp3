@@ -9,11 +9,11 @@ class Grasp
 {
     public:
         Grasp(Heuristica h);
-        virtual ~Grasp();
         void setParadaMaximoIteraciones(int paradaMaximoIteraciones);
         void setParadaIteracionesSinMejora(int paradaIteracionesSinMejora);
         void setProfundidadEleccionVertice(int profundidadEleccionVertice);
         void setProfundidadEleccionConjunto(int profundidadEleccionConjunto);
+        vector<set<int>> getMejorParticion();
         void ejecutar(int criterioParada);
         
         static const int pararPorMaximoIteraciones{0};
