@@ -1,15 +1,6 @@
 #include "grasp.h"
 #include <iostream>
 
-float node_weight_in_subset(int node, int subset, const vector<set<int> > &partition, const vector<vector<float> > &adym) {
-  float node_weight = 0;
-  for (set<int>::iterator it = partition[subset].begin(); it != partition[subset].end(); ++it) {
-    node_weight += adym[node][*it];
-  }
-
-  return node_weight;
-}
-
 void Grasp::busquedaLocalUnNodo() {
   int k = h_.getK();
   int n = h_.getGrafo().getCantidadVertices();
@@ -24,13 +15,13 @@ void Grasp::busquedaLocalUnNodo() {
   while (has_improved) {
     has_improved = false;
     for (int i = 0; i < n; ++i) {
-      int node_weight_in_current_subset = h_.pesoEnSubconjunto(i, particionActual_[node_indexed_partition[i]]);
+      float node_weight_in_current_subset = h_.pesoEnSubconjunto(i, particionActual_[node_indexed_partition[i]]);
       bool swapped = false;
       int subset = 0;
       while (!swapped && subset < k) {
         if (subset != node_indexed_partition[i]) {
           //cout << "Considering swapping node " << i << " from subset " << node_indexed_partition[i] << " to subset " << subset << endl;
-          int node_weight_in_subset_j = h_.pesoEnSubconjunto(i, particionActual_[subset]);
+          float node_weight_in_subset_j = h_.pesoEnSubconjunto(i, particionActual_[subset]);
           if (node_weight_in_current_subset > node_weight_in_subset_j) {
             //cout << "FOUND IMPROVEMENT!" << endl;
             //cout << " Swapping node " << i << " from subset " << node_indexed_partition[i] << " to subset " << subset << endl;
@@ -73,17 +64,21 @@ Grasp::~Grasp() {
     
 }
 
-bool Grasp::pararMaximoIteraciones() { 
-    return iteracionActual_ >= paradaMaximoIteraciones_; 
+bool Grasp::parar(int criterio) {
+    switch (criterio) {
+        case Grasp::pararPorMaximoIteraciones:
+            return iteracionActual_ >= paradaMaximoIteraciones_; 
+        case Grasp::pararPorIteracionesSinMejora:
+            return (iteracionActual_ - ultimaIteracionConMejora_ >= paradaIteracionesSinMejora_);
+        case Grasp::pararPorMaximoYPorSinMejora:
+            return ( (iteracionActual_ >= paradaMaximoIteraciones_) || ( (iteracionActual_ - ultimaIteracionConMejora_) >= paradaIteracionesSinMejora_) );
+        default:
+            return true;
+    }
 }
-bool Grasp::pararIteracionesSinMejora() { 
-    return (iteracionActual_ - ultimaIteracionConMejora_ >= paradaIteracionesSinMejora_);
-}
-bool Grasp::pararMaximoYSinMejoraJuntos() {
-    return ( (iteracionActual_ >= paradaMaximoIteraciones_) || ( (iteracionActual_ - ultimaIteracionConMejora_) >= paradaIteracionesSinMejora_) );
-}
-int Grasp::pesoParticion(const vector<set<int>> & particion) {
-    int res = 0;
+
+float Grasp::pesoParticion(const vector<set<int>> & particion) {
+    float res = 0;
     for (auto & conjunto : particion) {
         for (auto i = conjunto.begin(); i != conjunto.end(); i++) {
             int v = *i;
@@ -98,10 +93,25 @@ int Grasp::pesoParticion(const vector<set<int>> & particion) {
     return res;
 }
 
-void Grasp::ejecutar() {
-    //bool hayMejora = false;
-    cout << "Peso total del grafo: " << pesoParticionActual_ << endl;
-    while( ! pararMaximoYSinMejoraJuntos() ) {
+void Grasp::setParadaMaximoIteraciones(int paradaMaximoIteraciones) {
+    paradaMaximoIteraciones_ = paradaMaximoIteraciones;
+}
+
+void Grasp::setParadaIteracionesSinMejora(int paradaIteracionesSinMejora) {
+    paradaIteracionesSinMejora_ = paradaIteracionesSinMejora;
+}
+
+void Grasp::setProfundidadEleccionVertice(int profundidadEleccionVertice) {
+    h_.setProfundidadEleccionVertice(profundidadEleccionVertice);
+}
+void Grasp::setProfundidadEleccionConjunto(int profundidadEleccionConjunto) {
+    h_.setProfundidadEleccionConjunto(profundidadEleccionConjunto);
+}
+
+void Grasp::ejecutar(int criterioParada) {
+    cout.precision(2);
+    cout << "Peso total del grafo: " << fixed << pesoParticionActual_ << endl;
+    while( ! parar(criterioParada) ) {
         iteracionActual_++;
         particionActual_ = h_.resolver();
         pesoParticionActual_ = pesoParticion(particionActual_);
@@ -113,6 +123,6 @@ void Grasp::ejecutar() {
         }
     }
     cout << "Ultima iteracion: " << iteracionActual_ << endl;
-    cout << "Mejor peso: " << pesoMejorParticion_ << endl;
+    cout << "Mejor peso: " << fixed << pesoMejorParticion_ << endl;
 }
 

@@ -15,16 +15,20 @@ class Heuristica
         const Grafo & getGrafo() { return grafo_; }
         void setK(int k);
         int getK() { return k_; }
-        int pesoEnSubconjunto(int vertice, std::set<int> & conjuntoVertices);
+        float pesoEnSubconjunto(int vertice, std::set<int> & conjuntoVertices);
+        void setProfundidadEleccionVertice(int profundidadEleccionVertice);
+        void setProfundidadEleccionConjunto(int profundidadEleccionConjunto);
         
         std::vector<std::set<int>> resolverGolosoPuro();
-        std::vector<std::set<int>> resolver(int profundidadEleccionVertice = 5, int profundidadEleccionConjunto = 5);
+        std::vector<std::set<int>> resolver();
     
     private:
         std::vector<int> ordenarPorPesoEnGrafo();
     
         Grafo grafo_{0};
         int k_{1};
+        int profundidadEleccionVertice_{5};
+        int profundidadEleccionConjunto_{5};
 };
 
 #endif /* HEURISTICA_H */ 
