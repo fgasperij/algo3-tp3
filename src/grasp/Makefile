@@ -1,13 +1,10 @@
 CXXFLAGS = -std=c++0x -Wall
 CC = clang++
 
-all: testGrasp randomGen
+all: testGrasp
 
 #testComplejidad: grafo.o heuristica.o testComplejidad.o
 #	$(CC) $(CXXFLAGS) testComplejidad.o heuristica.o grafo.o -o testComplejidad
-
-randomGen: grafo.o heuristica.o randomGen.o
-	$(CC) $(CXXFLAGS) randomGen.o heuristica.o grafo.o -o randomGen
 	
 testGrasp: grafo.o heuristica.o grasp.o testGrasp.o
 	$(CC) $(CXXFLAGS) grafo.o heuristica.o grasp.o testGrasp.o -o testGrasp
@@ -20,9 +17,6 @@ heuristica.o: heuristica.cpp
 
 grasp.o: grasp.cpp
 	$(CC) -c $(CXXFLAGS) grasp.cpp
-	
-randomGen.o: randomGen.cpp
-	$(CC) -c $(CXXFLAGS) randomGen.cpp
 
 testGrasp.o: testGrasp.cpp
 	$(CC) -c $(CXXFLAGS) testGrasp.cpp
@@ -31,4 +25,4 @@ testGrasp.o: testGrasp.cpp
 #	$(CC) -c $(CXXFLAGS) testComplejidad.cpp
 
 clean:
-		rm -rf *o
+		rm -rf *.o

@@ -39,5 +39,10 @@
 # Temporary files
 *~
 
-# Misc
+# Informe
 main.pdf
+
+# Misc
+.DS_Store
+Thumbs.db
+Desktop.ini

@@ -2,15 +2,23 @@
 #include <chrono>
 #include <iostream>
 #include <climits>
+#include <fstream>
+#include <algorithm>
 
-const int CANT_INSTANCIAS = 100;
-const int MIN_VERTICES = 2;
-const int MAX_VERTICES = 100;
+int CANT_INSTANCIAS;
+int MIN_VERTICES;
+int MAX_VERTICES;
+
 const int CANT_REPETICIONES_CALCULO_INSTANCIA = 5;
-const int MAX_K = 100;
-const int K_STEP = 10;
+int MAX_K;
+int K_STEP;
 
 int main(int argc, const char* argv[]) {
+    std::ifstream archivoConfiguracion("../configuracionGeneracionInstancias.txt");
+    archivoConfiguracion >> CANT_INSTANCIAS >> MIN_VERTICES >> MAX_VERTICES;
+    archivoConfiguracion.close();
+    MAX_K = MAX_VERTICES;
+    K_STEP = std::max(1, MAX_K / 10);
     for (int cantVertices = MIN_VERTICES; cantVertices <= MAX_VERTICES; cantVertices++) {
         std::cout << cantVertices << " ";
         std::vector<int> sumaTiemposPorK(MAX_K / K_STEP);

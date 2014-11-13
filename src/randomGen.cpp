@@ -9,15 +9,16 @@
 #include <set>
 #include <climits>
 #include <cfloat>
+#include <fstream>
 
 using namespace std;
 
 typedef int Vertice;
 
-const int CANT_INSTANCIAS = 100;
-const int MIN_VERTICES = 2;
-const int MAX_VERTICES = 100;
-const float MAX_COSTO_ARISTA = 1000.f;
+int CANT_INSTANCIAS;
+int MIN_VERTICES;
+int MAX_VERTICES;
+float MAX_COSTO_ARISTA;
 
 Vertice seleccionarVerticeRandom(const set<Vertice> & conjunto) {
     int i = rand() % conjunto.size();
@@ -27,6 +28,9 @@ Vertice seleccionarVerticeRandom(const set<Vertice> & conjunto) {
 }
 
 int main(int argc, const char* argv[]) {
+    ifstream archivoConfiguracion("configuracionGeneracionInstancias.txt");
+    archivoConfiguracion >> CANT_INSTANCIAS >> MIN_VERTICES >> MAX_VERTICES >> MAX_COSTO_ARISTA;
+    archivoConfiguracion.close();
     srand(time(NULL) + getpid()); // Seedeo
     cout.precision(4);
     for (int n = MIN_VERTICES; n <= MAX_VERTICES; n++) {
