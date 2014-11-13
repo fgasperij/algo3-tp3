@@ -109,7 +109,7 @@ void Grasp::setProfundidadEleccionConjunto(int profundidadEleccionConjunto) {
 }
 
 void Grasp::ejecutar(int criterioParada) {
-    cout.precision(2);
+    cout.precision(4);
     cout << "Peso total del grafo: " << fixed << pesoParticionActual_ << endl;
     while( ! parar(criterioParada) ) {
         iteracionActual_++;

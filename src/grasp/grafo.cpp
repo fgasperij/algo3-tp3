@@ -1,6 +1,5 @@
 #include "grafo.h"
 
-
 Grafo::Grafo(int n) : matrizAdyacencia_(n, std::vector<float>(n)) {
 }
 
