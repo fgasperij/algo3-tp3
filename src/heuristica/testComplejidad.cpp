@@ -23,9 +23,9 @@ int main(int argc, const char* argv[]) {
         std::cout << cantVertices << " ";
         std::vector<int> sumaTiemposPorK(MAX_K / K_STEP);
         for (int instancia = 1; instancia <= CANT_INSTANCIAS; instancia++) {
-            int n, m, u, v;
+            int n, m, u, v, original_k;
             float w;
-            std::cin >> n >> m;
+            std::cin >> n >> m >> original_k;
             Grafo g(n);
             for (int i = 0; i < m; i++) {
                 std::cin >> u >> v >> w;
