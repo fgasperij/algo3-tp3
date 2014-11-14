@@ -48,7 +48,7 @@ int main (int argc, char *argv[])
   }
 
   for (int i = 0; i < n; i++) {
-    cout << node_indexed_partition[i] << ' ';
+    cout << node_indexed_partition[i] + 1 << ' ';
   }
   cout << endl;
 
