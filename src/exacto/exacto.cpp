@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <list>
+#include <limits>
 
 using namespace std;
 
@@ -29,8 +30,8 @@ int main (int argc, char *argv[])
   float w;
   for(int i = 0; i < m; i++) {
     cin >> u >> v >> w;
-    adym[u][v] = w;
-    adym[v][u] = w;
+    adym[u - 1][v - 1] = w;
+    adym[v - 1][u - 1] = w;
   }
 
   vector<list<int> > partition(k, list<int>());
