@@ -18,5 +18,6 @@ int main(int argc, char* argv[]) {
     grasp.setProfundidadEleccionConjunto(4);
     grasp.setProfundidadEleccionVertice(4);
     grasp.ejecutar(Grasp::pararPorMaximoYPorSinMejora);
+    Grasp::imprimirParticion(grasp.getMejorParticion(), n);
     return 0;
 }

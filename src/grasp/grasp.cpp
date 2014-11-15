@@ -94,11 +94,11 @@ vector<set<int>> Grasp::getMejorParticion() {
     return mejorParticion_;
 }
 
-void Grasp::ejecutar(int criterioParada) {
+float Grasp::ejecutar(int criterioParada) { // Ejecuta GRASP hasta que se llegue al criterio de parada y devuelve el minimo peso
     cout.precision(4);
     iteracionActual_ = 0;
     ultimaIteracionConMejora_ = 0;
-    cout << "Peso total del grafo: " << fixed << pesoParticionActual_ << endl;
+    //cout << "Peso total del grafo: " << fixed << pesoParticionActual_ << endl;
     while( ! parar(criterioParada) ) {
         iteracionActual_++;
         particionActual_ = h_.resolver();
@@ -110,7 +110,22 @@ void Grasp::ejecutar(int criterioParada) {
             ultimaIteracionConMejora_ = iteracionActual_;
         }
     }
-    cout << "Ultima iteracion: " << iteracionActual_ << endl;
-    cout << "Mejor peso: " << fixed << pesoMejorParticion_ << endl;
+    //cout << "Criterio de parada: " << (criterioParada == Grasp::pararPorMaximoIteraciones ? "maximo de iteraciones" : "iteraciones sin mejora") << " - Ultima iteracion: " << iteracionActual_ << endl;
+    //cout << "Mejor peso: " << fixed << pesoMejorParticion_ << endl;
+    return pesoMejorParticion_;
+}
+
+void Grasp::imprimirParticion(const std::vector<std::set<int>> & particion, int n) {
+    std::vector<int> conjuntoPorVertice(n);
+    int k = particion.size();
+    for ( int i = 0; i < k; i++) {
+        for (auto & v : particion[i]) {
+            conjuntoPorVertice[v] = i;
+        }
+    }
+    for (auto & conj : conjuntoPorVertice) {
+        std::cout << conj + 1 << " ";
+    }
+    std::cout << std::endl;
 }
 

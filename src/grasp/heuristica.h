@@ -27,8 +27,8 @@ class Heuristica
     
         Grafo grafo_{0};
         int k_{1};
-        int profundidadEleccionVertice_{5};
-        int profundidadEleccionConjunto_{5};
+        int profundidadEleccionVertice_{3};
+        int profundidadEleccionConjunto_{3};
 };
 
 #endif /* HEURISTICA_H */ 
