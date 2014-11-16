@@ -54,10 +54,10 @@ void testConfiguracion() {
     vector<int> paradasIteracionesSinMejora = {10, 35, 50, 70};
     vector<int> profundidadesEleccionVertice = {2, 4};
     vector<int> profundidadesEleccionConjunto = {2, 4};
-    vector<vector<vector<float>>> resultadosParaMaximoIteraciones(4, vector<vector<float>>(4, vector<float>(4)));
-    vector<vector<vector<float>>> resultadosParaIteracionesSinMejora(4, vector<vector<float>>(4, vector<float>(4)));
-    vector<vector<vector<float>>> totalResultadosParaMaximoIteraciones(4, vector<vector<float>>(4, vector<float>(4)));
-    vector<vector<vector<float>>> totalResultadosParaIteracionesSinMejora(4, vector<vector<float>>(4, vector<float>(4)));
+    vector<vector<vector<float>>> resultadosParaMaximoIteraciones(paradasMaximoIteraciones.size(), vector<vector<float>>(profundidadesEleccionVertice.size(), vector<float>(profundidadesEleccionConjunto.size())));
+    vector<vector<vector<float>>> resultadosParaIteracionesSinMejora(paradasIteracionesSinMejora.size(), vector<vector<float>>(profundidadesEleccionVertice.size(), vector<float>(profundidadesEleccionConjunto.size())));
+    vector<vector<vector<float>>> totalResultadosParaMaximoIteraciones(paradasMaximoIteraciones.size(), vector<vector<float>>(profundidadesEleccionVertice.size(), vector<float>(profundidadesEleccionConjunto.size())));
+    vector<vector<vector<float>>> totalResultadosParaIteracionesSinMejora(paradasIteracionesSinMejora.size(), vector<vector<float>>(profundidadesEleccionVertice.size(), vector<float>(profundidadesEleccionConjunto.size())));
     int ganadasPorMaximo = 0, ganadasPorSinMejora = 0;
     vector<vector<int>> ganadasProfundidad(profundidadesEleccionVertice.size(), vector<int>(profundidadesEleccionConjunto.size()));
     cout << "Corriendo test de configuracion optima de GRASP . . ." << endl;
@@ -143,8 +143,8 @@ void testConfiguracion() {
         //cout << "Limite de iteraciones = " << mejorParada << endl;
         //cout << "Profundidad de eleccion de vertices = " << mejorProfVertice << endl;
         //cout << "Profundidad de eleccion de conjuntos = " << mejorProfConjunto << endl;
-        resultadosParaMaximoIteraciones = vector<vector<vector<float>>>(4, vector<vector<float>>(4, vector<float>(4)));
-        resultadosParaIteracionesSinMejora = vector<vector<vector<float>>>(4, vector<vector<float>>(4, vector<float>(4)));
+        resultadosParaMaximoIteraciones = vector<vector<vector<float>>>(paradasMaximoIteraciones.size(), vector<vector<float>>(profundidadesEleccionVertice.size(), vector<float>(profundidadesEleccionConjunto.size())));;
+        resultadosParaIteracionesSinMejora = vector<vector<vector<float>>>(paradasIteracionesSinMejora.size(), vector<vector<float>>(profundidadesEleccionVertice.size(), vector<float>(profundidadesEleccionConjunto.size())));;
         cout << mejorParada << endl;
     }
     bool esMejorIteracionesSinMejora = true;
@@ -177,7 +177,7 @@ void testConfiguracion() {
     }
     int ganadoraTotalProfundidad = 0, indiceMejorProfVert = -1, indiceMejorProfConj = -1;
     for (int i = 0; i < ganadasProfundidad.size(); i++) {
-        for (int j = 0; j < ganadasProfundidad.size(); j++) {
+        for (int j = 0; j < ganadasProfundidad[i].size(); j++) {
             if (ganadasProfundidad[i][j] > ganadoraTotalProfundidad) {
                 indiceMejorProfVert = i;
                 indiceMejorProfConj = j;
@@ -203,8 +203,8 @@ int main(int argc, char* argv[]) {
     srand(time(NULL));
     cout.precision(4);
     
-    int max_vertices = 20;
     //testConfiguracion();
+    int max_vertices = 20;
     testCalidadVsExacto(max_vertices);
     
     return 0;
