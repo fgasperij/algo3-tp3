@@ -73,7 +73,6 @@ void testConfiguracion() {
                 g.setPesoArista(u - 1, v - 1, w);
             }
             Heuristica h(g,k);
-            
             for (int maxIter = 0; maxIter < paradasMaximoIteraciones.size(); maxIter++) {
                 for (int profVert = 0; profVert < profundidadesEleccionVertice.size(); profVert++) {
                     for (int profConj = 0; profConj < profundidadesEleccionConjunto.size(); profConj++) {
@@ -81,12 +80,12 @@ void testConfiguracion() {
                         grasp.setParadaMaximoIteraciones(paradasMaximoIteraciones[maxIter]);
                         grasp.setProfundidadEleccionVertice(profundidadesEleccionVertice[profVert]);
                         grasp.setProfundidadEleccionConjunto(profundidadesEleccionConjunto[profConj]);
-                        resultadosParaMaximoIteraciones[maxIter][profVert][profConj] += grasp.ejecutar(Grasp::pararPorMaximoIteraciones);
-                        totalResultadosParaMaximoIteraciones[maxIter][profVert][profConj] += grasp.ejecutar(Grasp::pararPorMaximoIteraciones);
+                        float peso = grasp.ejecutar(Grasp::pararPorMaximoIteraciones);
+                        resultadosParaMaximoIteraciones[maxIter][profVert][profConj] += peso;
+                        totalResultadosParaMaximoIteraciones[maxIter][profVert][profConj] += peso;
                     }
                 }
             }
-            
             for (int iterSinM = 0; iterSinM < paradasIteracionesSinMejora.size(); iterSinM++) {
                 for (int profVert = 0; profVert < profundidadesEleccionVertice.size(); profVert++) {
                     for (int profConj = 0; profConj < profundidadesEleccionConjunto.size(); profConj++) {
@@ -94,8 +93,9 @@ void testConfiguracion() {
                         grasp.setParadaIteracionesSinMejora(paradasIteracionesSinMejora[iterSinM]);
                         grasp.setProfundidadEleccionVertice(profundidadesEleccionVertice[profVert]);
                         grasp.setProfundidadEleccionConjunto(profundidadesEleccionConjunto[profConj]);
-                        resultadosParaIteracionesSinMejora[iterSinM][profVert][profConj] += grasp.ejecutar(Grasp::pararPorIteracionesSinMejora);
-                        totalResultadosParaIteracionesSinMejora[iterSinM][profVert][profConj] += grasp.ejecutar(Grasp::pararPorIteracionesSinMejora);
+                        float peso = grasp.ejecutar(Grasp::pararPorIteracionesSinMejora);
+                        resultadosParaIteracionesSinMejora[iterSinM][profVert][profConj] += peso;
+                        totalResultadosParaIteracionesSinMejora[iterSinM][profVert][profConj] += peso;
                     }
                 }
             }
