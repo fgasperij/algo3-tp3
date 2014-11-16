@@ -1,20 +1,11 @@
 #include <iostream>
 #include <vector>
 #include <list>
+#include <fstream>
 #include <map>
 #include <string>
 
 using namespace std;
-
-void show_list_vector(vector<list<int> > vlint)
-{
-  for (int i = 0; i < vlint.size(); i++) {
-    for(list<int>::iterator it = vlint[i].begin(); it != vlint[i].end(); it++) {
-      cout << *it << ' ';
-    }
-    cout << endl;
-  }
-}
 
 struct Partition {
   Partition() : partition(vector<list<int> > (1, list<int> ())), weight(0), subsets_used(0), allowed_subsets(1) {};
@@ -65,40 +56,79 @@ struct Partition {
  **/   
 void kpmp(vector<vector<float> > &adym, Partition &partition, Partition &min_partition, int node, map<string, bool> &options);
 
+#define MAX_N 10
+#define MIN_N 3 // this dependes on the test.in
+#define INSTANCES_BY_N 100
 int main (int argc, char *argv[])
 {
-  map<string, bool> options = {{"min_weight", true}, {"k_subsets", true}, {"can_improve", true}};
-  
-  int n, m, k;
-  cin >> n >> m >> k;
+  vector<map<string, bool> > prune_options(5, map<string, bool> ());
+  prune_options[0] = {{"min_weight", false}, {"k_subsets", false}, {"can_improve", false}};
+  prune_options[1] = {{"min_weight", false}, {"k_subsets", true}, {"can_improve", false}};
+  prune_options[2] = {{"min_weight", true}, {"k_subsets", false}, {"can_improve", false}};
+  prune_options[3] = {{"min_weight", false}, {"k_subsets", false}, {"can_improve", true}};
+  prune_options[4] = {{"min_weight", true}, {"k_subsets", true}, {"can_improve", true}};
 
-  // having w((u, v)) = 0 || (u, v) not in E is the same 
-  vector<vector<float> > adym(n, vector<float> (n, 0));
-  int u, v;
-  float w;
-  for(int i = 0; i < m; i++) {
-    cin >> u >> v >> w;
-    adym[u][v] = w;
-    adym[v][u] = w;
-  }
+  ofstream ofs("test.out", std::ofstream::out);
+  for (int instance_size = MIN_N; instance_size < MAX_N; ++instance_size) {
+    ofs << instance_size << ' ';
+    cout << "INSTANCE SET OF SIZE: " << instance_size << endl;
+    // sumaTiemposPorN
+    // [0] -> sin_podas
+    // [1] -> k_subset
+    // [2] -> min_weight
+    // [3] -> can_improve
+    // [4] -> all
+    vector<int> sumaTiemposPorN(5, 0);
+    for (int instance_of_size = 0; instance_of_size < 100; ++instance_of_size) {
+      cout << "Instance: " << instance_of_size << endl;
+      int n, m, k;
+      cin >> n >> m >> k;
 
-  Partition partition(k, k);
-  partition.push_back_to_subset(0, 0);
-  Partition min_partition(k, k);
-  min_partition.weight = numeric_limits<float>::max();
-  kpmp(adym, partition, min_partition, 1, options);
+      // having w((u, v)) = 0 || (u, v) not in E is the same 
+      vector<vector<float> > adym(n, vector<float> (n, 0));
+      int u, v;
+      float w;
+      for(int i = 0; i < m; i++) {
+        cin >> u >> v >> w;
+        adym[u-1][v-1] = w;
+        adym[v-1][u-1] = w;
+      }
 
-  vector<int> node_indexed_partition(n, -1);
-  for (int i = 0; i < k; i++) {
-    for(list<int>::iterator it = min_partition.partition[i].begin(); it != min_partition.partition[i].end(); it++) {
-      node_indexed_partition[*it] = i;
+      // one for each prune
+      for (int prune = 0; prune < 5; prune++) {
+        std::chrono::microseconds minTiempo(INT_MAX);
+        for (int i = 0; i < 10; ++i) {
+          auto start_time = std::chrono::high_resolution_clock::now();
+          if (!prune_options[prune]["min_weight"] && !prune_options[prune]["k_subsets"] &&
+              !prune_options[prune]["can_improve"]) {
+            Partition partition(n, k);
+            partition.push_back_to_subset(0, 0);
+            Partition min_partition(n, k);
+            min_partition.weight = numeric_limits<float>::max();
+            kpmp(adym, partition, min_partition, 1, prune_options[prune]);
+          } else {
+            Partition partition(k, k);
+            partition.push_back_to_subset(0, 0);
+            Partition min_partition(k, k);
+            min_partition.weight = numeric_limits<float>::max();
+            kpmp(adym, partition, min_partition, 1, prune_options[prune]);
+          }
+          auto end_time = std::chrono::high_resolution_clock::now();
+          std::chrono::microseconds tiempoRep = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
+          if (tiempoRep < minTiempo) {
+              minTiempo = tiempoRep;
+          }
+          sumaTiemposPorN[prune] += minTiempo.count();
+        }
+      }
     }
+    // sin_podas k_subset min_weight can_improve all
+    ofs << sumaTiemposPorN[0]/INSTANCES_BY_N << ' ' << sumaTiemposPorN[1]/INSTANCES_BY_N << ' ' << 
+      sumaTiemposPorN[2]/INSTANCES_BY_N << ' ' << sumaTiemposPorN[3]/INSTANCES_BY_N << ' ' << 
+      sumaTiemposPorN[4]/INSTANCES_BY_N << endl;
   }
 
-  for (int i = 0; i < n; i++) {
-    cout << node_indexed_partition[i] << ' ';
-  }
-  cout << endl;
+  ofs.close();
 
   return 0;
 }

@@ -1,16 +1,24 @@
 CC=g++
-SRC=exacto.cpp
-OBJ=$(SRC:cpp=o)
-OUT=exacto
+CFLAGS=-std=c++0x
+SRCE=exacto.cpp
+OBJE=$(SRCE:cpp=o)
+SRCT=tests.cpp
+OBJT=$(SRCT:cpp=o)
+OUT=exacto tests
 .PHONY: clean build
 
 all: clean build
 
-build: $(OBJ)
-	$(CC) $(OBJ) -o $(OUT)
+build: $(OUT)
+
+exacto: $(OBJE)
+	$(CC) $(OBJE) -o $@
+
+tests: $(OBJT)
+	$(CC) $(OBJT) -o $@
 
 %.o: %.cpp
-	$(CC) -c $<
+	$(CC) $(CFLAGS) -c $<
 
 clean: 
-	rm -rf $(OBJ) $(OUT)
+	rm -rf $(OBJE) $(OBJT) $(OUT)
