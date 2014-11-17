@@ -124,7 +124,42 @@ los nodos y recordamos que era:
 \end{displaymath}
 
 \subsection{Experimentación}
-\begin{itemize}
-  \item un gráfico sin podas
-  \item un gráfico por poda
-\end{itemize}
+El objetivo de esta experimentación es revisar las cotas de complejidad obtenidas a través del análisis teórico
+a la luz de resultados empíricos y comparar las diferentes podas para ver cuáles son más eficientes y si 
+resulta beneficioso componerlas. Por composición de podas nos referimos a aplicar más de una, lo cual no necesariamente
+es mejor que aplicar sólo una ya que quizás realizan podas parecidas duplicando el trabajo para podar lo mismo.
+En primer lugar, ejecutamos el algoritmo sin podas para instancias de hasta 12 nodos, ya que con más nodos
+tomaba demasiado tiempo, y dividimos el tiempo por $\sum_{i=0}^ni!$ que era la cota que habíamos
+obtenido para el algoritmo sin podas. Esperamos que la curva se asemeje a una recta constante. Cada instancia
+la corrimos 10 veces y nos quedamos con el tiempo mínimo de las 10 corridas. Para cada $1 \leq n \leq 12$ corrimos
+100 instancias generadas pseudoaleatoriamente y nos quedamos con el promedio de las 100:
+\begin{center}
+  \begin{tabular}{ c | c | c | c | c | c}
+    $n$ & sin podas & k subconjuntos & mínimo peso & hay mejora & compuestas \tabularnewline \hline
+    3 & 86 & 74 & 70 & 74 & 64 \tabularnewline \hline
+    4 & 199 & 148 & 125 & 130 & 118 \tabularnewline \hline
+    5 & 525 & 276 & 204 & 203 & 183 \tabularnewline \hline
+    6 & 1760 & 557 & 372 & 359 & 324 \tabularnewline \hline 
+    7 & 6906 & 1096 & 651 & 561 & 516 \tabularnewline \hline 
+    8 & 30305 & 2177 & 1175 & 936 & 886 \tabularnewline \hline
+    9 & 149877 & 21016 & 3240 & 5034 & 2133 \tabularnewline \hline
+    10 & 819763 & 62888 & 7192 & 10064 & 4026 \tabularnewline \hline
+    11 & 4561726 & 160775 & 13322 & 17324 & 6527
+  \end{tabular}
+\end{center}
+\begin{center}
+  \begin{tabular}{ c | c | c | c | c | c}
+    $n$ & $sin podas - \sum_{i=0}^ni!$ & k subconjuntos & mínimo peso & hay mejora & compuestas \tabularnewline \hline
+    3 & 86 - 9 & 74 & 70 & 74 & 64 \tabularnewline \hline
+    4 & 199 - 24 & 148 & 125 & 130 & 118 \tabularnewline \hline
+    5 & 525 - 153& 276 & 204 & 203 & 183 \tabularnewline \hline
+    6 & 1760 - 873& 557 & 372 & 359 & 324 \tabularnewline \hline 
+    7 & 6906 - 5913 & 1096 & 651 & 561 & 516 \tabularnewline \hline 
+    8 & 30305 - 46233 & 2177 & 1175 & 936 & 886 \tabularnewline \hline
+    9 & 149877 - 409113 & 21016 & 3240 & 5034 & 2133 \tabularnewline \hline
+    10 & 819763 - 4037913 & 62888 & 7192 & 10064 & 4026 \tabularnewline \hline
+    11 & 4561726 - 43954713 & 160775 & 13322 & 17324 & 6527
+  \end{tabular}
+\end{center}
+Podemos ver que la curva parece constante pero no  
+

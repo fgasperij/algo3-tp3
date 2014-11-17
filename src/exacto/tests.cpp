@@ -56,7 +56,7 @@ struct Partition {
  **/   
 void kpmp(vector<vector<float> > &adym, Partition &partition, Partition &min_partition, int node, map<string, bool> &options);
 
-#define MAX_N 10
+#define MAX_N 20 
 #define MIN_N 3 // this dependes on the test.in
 #define INSTANCES_BY_N 100
 int main (int argc, char *argv[])
@@ -95,7 +95,7 @@ int main (int argc, char *argv[])
       }
 
       // one for each prune
-      for (int prune = 0; prune < 5; prune++) {
+      for (int prune = 1; prune < 5; prune++) {
         std::chrono::microseconds minTiempo(INT_MAX);
         for (int i = 0; i < 10; ++i) {
           auto start_time = std::chrono::high_resolution_clock::now();
@@ -123,7 +123,7 @@ int main (int argc, char *argv[])
       }
     }
     // sin_podas k_subset min_weight can_improve all
-    ofs << sumaTiemposPorN[0]/INSTANCES_BY_N << ' ' << sumaTiemposPorN[1]/INSTANCES_BY_N << ' ' << 
+    ofs /*<< sumaTiemposPorN[0]/INSTANCES_BY_N << ' '*/ << sumaTiemposPorN[1]/INSTANCES_BY_N << ' ' << 
       sumaTiemposPorN[2]/INSTANCES_BY_N << ' ' << sumaTiemposPorN[3]/INSTANCES_BY_N << ' ' << 
       sumaTiemposPorN[4]/INSTANCES_BY_N << endl;
   }
