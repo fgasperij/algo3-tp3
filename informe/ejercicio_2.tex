@@ -1,11 +1,128 @@
 \section{Algoritmo exacto}
 
 \subsection{Descripción del algoritmo}
-La idea es recorrer todas las particiones de k conjuntos ordenadamente, irlas generando.
-Probar que siempre conviene usar todas las particiones.
-Para sólo generar las de 4 y no las de 3 cada vez que me queden i elementos e i particiones 
-sólo voy a considerar de ubicar los i elementos restante en las i particiones vacías.
+El algoritmo utilizado para obtener la $k$-PMP de un grafo $G$ consiste en construir 
+todas las posibles soluciones de manera ordenada para mediante backtracking.
+Veamos qué contiene el conjunto de soluciones posibles $S$ asociado a un grafo $G = (V, E)$.
+Sea $P_V$ el conjunto con todas las particiones posibles del conjunto $V$:
+\begin{displaymath}
+  S = \left\{p \quad | \quad p \in P_V \land \left\vert{p}\right\vert \leq k\right\}
+\end{displaymath}
+Todas las particiones de un conjunto de $n$ elementos se pueden obtener recursivamente. Si contamos
+con todas las particiones de $i$ elementos, denominaremos $S_i$ al conjunto que contiene a todas las
+particiones de $i$ elementos, entonces podemos generar todas las particiones de $i+1$ elementos simplemente 
+tomando cada una de las particiones pertenecientes a $S_i$ y agregando el elemento $i+1$ a cada uno 
+de sus subconjuntos. Describimos este procedimiento con un pequeño pseudocódigo:
+
+\begin{algorithm}[H]
+\begin{algorithmic}
+\caption{Particiones}
+  \STATE $S_{i+1}\gets \emptyset$
+  \WHILE {$S_i \neq \emptyset$}
+    \STATE $s\gets$ sacarUno($S_i$)
+    \FOR {$j \gets 0...\left\vert{s}\right\vert$}
+      \STATE $nuevoSubconjunto \gets $ dameIesimo($j$, $s$)
+      \STATE $nuevoSubconjunto \cup e_{i+1}$
+      \STATE $S_{i+1} \cup \left\{ s \setminus \text{dameIesimo(}j\text{, }s\text{)} \cup nuevoSubconjunto \right\}$
+    \ENDFOR
+  \ENDWHILE
+\end{algorithmic}
+\end{algorithm}
+
+Se puede ver fácilmente que con este procedimiento efectivamente consideramos todas las particiones
+posibles que se pueden obtener con los $n$ vértices de $V$. Sin embargo, estamos considerando muchas
+particiones que no es necesario tener en cuenta. Por ejemplo, aquellas que tengan una cantidad de
+subconjuntos mayor a $k$.
+
 \subsection{Podas y estrategias}
+%\begin{lema}
+%\label{lema_ej2}
+%acá va el enunciado del lema
+%\end{lema}
+%\begin{proof}
+%  Acá va la demostración.
+%\end{proof}
+
+Las podas que le agregamos a nuestro backtracking para reducir el árbol de soluciones son:
+\begin{enumerate}
+  \item no consideraremos particiones que tengan más de $k$ subconjuntos. Una vez que tenemos
+    $k$ subconjuntos en la solución actual no agregamos más ya que la solución no puede tener
+    más de $k$ subconjuntos. El costo de esta poda es $O(1)$ porque sólo requiere una comparación
+    de tipos primitivos.
+
+  \item no considerar particiones que utilicen menos de $k$ subconjuntos. Si estamos
+    buscando la $k$-PMP de $G$, llamémosla $P_{min}$ y la misma utiliza menos de $k$ subconjuntos 
+    $|P_{min}| < k$ entonces su peso total necesariamente es nulo $\omega(P_{min}) = 0$ ya que si
+    hubiera algún subconjunto $s$ con peso mayor 0 eso indicaría que existe alguna arista $e = (v, u)$ intra-partición
+    en ese subconjunto con peso mayor a 0. Por lo tanto, si tomamos a $v$ uno de los extremos de esa
+    arista y lo pasamos a un subconjunto $s'$ vacío entonces obtendríamos una nueva partición con un peso
+    estrictamente menor al de la mínima lo cual es absurdo.
+    En el algoritmo esto se ve reflejado cuando la cantidad de subconjuntos no utilizados es igual a la cantidad 
+    de nodos que nos quedan por ubicar $|P_{actual}|-k = |nodosRestantes|$. En ese caso lo que hacemos es agregar los $|nodosRestantes|$
+    a cada uno de los subconjuntos todavía no utilizados ya que cualquier partición $P'$ que agregue alguno
+    de los $nodosRestantes$ a uno de los subconjuntos ya utilizados necesariamente cumple que 
+    $\omega(P') \geq \omega(P_{actual})$ porque $P_{actual}$ no va a tener más aristas intra-partición
+    y agregando nodos a conjuntos ya utilizados puede que agreguemos aristas intra-partición o no.
+    Esta poda también tiene costo $O(1)$ porque sólo necesita que se comparen la cantidad de subconjuntos
+    vacíos con la cantidad de nodos restantes. Ambos valores son conocidos en todo momento del algoritmo.
+
+  \item inicializamos $pesoMinimo = +\infty$ y cada vez que encontramos una nueva partición que incluye a todos
+    los nodos comparamos su peso con el de $pesoMinimo$ si su peso es menor entonces actualizamos $pesoMinimo$
+    y la partición mínima encontrada hasta el momento. De esta forma siempre sabemos cuál es el peso de la mejor 
+    solución obtenida hasta el momento. Entonces, cada vez que vamos a agregar un nodo a un subconjunto comparamos
+    cuál sería el peso total de la nueva partición generada con el de la mínima actual. Si resulta ser mayor o igual
+    no hacemos la llamada recursiva porque sabemos que agregar nodos a la partición sólo puede incrementar el peso
+    de total de la partición porque todas las aristas tienen pesos positivos. Esta poda tiene costo $O(1)$ ya
+    que también implica la comparación de dos valores ya conocidos: el peso total de la partición actual
+    y el peso de la mínima obtenida hasta el momento.
+
+  \item si ya existen elementos en los $k$ subconjuntos, es decir no restan subconjuntos vacíos,
+    calculamos el peso que aportaría a la partición agregar cada uno de los nodos restantes al 
+    subconjunto que menos peso agregue. Es decir, calculo el mínimo peso
+    que pueden llegar a sumar a la partición actual los $i$ nodos restantes. Si la suma de todos los pesos 
+    más el peso actual es mayor al mínimo obtenido hasta el momento dejo de recorrer esa rama. El costo 
+    de esta poda es $O(n^2)$ porque por cada nodo restante $(n-i)$ tengo que recorrer $i$. El máximo posible
+    es $\frac{n^2}{4}$ que es del orden de $n^2$. 
+\end{enumerate}
+
+\subsection{Complejidad temporal}
+Para analizar la complejidad temporal del algoritmo veremos por un lado el costo que pagamos en cada llamada recursiva
+y por otro la cantidad de llamadas recursivas que realizamos. La función auxiliar utilizada en cada llamada recursiva
+es $calcularPesoEnSubconjunto$. Esta función es llamada una vez por cada subconjunto, por lo tanto,
+cuando estamos agregando el nodo $v_i$ tiene una complejidad amortizada de $O(i)$ ya que la cantidad
+total de nodos en todos los subconjuntos es $i$ y no recorremos subconjuntos vacíos. La cantidad de llamadas recursivas
+es igual a la cantidad de particiones de $i$ elementos en $j$ subconjuntos con $1 \leq i \leq n$ y $1 \leq j \leq k$. Ya que
+como vimos antes generamos todas las particiones de los $n$ nodos en $k$ subconjuntos diferentes de forma recursiva
+utilizando en el paso $i$ las particiones de $i-1$ elementos y agregamos el elemento $i$ en cada uno de los subconjuntos
+de cada una de las particiones. Este objeto combinatorio, cantidad de formas de ubicar $n$ objetos en $k$ subconjuntos
+sin dejar subconjuntos vacíos, está representado por los números de Stirling de segunda especie:
+\begin{displaymath}
+  S(n, k) = \left\{\begin{matrix} n \\ k \end{matrix}\right\} = \frac{1}{k!}\sum_{j=0}^k (-1)^{j}{k \choose j} (k-j)^n
+\end{displaymath}
+aquí presentamos su fórmula exacta la cual se vale del principio de inclusión-exclusión para resolver el conteo.
+Una cota superior conocida para la función $S(n ,k)$ es:
+\begin{displaymath}
+  S(n, k) \leq \frac{1}{2}{n \choose k} k^{n-k}
+\end{displaymath}
+Sin embargo, este valor sólo representa las hojas de nuestro árbol de backtracking ya que al nosotros generarlas
+recursivamente primero generamos $S(i, j)$ con $1 \leq i \leq n$ y $1 \leq j \leq k$. Por lo tanto las
+llamadas recursivas totales son:
+\begin{displaymath}
+  \sum_{i=0}^n\sum_{j=0}^k S(i, j) \leq \sum_{i=0}^n\sum_{j=0}^k \frac{1}{2}{i \choose j} j^{i-j}
+\end{displaymath}
+La cota de complejidad resulta ser:
+\begin{displaymath}
+  O(\sum_{i=0}^n\sum_{j=0}^k \frac{1}{2}{i \choose j} j^{i-j}i)
+\end{displaymath}
+porque le agregamos el costo de calcular el peso en cada uno de los subconjuntos. Ésta cota se corresponde
+con la complejidad del algoritmo utilizando las podas 1 y 2 porque no consideramos subconjuntos vacíos y
+tampoco consideramos más de $k$ subconjuntos. La complejidad temporal del algoritmo sin podas es equivalente
+a la de \textit{Biohazard} ya que consideramos todas las particiones de un conjunto de $n$ elementos, en este caso
+los nodos y recordamos que era:
+\begin{displaymath}
+  O(\sum_{i=0}^ni!)
+\end{displaymath}
+
 \subsection{Experimentación}
 \begin{itemize}
   \item un gráfico sin podas

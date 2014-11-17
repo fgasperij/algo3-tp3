@@ -1,13 +1,15 @@
 CC=g++
-SRC=busqueda_local_swap.cpp
+SRC=busqueda_local_swap.cpp busqueda_local.cpp
 OBJ=$(SRC:cpp=o)
-OUT=busqueda_local
+OUT=$(SRC:.cpp=)
 .PHONY: clean build
 
 all: clean build
 
-build: $(OBJ)
-	$(CC) $(OBJ) -o $(OUT)
+build: $(OUT)
+
+%: %.o
+	$(CC) -o $<
 
 %.o: %.cpp
 	$(CC) -c $<

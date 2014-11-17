@@ -2,23 +2,14 @@
 #include <vector>
 #include <list>
 #include <map>
+#include <limits>
 #include <string>
 
 using namespace std;
 
-void show_list_vector(vector<list<int> > vlint)
-{
-  for (int i = 0; i < vlint.size(); i++) {
-    for(list<int>::iterator it = vlint[i].begin(); it != vlint[i].end(); it++) {
-      cout << *it << ' ';
-    }
-    cout << endl;
-  }
-}
-
 struct Partition {
-  Partition() : partition(vector<list<int> > (1, list<int> ())), weight(0), subsets_used(0), allowed_subsets(1) {};
-  Partition(int subsets, int allowed_subsets) : partition(vector<list<int> > (subsets, list<int> ())), weight(0), subsets_used(0), allowed_subsets(allowed_subsets) {};
+  Partition() : partition(vector<list<int>> (1, list<int> ())), weight(0), subsets_used(0), allowed_subsets(1) {};
+  Partition(int subsets, int allowed_subsets) : partition(vector<list<int>> (subsets, list<int> ())), weight(0), subsets_used(0), allowed_subsets(allowed_subsets) {};
 
   void push_back_to_subset(int subset, int node)
   {
@@ -36,7 +27,7 @@ struct Partition {
     }
   };
 
-  int weight_in_subset(const vector<vector<float> > &adym, int node, int subset) const
+  int weight_in_subset(const vector<vector<float>> &adym, int node, int subset) const
   {
     int weight = 0; 
     for(list<int>::const_iterator it = partition[subset].begin(); it != partition[subset].end(); it++) {
@@ -51,57 +42,11 @@ struct Partition {
     return partition.size();
   };
 
-  vector<list<int> > partition;
+  vector<list<int>> partition;
   float weight;
   int subsets_used;
   int allowed_subsets;
 };
-
-/*
- * options:
- * -min_weight
- * -k_subsets
- * -can_improve
- **/   
-void kpmp(vector<vector<float> > &adym, Partition &partition, Partition &min_partition, int node, map<string, bool> &options);
-
-int main (int argc, char *argv[])
-{
-  map<string, bool> options = {{"min_weight", true}, {"k_subsets", true}, {"can_improve", true}};
-  
-  int n, m, k;
-  cin >> n >> m >> k;
-
-  // having w((u, v)) = 0 || (u, v) not in E is the same 
-  vector<vector<float> > adym(n, vector<float> (n, 0));
-  int u, v;
-  float w;
-  for(int i = 0; i < m; i++) {
-    cin >> u >> v >> w;
-    adym[u][v] = w;
-    adym[v][u] = w;
-  }
-
-  Partition partition(k, k);
-  partition.push_back_to_subset(0, 0);
-  Partition min_partition(k, k);
-  min_partition.weight = numeric_limits<float>::max();
-  kpmp(adym, partition, min_partition, 1, options);
-
-  vector<int> node_indexed_partition(n, -1);
-  for (int i = 0; i < k; i++) {
-    for(list<int>::iterator it = min_partition.partition[i].begin(); it != min_partition.partition[i].end(); it++) {
-      node_indexed_partition[*it] = i;
-    }
-  }
-
-  for (int i = 0; i < n; i++) {
-    cout << node_indexed_partition[i] << ' ';
-  }
-  cout << endl;
-
-  return 0;
-}
 
 int nodes_left(int n, int current_node)
 {
@@ -109,7 +54,7 @@ int nodes_left(int n, int current_node)
   return n - current_node;
 }
 
-void kpmp(vector<vector<float> > &adym, Partition &partition, Partition &min_partition, int node, map<string, bool> &options)
+void kpmp(const vector<vector<float>> &adym, Partition &partition, Partition &min_partition, int node, map<string, bool> &options)
 {
   // check if has added all nodes
   if (node == adym.size()) {
@@ -186,4 +131,16 @@ void kpmp(vector<vector<float> > &adym, Partition &partition, Partition &min_par
       partition.pop_back_from_subset(partition.subsets_used-1);
     }
   }
+}
+
+float algoritmo_exacto(const vector<vector<float>> & adym, int k)
+{
+  map<string, bool> options = {{"min_weight", true}, {"k_subsets", true}, {"can_improve", true}};
+  Partition partition(k, k);
+  partition.push_back_to_subset(0, 0);
+  Partition min_partition(k, k);
+  min_partition.weight = numeric_limits<float>::max();
+  kpmp(adym, partition, min_partition, 1, options);
+
+  return min_partition.weight;
 }

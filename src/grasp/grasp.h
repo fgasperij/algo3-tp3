@@ -14,7 +14,9 @@ class Grasp
         void setProfundidadEleccionVertice(int profundidadEleccionVertice);
         void setProfundidadEleccionConjunto(int profundidadEleccionConjunto);
         vector<set<int>> getMejorParticion();
-        void ejecutar(int criterioParada);
+        float ejecutar(int criterioParada);
+        
+        static void imprimirParticion(const std::vector<std::set<int>> & particion, int n);
         
         static const int pararPorMaximoIteraciones{0};
         static const int pararPorIteracionesSinMejora{1};
@@ -27,8 +29,8 @@ class Grasp
         Heuristica h_;
         vector<set<int>> particionActual_;
         vector<set<int>> mejorParticion_;
-        unsigned int paradaMaximoIteraciones_{10000};
-        unsigned int paradaIteracionesSinMejora_{1000};
+        unsigned int paradaMaximoIteraciones_{1000};
+        unsigned int paradaIteracionesSinMejora_{100};
         unsigned int iteracionActual_{0};
         unsigned int ultimaIteracionConMejora_{0};
         float pesoParticionActual_{0.f};
