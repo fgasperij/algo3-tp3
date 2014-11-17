@@ -68,7 +68,7 @@ void testConfiguracion() {
     vector<int> paradasIteracionesSinMejora = {10, 35, 50, 70};
     vector<int> profundidadesEleccionVertice = {1, 2, 4};
     vector<int> profundidadesEleccionConjunto = {1, 2, 4};
-    ofstream logFile("testConfiguracion.log");
+    ofstream logFile("testConfiguracion-log.txt");
     ofstream histProfFile("histograma-rcl.txt");
     vector<vector<vector<float>>> resultadosParaMaximoIteraciones(paradasMaximoIteraciones.size(), vector<vector<float>>(profundidadesEleccionVertice.size(), vector<float>(profundidadesEleccionConjunto.size())));
     vector<vector<vector<float>>> resultadosParaIteracionesSinMejora(paradasIteracionesSinMejora.size(), vector<vector<float>>(profundidadesEleccionVertice.size(), vector<float>(profundidadesEleccionConjunto.size())));
