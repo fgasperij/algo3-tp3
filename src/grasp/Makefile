@@ -1,13 +1,13 @@
-CXXFLAGS = -std=c++0x -Wall -Ofast
+CXXFLAGS = -std=c++0x -Wall -O3
 CC = clang++
 
-all: testGrasp testCalidad
+all: testGrasp tests
 	
 testGrasp: grafo.o heuristica.o grasp.o testGrasp.o
 	$(CC) $(CXXFLAGS) grafo.o heuristica.o grasp.o testGrasp.o -o testGrasp
 
-testCalidad: grafo.o heuristica.o grasp.o algoritmo_exacto.o testCalidad.o
-	$(CC) $(CXXFLAGS) grafo.o heuristica.o grasp.o algoritmo_exacto.o testCalidad.o -o testCalidad
+tests: grafo.o heuristica.o grasp.o algoritmo_exacto.o tests.o
+	$(CC) $(CXXFLAGS) grafo.o heuristica.o grasp.o algoritmo_exacto.o tests.o -o tests
 	
 algoritmo_exacto.o:
 	$(CC) -c $(CXXFLAGS) algoritmo_exacto.cpp
@@ -24,8 +24,8 @@ grasp.o: grasp.cpp
 testGrasp.o: testGrasp.cpp
 	$(CC) -c $(CXXFLAGS) testGrasp.cpp
 
-testCalidad.o: testCalidad.cpp
-	$(CC) -c $(CXXFLAGS) testCalidad.cpp
+tests.o: tests.cpp
+	$(CC) -c $(CXXFLAGS) tests.cpp
 
 clean:
-		rm -rf *.o
+	rm -rf *.o

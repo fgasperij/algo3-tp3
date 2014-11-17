@@ -1,60 +1,146 @@
 #include <iostream>
 #include <vector>
 #include <list>
+#include <map>
 #include <limits>
+#include <string>
 
 using namespace std;
 
-void kpmp(const vector<vector<float>> &adym, vector<list<int>> &partition, 
-    vector<list<int>> &min_partition, int node, int k, int max_k_used, 
-    float total_weight, float &min_weight)
+struct Partition {
+  Partition() : partition(vector<list<int>> (1, list<int> ())), weight(0), subsets_used(0), allowed_subsets(1) {};
+  Partition(int subsets, int allowed_subsets) : partition(vector<list<int>> (subsets, list<int> ())), weight(0), subsets_used(0), allowed_subsets(allowed_subsets) {};
+
+  void push_back_to_subset(int subset, int node)
+  {
+    if (partition[subset].empty()) {
+      ++subsets_used;
+    }
+    partition[subset].push_back(node);
+  };
+
+  void pop_back_from_subset(int subset)
+  {
+    partition[subset].pop_back();
+    if (partition[subset].empty()) {
+      --subsets_used;
+    }
+  };
+
+  int weight_in_subset(const vector<vector<float>> &adym, int node, int subset) const
+  {
+    int weight = 0; 
+    for(list<int>::const_iterator it = partition[subset].begin(); it != partition[subset].end(); it++) {
+      weight += adym[node][*it];
+    }
+
+    return weight;
+  };
+
+  int total_subsets() const
+  {
+    return partition.size();
+  };
+
+  vector<list<int>> partition;
+  float weight;
+  int subsets_used;
+  int allowed_subsets;
+};
+
+int nodes_left(int n, int current_node)
 {
+  // since first node is 0
+  return n - current_node;
+}
+
+void kpmp(const vector<vector<float>> &adym, Partition &partition, Partition &min_partition, int node, map<string, bool> &options)
+{
+  // check if has added all nodes
   if (node == adym.size()) {
-    if (total_weight < min_weight) {
+    if (partition.weight < min_partition.weight &&
+       partition.subsets_used <= partition.allowed_subsets) {
       min_partition = partition;
-      min_weight = total_weight;
     }
     return;
   }
 
-  for (int i = 0; i <= max_k_used; i++) {
-    float added_weight = 0;
-    for(list<int>::iterator it = partition[i].begin(); it != partition[i].end(); it++) {
-      added_weight += adym[node][*it];
+  // poda k_subsets
+  if (options["k_subsets"]) {
+    int subsets_left = partition.allowed_subsets - partition.subsets_used;
+    if (nodes_left(adym.size(), node) == subsets_left) {
+      partition.push_back_to_subset(partition.subsets_used, node);
+      kpmp(adym, partition, min_partition, node+1, options);
+      partition.pop_back_from_subset(partition.subsets_used-1);
     }
-    partition[i].push_back(node);
-    kpmp(adym, partition, min_partition, node+1, k, max_k_used, 
-        total_weight+added_weight, min_weight);
-    partition[i].pop_back();
   }
 
-  if (max_k_used < k-1) {
-    // try adding new partition
-    partition[max_k_used+1].push_back(node);
-    kpmp(adym, partition, min_partition, node+1, k, max_k_used+1, 
-        total_weight, min_weight);
-    partition[max_k_used+1].pop_back();
-  }
-}
+  // poda pesada
+  if (options["can_improve"]) {
+    if (partition.subsets_used == partition.allowed_subsets) {
+      int min_weight_of_adding_rest = 0;
+      for (int current_node = node; current_node < adym.size(); current_node++) {
+        float min_weight_in_subset = numeric_limits<float>::max();
+        for (int subset = 0; subset < partition.subsets_used; ++subset) {
+          float current_weight = partition.weight_in_subset(adym, current_node, subset);
+          if (current_weight < min_weight_in_subset) {
+            min_weight_in_subset = current_weight;
+          }
+        }
+        min_weight_of_adding_rest += min_weight_in_subset;
+      }
 
-
-void show_list_vector(vector<list<int>> vlint)
-{
-  for (int i = 0; i < vlint.size(); i++) {
-    for(list<int>::iterator it = vlint[i].begin(); it != vlint[i].end(); it++) {
-      cout << *it << ' ';
+      if (min_weight_of_adding_rest + partition.weight >= min_partition.weight) {
+        return;
+      }
     }
-    cout << endl;
+  }
+
+  // try adding it to every non-empty subset
+  for (int subset = 0; subset < partition.subsets_used; ++subset) {
+    float added_weight = partition.weight_in_subset(adym, node, subset);
+    // poda min_weight
+    if (options["min_weight"]) {
+      if (partition.weight+added_weight < min_partition.weight) {
+        partition.push_back_to_subset(subset, node);
+        partition.weight += added_weight;
+        kpmp(adym, partition, min_partition, node+1, options);
+        partition.pop_back_from_subset(subset);
+        partition.weight -= added_weight;
+      }
+    } else {
+      partition.push_back_to_subset(subset, node);
+      partition.weight += added_weight;
+      kpmp(adym, partition, min_partition, node+1, options);
+      partition.pop_back_from_subset(subset);
+      partition.weight -= added_weight;
+    }
+  }
+
+  if (options["k_subsets"]) {
+    if (partition.subsets_used < partition.allowed_subsets) {
+      // try adding new partition
+      partition.push_back_to_subset(partition.subsets_used, node);
+      kpmp(adym, partition, min_partition, node+1, options);
+      partition.pop_back_from_subset(partition.subsets_used-1);
+    }
+  } else {
+    if (partition.subsets_used < partition.total_subsets()) {
+      partition.push_back_to_subset(partition.subsets_used, node);
+      kpmp(adym, partition, min_partition, node+1, options);
+      partition.pop_back_from_subset(partition.subsets_used-1);
+    }
   }
 }
 
 float algoritmo_exacto(const vector<vector<float>> & adym, int k)
 {
-  vector<list<int>> partition(k, list<int>());
-  vector<list<int>> min_partition(k, list<int>());
-  partition[0].push_back(0);
-  float min_weight = numeric_limits<float>::max();
-  kpmp(adym, partition, min_partition, 1, k, 0, 0, min_weight);
+  map<string, bool> options = {{"min_weight", true}, {"k_subsets", true}, {"can_improve", true}};
+  Partition partition(k, k);
+  partition.push_back_to_subset(0, 0);
+  Partition min_partition(k, k);
+  min_partition.weight = numeric_limits<float>::max();
+  kpmp(adym, partition, min_partition, 1, options);
 
-  return min_weight;
+  return min_partition.weight;
 }
