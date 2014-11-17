@@ -1,10 +1,19 @@
 \section{Ejercicio 4}
+\subsection{Descripción de los algoritmos}
+El procedimiento de una heurística de busqueda local consiste en tomar una solución inicial $s$ cualquiera e iterativamente mejorarla remplazandola por una solución mejor del conjunto de soluciones vecinas ($N(s)$ definidas particularmente en cada algoritmo), hasta llegar a un óptimo local.
 
+Llamamos heurística de busqueda local al método de selección que usamos para elegir o descartar una vecindad. Los algoritmos implementados a continuación usan el mismo criterio de heurística que consiste en iterar sobre las vecindades y elegir la primera que mejora la solución. Usamos este criterio por que mejora el tiempo de ejecución ya que cuando encuentra una mejor la elige y por que no encontramos otra considerablemente mejor. Por ejemplo se podría haber propuesto una heurística que recorra todas las vecindades y elija la mejor opción entre todas, pero aun en el mejor caso deberiamos recorrer todas las soluciones de $N(s)$ y esto incrementa el costo temporal.
+
+Implementamos dos tipos de vecindades: \textbf{(A)} toma un nodo de alguno de los $k$ subconjuntos y prueba si cambiando este nodo de subconjunto mejora el valor de la solución, siendo la vecindad todas las soluciones que difieren de la actual con un solo nodo en otro subconjunto $k$. \textbf{(B)} consiste en intercambiar dos nodos cualesquiera de distintos subconjuntos y ver si el valor mejora, es decir que la vecindad son aquellas soluciones que difieren solamente con un intercambio de nodos en dos distintos subconjuntos.
+
+Consideramos que la implementación que tiene la vecindad de tipo \textbf{(B)} es más limitada que la \textbf{(A)} porque la \textbf{(B)} mantiene la cardinalidad en los subconjuntos de la solución (ya que solo hace swap entre nodos de distintos subconjuntos) y esto hace que el algoritmo este más condicionado por la solución de partida.
+
+\textbf{(A)}:
 \begin{algorithm}[H]
 \begin{algorithmic}[1]
 \caption{HeuristicaBusquedaLocal(Grafo G, nat k)}
 \STATE Vector$<$Conjunto$<$Nat$>>$ conjuntos(k, vacío)
-\STATE todosLosNodosAParticion(0) \textit{//todos los nodos en la partición 0}
+\STATE solucionInicial(G,k)
 \STATE Bool hayMejora $\leftarrow$ true
 \WHILE {hayMejora}
     \STATE hayMejora $\leftarrow$ false
@@ -12,9 +21,9 @@
         \STATE Bool swappeado $\leftarrow$ false
         \STATE Int subset $\leftarrow$ 0
         \WHILE {!swappeado y subset $<$ k}
-            \IF{subset != particionDel(nodo) y pesoDelNodoEnParticion(actual) $>$ pesoDelNodoEnParticion(subset)}
-                \STATE borroNodoDeParticion(nodo,actual)
-                \STATE agregoNodoAParticion(nodo,subset)
+            \IF{subset != subcjtoDel(nodo) y pesoDelNodoEnSubcjto(actual) $>$ pesoDelNodoEnSubcjto(subset)}
+                \STATE borroNodoDeSubcjto(nodo,actual)
+                \STATE agregoNodoASubcjto(nodo,subset)
                 \STATE hayMejora $\leftarrow$ true
                 \STATE swappeado $\leftarrow$ true
             \ENDIF
@@ -25,6 +34,178 @@
 \RETURN conjuntos
 \end{algorithmic}
 \end{algorithm}
+
+\textbf{(B)}:
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+\caption{HeuristicaBusquedaLocalConSwap(Grafo G, nat k)}
+\STATE Vector$<$Conjunto$<$Nat$>>$ conjuntos(k, vacío)
+\STATE solucionInicial(G,k)
+\STATE Bool hayMejora $\leftarrow$ true
+\WHILE {hayMejora}
+    \STATE hayMejora $\leftarrow$ false
+    \FOR {\textbf{each} nodos}
+        \STATE Bool swappeado $\leftarrow$ false
+        \STATE nodoSwap $\leftarrow$ nodo$+1$
+        \WHILE {!swappeado y nodoSwap $<$ n}
+            \IF{subcjtoDel(nodo) != subcjtoDel(nodoSwap)}
+                \STATE pesoNodoCambiado $\leftarrow$ pesoDelNodoEnSubcjto(nodo,subcjtoDel(nodoSwap))
+                \STATE pesoNodoSwapCambiado $\leftarrow$ pesoDelNodoEnSubcjto(nodoSwap,subcjtoDel(nodo))
+                \IF{peso(nodo)$+$peso(nodoSwap) $>$ pesoNodoCambiado$+$pesoNodoSwapCambiado}
+                    \STATE borroNodoDeSubcjto(nodo,subcjtoDel(nodo))
+                    \STATE agregoNodoASubcjto(nodo,subcjtoDel(nodoSwap))
+                    \STATE borroNodoDeSubcjto(nodoSwap,subcjtoDel(nodoSwap))
+                    \STATE agregoNodoASubcjto(nodoSwap,subcjtoDel(nodo))
+                    \STATE hayMejora $\leftarrow$ true
+                    \STATE swappeado $\leftarrow$ true
+                \ENDIF
+            \ENDIF
+            \STATE nodoSwap++
+        \ENDWHILE
+    \ENDFOR
+\ENDWHILE
+\RETURN conjuntos
+\end{algorithmic}
+\end{algorithm}
+
+Ejemplo de ejecución de los algoritmos:
+
+Tenemos el siguiente grafo de entrada, y nos piden correr los algoritmos para $k=3$
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.7]{ejercicio-4-ejemplo-entrada.png}
+    \caption{Grafo de entrada}
+    \label{fig:ej4_ejemplo}
+\end{figure}
+
+Contamos con la siguiente solución inicial (entre parentesis el peso de cada nodo):
+\begin{center}
+  \begin{tabular}{ l | c | r }
+    $S_{1}$ & $S_{2}$ & $S_{3}$ \\ \hline
+    A(3) & E(0) & D(0) \\
+    B(4) &  &  \\
+    C(3) &  &  \\
+  \end{tabular}
+  \textbf{Costo total:} 5
+\end{center}
+
+
+
+\begin{minipage}[t]{0.5\linewidth}
+    \center{\textbf{(A)}} \\
+    \raggedright{
+        \textit{Tomo A:}\\
+        $\rightarrow$ Lo pruebo en $S_{2}$: A(2) \checkmark Mejora
+    }\\
+    \begin{center}
+      \begin{tabular}{ l | c | r }
+        $S_{1}$ & $S_{2}$ & $S_{3}$ \\ \hline
+        B(2) & E(2) & D(0) \\
+        C(2) & A(2) &  \\
+      \end{tabular}
+      \textbf{Costo total:} 4
+    \end{center}
+
+    \raggedright{
+        \textit{Tomo B:}\\
+        $\rightarrow$ Lo pruebo en $S_{2}$: B(4) No mejora\\
+        $\rightarrow$ Lo pruebo en $S_{3}$: B(0) \checkmark Mejora
+    }\\
+    \begin{center}
+      \begin{tabular}{ l | c | r }
+        $S_{1}$ & $S_{2}$ & $S_{3}$ \\ \hline
+        C(0) & E(2) & D(0) \\
+         & A(2) & B(0) \\
+      \end{tabular}
+      \textbf{Costo total:} 2
+    \end{center}
+
+    \raggedright{
+        \textit{Tomo C:}\\
+        $\rightarrow$ Lo pruebo en todos pero no mejora en ninguno por que tiene peso 0.
+    }\\
+
+    \raggedright{
+        \textit{Tomo D:}\\
+        $\rightarrow$ Lo pruebo en todos pero no mejora en ninguno por que tiene peso 0.
+    }\\
+
+    \raggedright{
+        \textit{Tomo E:}\\
+        $\rightarrow$ Lo pruebo en $S_{1}$: E(0) \checkmark Mejora
+    }\\
+    \begin{center}
+      \begin{tabular}{ l | c | r }
+        $S_{1}$ & $S_{2}$ & $S_{3}$ \\ \hline
+        C(0) & A(0) & D(0) \\
+        E(0) &  & B(0) \\
+      \end{tabular}
+      \textbf{Costo total:} 0
+    \end{center}
+
+    Hace una iteración mas buscando mejora pero no la encuentra, entonces termina. 
+
+\end{minipage}
+\vrule
+\begin{minipage}[t]{0.5\linewidth}
+    \centering{\textbf{(B)}}\\
+    \raggedright{
+        \textit{Tomo A y B:}\\
+        $\rightarrow$ estan en el mismo subconjunto (no hago nada).
+    }\\
+    \raggedright{
+        \textit{Tomo A y C:}\\
+        $\rightarrow$ estan en el mismo subconjunto.
+    }\\
+    \raggedright{
+        \textit{Tomo A y D:}\\
+        $\rightarrow$ como peso(A en $S_{3}$ sin D)$+$peso(D en $S_{1}$ sin A) $<$ peso(A actual)+peso(D actual)
+    }\\
+    \begin{center}
+      \begin{tabular}{ l | c | r }
+        $S_{1}$ & $S_{2}$ & $S_{3}$ \\ \hline
+        B(2) & E(0) & A(0) \\
+        C(2) &  &  \\
+        D(0) &  &  \\
+      \end{tabular}
+      \textbf{Costo total:} 2
+    \end{center}
+    \raggedright{
+        \textit{Tomo B y A:}\\
+        $\rightarrow$ no mejora.
+    }\\
+    \raggedright{
+        \textit{Tomo B y C:}\\
+        $\rightarrow$ estan en el mismo subconjunto.
+    }\\
+    \raggedright{
+        \textit{Tomo B y D:}\\
+        $\rightarrow$ estan en el mismo subconjunto.
+    }\\
+    \raggedright{
+        \textit{Tomo B y E:}\\
+        $\rightarrow$ no mejora.
+    }\\
+    \raggedright{
+        \textit{Tomo C y A:}\\
+        $\rightarrow$ no mejora.
+    }\\
+    \raggedright{
+        \textit{Tomo C y B:}\\
+        $\rightarrow$ estan en el mismo subconjunto.
+    }\\
+    \raggedright{
+        \textit{Tomo C y D:}\\
+        $\rightarrow$ estan en el mismo subconjunto.
+    }\\
+    \centering{...}\\
+    No mejora en ninguna de las combinaciones siguientes.
+    Termina.
+
+
+\end{minipage}
+
 
 \subsection{Análisis de complejidad temporal}
 
