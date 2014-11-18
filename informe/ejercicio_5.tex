@@ -8,13 +8,113 @@ Mostraremos los resultados de varios tests realizados a la GRASP, que introducim
     \item \textbf{Test de tiempo de ejecución}: Dado un conjunto de instancias, se calculan los tiempos de ejecución de la GRASP para distintas configuraciones.
 \end{itemize}
 
-% ESTOY COMPLETANDO ESTO. --Sebastian
+El conjunto de instancias utilizado está compuesto por 100 instancias para cada \\ ${n = 3, ..., 100}$ y tiene las siguientes características:
+\begin{enumerate}
+    \item Los pesos de las aristas de los grafos pertenecen al intervalo cerrado $[\num{0.0001}, \num{1000}]$.
+    \item Sea $G = (V,X)$ con $n = |V|$ y $m = |X|$ un grafo cualquiera del conjunto.\\ Sea $m_{max} = \frac{n(n-1)}{2}$. Entonces,
+            \begin{align*}
+                \num{0.7} \cdot m_{max} \leq m \leq m_{max} 
+            \end{align*}
+            Esto lo hicimos para evitar tener instancias con grafos fáciles de resolver incluso para la heurística golosa. Esto es claro en el caso extremo de que el grafo no tenga aristas. Teniendo esto en cuenta, pedimos que al menos tengan $70\%$ de la máxima cantidad de aristas posibles para cada grafo.
+    \item Sea $G = (V,X)$ con $n = |V|$ un grafo cualquiera del conjunto. Entonces,
+            \begin{align*}
+                        2 \leq k \leq max\left(2, \frac{n}{3}\right)
+            \end{align*}
+            La razón de esto es la misma que en el punto anterior. En el caso extremo, si tuviéramos un grafo con $k \geq n$, alcanzaría con poner un vértice en cada conjunto para obtener una solución óptima (en el otro extremo, $k = 1$ sólo admite una solución, que obviamente es óptima). A mayor $k$, más márgen de error se le da a la heurística para equivocarse porque tiene más conjuntos donde colocar vértices. Por este motivo limitamos a $\frac{n}{3}$ la cantidad de conjuntos que puede tener una partición.
+\end{enumerate}
+Las instancias fueron generadas aleatorizando cada una de las variables mencionadas. El código del generador se encuentra en el Apéndice.
+
 
 \subsubsection{Test de configuración}
 
-Lo que primero necesitamos es tener una idea de cuál configuración usar en la GRASP.
+Lo que primero necesitamos es tener una idea de cuál configuración usar en la GRASP. Para ello, testearemos con todas las combinaciones de configuraciones para un set acotado de valores, y discutiremos al respecto sobre cómo interpretar los resultados obtenidos, y así decidir una configuración.
 
-% ESTOY COMPLETANDO ESTO. --Sebastian
+Tenemos dos criterios de parada: parar por un límite $\alpha$ de iteraciones máximo, o parar si una cierta cantidad $\beta$ de instancias pasaron sin haber mejora en la solución. Por el el lado de la heurística aleatorizada, es decir, para la selección de candidatos, tenemos dos variables independientes: la profundidad de la elección del próximo vértice a insertar, y la profundidad de la elección del conjunto en que va a ser insertado el vértice.
+
+Parar por un máximo de iteraciones $\alpha$ es el criterio más sencillo, pero tiene inconvenientes. Por un lado, podemos estar haciendo muchas iteraciones de más ya que rápidamente encontramos la solución óptima; esto ocurre siempre con grafos con pocos nodos, que son fáciles de resolver. Por otro lado, puede pasar que la cantidad fija de iteraciones que fue seteada no sea suficiente, y que obtengamos soluciones subóptimas incluso para lo que puede dar GRASP.
+
+Parar por iteraciones sin mejora es más flexible porque si se encuentra rápidamente la solución óptima, no va a haber mejora en las próximas $\beta$ iteraciones, por lo cual el algoritmo va a terminar mucho más rápido para este tipo de casos. Para el caso en que sí haya mejoras todo el tiempo, incluso aunque $\beta < \alpha$ el algoritmo seguirá ejecutando hasta que pasen $\beta$ iteraciones sin mejorar, lo cual puede hacer que el total de iteraciones sea mucho mayor a $\alpha$, pero consiguiendo una solución con mejor calidad que parar por máximo de iteraciones. De todas formas, podría pasar que las soluciones obtenidas de la golosa y mejoradas con la búsqueda local, sean peores que la mejor hasta el momento durante $\beta$ iteraciones, y que si $\beta < \alpha$, se termine haciendo menos iteraciones que $\alpha$, por lo cual no hay garantía de que parar por iteraciones sin mejora en el caso $\beta < \alpha$ vaya a devolver mejores soluciones que parar en $\alpha$ iteraciones.
+
+Si tomamos $\beta < \alpha$, cabe preguntarse qué valor de $\beta$ hace falta para que parar por iteraciones sin mejora sea mejor que parar por máximo de iteraciones. Fijamos $\alpha = 100$, y testeamos con $\beta = 10, 35, 50, 70$.
+
+Pero todavía falta la selección de candidatos: plantearemos que ambas profundidades puedan tomar los valores $1$, $2$ ó $4$. Como notación, cuando decimos \underline{profundidad $(x_1,x_2)$} significa profundidad de elección de vértice $x_1$ y profundidad de elección de conjunto $x_2$. Notar que la profundidad $(1,1)$ es equivalente a la golosa pura, sin aleatoriedad. Dejamos esa opción para verificar que la aleatoriedad es efectivamente necesaria para obtener mejores soluciones. Con respecto a esto, conjeturamos que lo mejor es aleatorizar lo máximo posible, entonces esperamos ver que $(4,4)$ sea la mejor configuración de selección.
+
+Dado un $n$, para cada instancia que tenga un grafo de $n$ nodos, se va ejecutar GRASP con cada configuración por separado y se van a acumular los resultados. Luego, se busca cuál es la mejor configuración para este $n$ hallando el mínimo de las sumas de pesos para cada configuración. El mínimo se calcula de la siguiente manera:
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+\caption{Cálculo del mínimo peso de las configuraciones para un $n$}
+\STATE mejorPesoAcumulado $\leftarrow$ $+ \infty$
+\FOR {valor de iteraciones sin mejora (10, 35, 50, 70)}
+    \FOR{cada valor de profundidad de vértice (4, 2, 1)}
+        \FOR{cada valor de profundidad de conjunto (4, 2, 1)}
+            \IF{Peso acumulado de esta configuración $<$ mejorPesoAcumulado}
+                \STATE Actualizar mejorPesoAcumulado
+                \STATE Poner la actual como mejor configuración
+            \ENDIF
+        \ENDFOR
+    \ENDFOR
+\ENDFOR
+\FOR {valor de máximo de iteraciones (100)}
+    \FOR{cada valor de profundidad de vértice (4, 2, 1)}
+        \FOR{cada valor de profundidad de conjunto (4, 2, 1)}
+            \IF{Peso acumulado de esta configuración $<$ mejorPesoAcumulado}
+                \STATE Actualizar mejorPesoAcumulado
+                \STATE Poner la actual como mejor configuración
+            \ENDIF
+        \ENDFOR
+    \ENDFOR
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+Empezamos buscando el mínimo parando por iteraciones sin mejora, y después de encontrarlo, vemos si por máximo de iteraciones es mejor para ese $n$. Dentro de cada configuración de parada, calculamos para cada profundidad (recorriéndolas de esta manera: $(4,4)$, $(4,2)$, $(4,1)$, $(2,4)$, etc). Si como conjeturamos, $(4,4)$ es la mejor profundidad, las demás no deberían dar pesos acumulados menores, y debería ganar siempre $(4,4)$. Lo mismo para el criterio de parada, si parar por 10 iteraciones consigue la solución óptima, y las demás configuraciones no la mejoran, ésa es la elegimos como mejor porque hizo menos iteraciones que las demás.
+
+Por otro lado, para el total del conjunto de instancias hacemos esta misma acumulación de pesos también separando por configuración, y buscamos de esta manera obtenemos la configuración de mínimo peso en las 10.000 instancias.
+
+Veamos primero cuál de los dos criterios de parada resultó ganador para cada $n$. El siguiente gráfico se interpreta de la siguiente manera: Si y(n) es 10, 35, 50, ó 70, entonces ganó iteraciones sin mejora con valor y(n). Si es 100, entonces ganó máximo de iteraciones, con ese valor (que es el único).
+\begin{figure}[H]
+    \begin{minipage}[t]{\linewidth}
+		\centering
+		\frame{\includegraphics[width=\textwidth]{ejercicio-5-configuracion-conjunto-1.jpg}}
+		\label{fig:ejercicio-5-configuracion-conjunto-1}
+    \end{minipage}
+\end{figure}
+Podemos observar que para valores de $n$ menores a 15, muchas veces alcanza con 10, 35 ó 50 iteraciones sin mejora para ganar; es decir, en ningún caso usar las 100 iteraciones del otro criterio de parada mejora la solución, como preveíamos. Pero al aumentar el $n$, aunque claramente parar por 70 iteraciones sin mejora gana más veces, observamos que a veces resulta mejor el criterio de máximo de iteraciones, lo cual muestra falta de garantía de parar por iteraciones sin mejora.
+
+Independientemente de qué criterio de parada sea mejor para cada $n$, veamos qué profundidad resultó ganadora. Veamos primero para cuantos $n$ resultó ganadora cada una:
+\begin{figure}[H]
+    \begin{minipage}[t]{\linewidth}
+		\centering
+		\frame{\includegraphics[width=\textwidth]{ejercicio-5-histograma-rcl-conjunto-1.jpg}}
+		\label{fig:ejercicio-5-histograma-rcl-conjunto-1}
+    \end{minipage}
+\end{figure}
+La primera observación es que usar de profundidad $(x,1)$ no es conveniente. En particular, $(1,1)$, que es equivalente a que la heurística golosa no tenga aleatoriedad, no resultó ganadora para ningún caso, como esperábamos. Usar $(4,4)$ gana más veces (25), y usar $(x,4)$ gana 57 veces, contra 39 ganadas de $(x,2)$. Fijando los conjuntos, $(1,x)$ gana 28 veces, $(2,x)$ gana 33, y $(4,x)$ gana 37 veces. Hasta ahora pareciera que $(4,4)$ es la mejor profundidad, pero tenemos que ver más detalladamente qué ocurre para cada $n$, porque si por ejemplo $(4,4)$ sólo ganara para las primeros 25 cantidades de nodos, pero fuera superada para $n \geq 27$, claramente sería una profundidad que no funciona para grafos con una cantidad elevada de nodos. Veamos entonces cuál profundidad gana para cada $n$:
+\begin{figure}[H]
+    \begin{minipage}[t]{\linewidth}
+		\centering
+		\frame{\includegraphics[width=\textwidth]{ejercicio-5-configuracion-profundidad-conjunto-1.jpg}}
+		\label{fig:ejercicio-5-configuracion-profundidad-conjunto-1}
+    \end{minipage}
+\end{figure}
+Podemos ver en el gráfico que $(4,4)$ gana de manera consistente, excepto para los $n$ más altos, para los cuales no parece haber claramente un ganador, ya que ganan casi todas las configuraciones. Hay un problema más: no sabemos exactamente por cuánto gana una profundidad. Vamos a usar el cálculo paralelo que hicimos, la suma de los pesos de cada configuración para las 10.000 instancias, para ver qué tan alejadas están verdaderamente las configuraciones de profundidad.
+\begin{center}
+    \begin{tabular}{ | l | l | l | l |}
+    \hline
+    (x,y)   & 1                 & 2                 & 4 \\ \hline
+    1       & 459037888         & 432225472         & 432218464 \\ \hline
+    2       & 433368064         & 432117408         & 432198464 \\ \hline
+    4       & 432523232         & 432218784         & 432113312 \\
+    \hline
+    \end{tabular}
+\end{center}
+$(4,4)$ logra el menor peso, y $(1,1)$ el peor (siendo $6.23\%$ más pesada). En particular, la primera columna, es decir, las profundidades $(x,1)$ son las tres peores. Pero el resto de las configuraciones no son mucho más pesadas que $(4,4)$ (la más pesada de éstas, $(1,2)$, sólo es un $0.026\%$ más pesada. En particular, $(2,2)$ es la más cercana siendo sólamente $0.0009479\%$ más pesada. Podemos sacar como conclusión que aleatorizar la elección del conjunto es más importante que aleatorizar la elección del vértice a insertar.
+
+Por todo lo anterior, decidimos usar la configuración siguiente:
+\begin{itemize}
+    \item Criterio de parada: iteraciones sin mejora.
+    \item Profundidad elección vértice-conjunto: $(4,4)$.
+\end{itemize}
+
 
 \subsubsection{Test de calidad}
 

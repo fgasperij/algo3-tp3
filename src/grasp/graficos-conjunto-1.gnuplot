@@ -3,11 +3,16 @@ set output "ejercicio-5-configuracion-conjunto-1.jpg"
 set xrange[3:100]
 set yrange[0:110]
 set xtics 5
-set ytics 5
+set ytics 500
+set ytics add ("10" 10)
+set ytics add ("35" 35)
+set ytics add ("50" 50)
+set ytics add ("70" 70)
+set ytics add ("100" 100)
 set xlabel "Cantidad de vértices (n)"
 set ylabel "Configuración de parada por iteraciones"
 set title "Resultados de criterio de parada ganador \n (10,35,50,70 = por iteraciones sin mejora, 100 = por maximo de iteraciones)"
-plot 'resultadosTestConfiguracion-conjunto-1.txt' using 1:2 with lines notitle
+plot 'resultadosTestConfiguracion-conjunto-1.txt' using 1:2 pt 7 notitle
 
 reset
 set terminal jpeg size 800,600
@@ -18,19 +23,19 @@ set xtics 5
 set ytics 500
 set grid ytics
 set style line 100 lt 1 lc rgb "red" lw 2
-set ytics add ("1-1" 1)
-set ytics add ("1-2" 2)
-set ytics add ("1-4" 3)
-set ytics add ("2-1" 4)
-set ytics add ("2-2" 5)
-set ytics add ("2-4" 6)
-set ytics add ("4-1" 7)
-set ytics add ("4-2" 8)
-set ytics add ("4-4" 9)
+set ytics add ("(1,1)" 1)
+set ytics add ("(1,2)" 2)
+set ytics add ("(1,4)" 3)
+set ytics add ("(2,1)" 4)
+set ytics add ("(2,2)" 5)
+set ytics add ("(2,4)" 6)
+set ytics add ("(4,1)" 7)
+set ytics add ("(4,2)" 8)
+set ytics add ("(4,4)" 9)
 set xlabel "Cantidad de vértices (n)"
 set ylabel "Configuración de profundidad vértice-conjunto"
 set title "Resultados de profundidad vértice-conjunto ganadora para cada n"
-plot 'resultadosTestConfiguracionProfundidad_para_graficar-conjunto-1.txt' using 1:2 pt 7 notitle
+plot 'resultadosTestConfiguracion-conjunto-1.txt' using 1:4 pt 7 notitle
 
 reset
 set terminal jpeg size 800,600
@@ -40,7 +45,7 @@ set style data histogram
 # Give the bars a plain fill pattern, and draw a solid line around them.
 set style histogram clustered
 set style fill solid border
-set xlabel "Profundidad de elección vértice-conjunto, cada una yendo de 1 a 4"
+set xlabel "Profundidad de elección vértice-conjunto"
 set ylabel "Cantidad de veces que ganó en calidad"
 set yrange[0:]
 set ytics 1
@@ -79,8 +84,8 @@ plot 'tiemposGrasp-conjunto-1.txt' using 1:($2 / $1) title "Max. iter. = 100 | p
 reset
 set terminal jpeg size 800,600
 set output "ejercicio-5-calidad-todos-conjunto-1.jpg"
-set key top center
-set yrange[0:25]
+set key top left
+set yrange[0:]
 set xtics 1
 set ytics 1
 set grid ytics
@@ -101,7 +106,7 @@ plot 'calidadVsExacto-conjunto-1.txt' using 1:2 with lines title "Límite = 1", 
 reset
 set terminal jpeg size 800,600
 set output "ejercicio-5-calidad-mejores-conjunto-1.jpg"
-set key top center
+set key top left
 set yrange[0:]
 set xtics 1
 set ytics 0.1
@@ -109,8 +114,9 @@ set grid ytics
 set xlabel "Cantidad de vértices (n)"
 set ylabel "Promedio de peso GRASP dividido por peso exacto convertido a porcentaje"
 set title "Calidad de GRASP en función de n y del límite de instancias\nMejores límites\n100*Peso(GRASP)/Peso(Exacto) - 100"
-plot 'calidadVsExacto-conjunto-1.txt' using 1:7 with lines title "Límite = 32", \
-     'calidadVsExacto-conjunto-1.txt' using 1:8 with lines title "Límite = 64", \
-     'calidadVsExacto-conjunto-1.txt' using 1:9 with lines title "Límite = 128", \
+plot 'calidadVsExacto-conjunto-1.txt' using 1:11 with lines title "Límite = 512", \
      'calidadVsExacto-conjunto-1.txt' using 1:10 with lines title "Límite = 256", \
-     'calidadVsExacto-conjunto-1.txt' using 1:11 with lines title "Límite = 512"
+     'calidadVsExacto-conjunto-1.txt' using 1:9 with lines title "Límite = 128", \
+     'calidadVsExacto-conjunto-1.txt' using 1:8 with lines title "Límite = 64", \
+     'calidadVsExacto-conjunto-1.txt' using 1:7 with lines title "Límite = 32"
+

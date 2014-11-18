@@ -3,14 +3,14 @@ Corriendo test de configuracion optima de GRASP . . .
 Mejor configuracion para grafos con n = 3:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 10
-Profundidad de eleccion de vertices = 1
-Profundidad de eleccion de conjuntos = 2
+Profundidad de eleccion de vertices = 4
+Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 4:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 10
-Profundidad de eleccion de vertices = 1
-Profundidad de eleccion de conjuntos = 4
+Profundidad de eleccion de vertices = 2
+Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 5:
 Es mejor parar por iteraciones sin mejora.
@@ -21,30 +21,30 @@ Profundidad de eleccion de conjuntos = 4
 Mejor configuracion para grafos con n = 6:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 10
-Profundidad de eleccion de vertices = 1
+Profundidad de eleccion de vertices = 2
 Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 7:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 35
-Profundidad de eleccion de vertices = 2
-Profundidad de eleccion de conjuntos = 4
+Profundidad de eleccion de vertices = 4
+Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 8:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 35
-Profundidad de eleccion de vertices = 1
-Profundidad de eleccion de conjuntos = 4
+Profundidad de eleccion de vertices = 4
+Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 9:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 35
-Profundidad de eleccion de vertices = 1
+Profundidad de eleccion de vertices = 4
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 10:
 Es mejor parar por iteraciones sin mejora.
-Limite de iteraciones = 50
+Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 1
 Profundidad de eleccion de conjuntos = 4
 
@@ -52,18 +52,18 @@ Mejor configuracion para grafos con n = 11:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 1
-Profundidad de eleccion de conjuntos = 2
+Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 12:
 Es mejor parar por iteraciones sin mejora.
-Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 1
+Limite de iteraciones = 35
+Profundidad de eleccion de vertices = 4
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 13:
 Es mejor parar por iteraciones sin mejora.
-Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 2
+Limite de iteraciones = 50
+Profundidad de eleccion de vertices = 4
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 14:
@@ -74,57 +74,57 @@ Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 15:
 Es mejor parar por iteraciones sin mejora.
-Limite de iteraciones = 50
+Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 4
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 16:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 2
+Profundidad de eleccion de vertices = 4
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 17:
-Es mejor parar por iteraciones sin mejora.
-Limite de iteraciones = 70
+Es mejor parar por maximo de iteraciones.
+Limite de iteraciones = 100
 Profundidad de eleccion de vertices = 4
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 18:
-Es mejor parar por maximo de iteraciones.
-Limite de iteraciones = 100
-Profundidad de eleccion de vertices = 1
-Profundidad de eleccion de conjuntos = 2
-
-Mejor configuracion para grafos con n = 19:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 1
+Profundidad de eleccion de conjuntos = 4
+
+Mejor configuracion para grafos con n = 19:
+Es mejor parar por maximo de iteraciones.
+Limite de iteraciones = 100
+Profundidad de eleccion de vertices = 4
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 20:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 4
-Profundidad de eleccion de conjuntos = 2
+Profundidad de eleccion de vertices = 1
+Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 21:
-Es mejor parar por iteraciones sin mejora.
-Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 2
-Profundidad de eleccion de conjuntos = 4
+Es mejor parar por maximo de iteraciones.
+Limite de iteraciones = 100
+Profundidad de eleccion de vertices = 4
+Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 22:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 2
-Profundidad de eleccion de conjuntos = 2
+Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 23:
 Es mejor parar por maximo de iteraciones.
 Limite de iteraciones = 100
-Profundidad de eleccion de vertices = 2
-Profundidad de eleccion de conjuntos = 4
+Profundidad de eleccion de vertices = 4
+Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 24:
 Es mejor parar por iteraciones sin mejora.
@@ -133,16 +133,16 @@ Profundidad de eleccion de vertices = 4
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 25:
-Es mejor parar por iteraciones sin mejora.
-Limite de iteraciones = 70
+Es mejor parar por maximo de iteraciones.
+Limite de iteraciones = 100
 Profundidad de eleccion de vertices = 1
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 26:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 2
-Profundidad de eleccion de conjuntos = 2
+Profundidad de eleccion de vertices = 1
+Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 27:
 Es mejor parar por iteraciones sin mejora.
@@ -151,51 +151,51 @@ Profundidad de eleccion de vertices = 2
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 28:
-Es mejor parar por maximo de iteraciones.
-Limite de iteraciones = 100
+Es mejor parar por iteraciones sin mejora.
+Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 4
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 29:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 1
+Profundidad de eleccion de vertices = 2
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 30:
-Es mejor parar por maximo de iteraciones.
-Limite de iteraciones = 100
-Profundidad de eleccion de vertices = 1
+Es mejor parar por iteraciones sin mejora.
+Limite de iteraciones = 70
+Profundidad de eleccion de vertices = 4
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 31:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 4
-Profundidad de eleccion de conjuntos = 2
+Profundidad de eleccion de vertices = 2
+Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 32:
+Es mejor parar por iteraciones sin mejora.
+Limite de iteraciones = 70
+Profundidad de eleccion de vertices = 1
+Profundidad de eleccion de conjuntos = 4
+
+Mejor configuracion para grafos con n = 33:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 2
 Profundidad de eleccion de conjuntos = 2
 
-Mejor configuracion para grafos con n = 33:
-Es mejor parar por iteraciones sin mejora.
-Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 1
-Profundidad de eleccion de conjuntos = 4
-
 Mejor configuracion para grafos con n = 34:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 1
-Profundidad de eleccion de conjuntos = 4
+Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 35:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 1
+Profundidad de eleccion de vertices = 2
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 36:
@@ -213,67 +213,67 @@ Profundidad de eleccion de conjuntos = 4
 Mejor configuracion para grafos con n = 38:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 4
-Profundidad de eleccion de conjuntos = 4
+Profundidad de eleccion de vertices = 1
+Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 39:
-Es mejor parar por maximo de iteraciones.
-Limite de iteraciones = 100
-Profundidad de eleccion de vertices = 4
-Profundidad de eleccion de conjuntos = 4
+Es mejor parar por iteraciones sin mejora.
+Limite de iteraciones = 70
+Profundidad de eleccion de vertices = 1
+Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 40:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 1
-Profundidad de eleccion de conjuntos = 4
+Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 41:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 1
+Profundidad de eleccion de vertices = 2
 Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 42:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 2
+Profundidad de eleccion de vertices = 1
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 43:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 1
+Profundidad de eleccion de vertices = 4
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 44:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 4
+Profundidad de eleccion de vertices = 1
 Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 45:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 1
-Profundidad de eleccion de conjuntos = 2
+Profundidad de eleccion de vertices = 2
+Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 46:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 2
+Profundidad de eleccion de vertices = 1
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 47:
-Es mejor parar por iteraciones sin mejora.
-Limite de iteraciones = 70
+Es mejor parar por maximo de iteraciones.
+Limite de iteraciones = 100
 Profundidad de eleccion de vertices = 4
-Profundidad de eleccion de conjuntos = 2
+Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 48:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 4
+Profundidad de eleccion de vertices = 2
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 49:
@@ -283,15 +283,15 @@ Profundidad de eleccion de vertices = 4
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 50:
-Es mejor parar por maximo de iteraciones.
-Limite de iteraciones = 100
-Profundidad de eleccion de vertices = 4
+Es mejor parar por iteraciones sin mejora.
+Limite de iteraciones = 70
+Profundidad de eleccion de vertices = 1
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 51:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 2
+Profundidad de eleccion de vertices = 4
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 52:
@@ -304,91 +304,91 @@ Mejor configuracion para grafos con n = 53:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 4
-Profundidad de eleccion de conjuntos = 2
+Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 54:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 2
-Profundidad de eleccion de conjuntos = 2
+Profundidad de eleccion de vertices = 1
+Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 55:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 2
+Profundidad de eleccion de vertices = 1
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 56:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 4
+Profundidad de eleccion de vertices = 2
 Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 57:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 4
+Profundidad de eleccion de vertices = 2
 Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 58:
 Es mejor parar por iteraciones sin mejora.
-Limite de iteraciones = 50
-Profundidad de eleccion de vertices = 1
+Limite de iteraciones = 70
+Profundidad de eleccion de vertices = 4
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 59:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 2
+Profundidad de eleccion de vertices = 4
 Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 60:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 2
-Profundidad de eleccion de conjuntos = 4
+Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 61:
-Es mejor parar por iteraciones sin mejora.
-Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 2
-Profundidad de eleccion de conjuntos = 2
+Es mejor parar por maximo de iteraciones.
+Limite de iteraciones = 100
+Profundidad de eleccion de vertices = 4
+Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 62:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 1
-Profundidad de eleccion de conjuntos = 4
+Profundidad de eleccion de vertices = 4
+Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 63:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 4
+Profundidad de eleccion de vertices = 2
 Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 64:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 4
-Profundidad de eleccion de conjuntos = 2
+Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 65:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 2
+Profundidad de eleccion de vertices = 1
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 66:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 4
-Profundidad de eleccion de conjuntos = 4
+Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 67:
-Es mejor parar por maximo de iteraciones.
-Limite de iteraciones = 100
+Es mejor parar por iteraciones sin mejora.
+Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 1
-Profundidad de eleccion de conjuntos = 4
+Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 68:
 Es mejor parar por iteraciones sin mejora.
@@ -400,7 +400,7 @@ Mejor configuracion para grafos con n = 69:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 2
-Profundidad de eleccion de conjuntos = 4
+Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 70:
 Es mejor parar por iteraciones sin mejora.
@@ -417,50 +417,50 @@ Profundidad de eleccion de conjuntos = 4
 Mejor configuracion para grafos con n = 72:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 4
+Profundidad de eleccion de vertices = 2
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 73:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 4
-Profundidad de eleccion de conjuntos = 2
-
-Mejor configuracion para grafos con n = 74:
-Es mejor parar por iteraciones sin mejora.
-Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 4
-Profundidad de eleccion de conjuntos = 4
-
-Mejor configuracion para grafos con n = 75:
-Es mejor parar por iteraciones sin mejora.
-Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 2
 Profundidad de eleccion de conjuntos = 4
 
-Mejor configuracion para grafos con n = 76:
-Es mejor parar por iteraciones sin mejora.
-Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 4
-Profundidad de eleccion de conjuntos = 4
-
-Mejor configuracion para grafos con n = 77:
+Mejor configuracion para grafos con n = 74:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 1
 Profundidad de eleccion de conjuntos = 4
 
+Mejor configuracion para grafos con n = 75:
+Es mejor parar por iteraciones sin mejora.
+Limite de iteraciones = 70
+Profundidad de eleccion de vertices = 1
+Profundidad de eleccion de conjuntos = 2
+
+Mejor configuracion para grafos con n = 76:
+Es mejor parar por maximo de iteraciones.
+Limite de iteraciones = 100
+Profundidad de eleccion de vertices = 2
+Profundidad de eleccion de conjuntos = 2
+
+Mejor configuracion para grafos con n = 77:
+Es mejor parar por iteraciones sin mejora.
+Limite de iteraciones = 70
+Profundidad de eleccion de vertices = 2
+Profundidad de eleccion de conjuntos = 2
+
 Mejor configuracion para grafos con n = 78:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 2
-Profundidad de eleccion de conjuntos = 4
+Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 79:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 4
-Profundidad de eleccion de conjuntos = 2
+Profundidad de eleccion de vertices = 2
+Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 80:
 Es mejor parar por iteraciones sin mejora.
@@ -477,110 +477,110 @@ Profundidad de eleccion de conjuntos = 4
 Mejor configuracion para grafos con n = 82:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 2
+Profundidad de eleccion de vertices = 4
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 83:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 1
-Profundidad de eleccion de conjuntos = 4
+Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 84:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 2
+Profundidad de eleccion de vertices = 4
 Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 85:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 2
-Profundidad de eleccion de conjuntos = 2
+Profundidad de eleccion de vertices = 4
+Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 86:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 4
-Profundidad de eleccion de conjuntos = 2
+Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 87:
-Es mejor parar por iteraciones sin mejora.
-Limite de iteraciones = 70
+Es mejor parar por maximo de iteraciones.
+Limite de iteraciones = 100
 Profundidad de eleccion de vertices = 4
-Profundidad de eleccion de conjuntos = 4
+Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 88:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 2
-Profundidad de eleccion de conjuntos = 4
+Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 89:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 4
-Profundidad de eleccion de conjuntos = 2
+Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 90:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 4
-Profundidad de eleccion de conjuntos = 4
+Profundidad de eleccion de vertices = 2
+Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 91:
 Es mejor parar por maximo de iteraciones.
 Limite de iteraciones = 100
 Profundidad de eleccion de vertices = 2
-Profundidad de eleccion de conjuntos = 2
+Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 92:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 1
+Profundidad de eleccion de vertices = 4
 Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 93:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 4
+Profundidad de eleccion de vertices = 2
 Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 94:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 2
-Profundidad de eleccion de conjuntos = 4
+Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 95:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
 Profundidad de eleccion de vertices = 2
-Profundidad de eleccion de conjuntos = 2
+Profundidad de eleccion de conjuntos = 1
 
 Mejor configuracion para grafos con n = 96:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 1
+Profundidad de eleccion de vertices = 2
 Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 97:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 2
+Profundidad de eleccion de vertices = 4
 Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 98:
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 4
-Profundidad de eleccion de conjuntos = 4
+Profundidad de eleccion de vertices = 1
+Profundidad de eleccion de conjuntos = 2
 
 Mejor configuracion para grafos con n = 99:
-Es mejor parar por maximo de iteraciones.
-Limite de iteraciones = 100
-Profundidad de eleccion de vertices = 4
-Profundidad de eleccion de conjuntos = 2
+Es mejor parar por iteraciones sin mejora.
+Limite de iteraciones = 70
+Profundidad de eleccion de vertices = 1
+Profundidad de eleccion de conjuntos = 4
 
 Mejor configuracion para grafos con n = 100:
 Es mejor parar por maximo de iteraciones.
@@ -591,20 +591,66 @@ Profundidad de eleccion de conjuntos = 1
 Resultados
 ==========
 
-Parar por maximo de iteraciones gano 10 veces.
-Parar por iteraciones sin mejora gano 88 veces.
+Iteraciones sin mejora con limite = 10, prof. vert. = 4, prof. conj. = 4. Peso total = 438451840.000000
+Iteraciones sin mejora con limite = 10, prof. vert. = 4, prof. conj. = 2. Peso total = 438713920.000000
+Iteraciones sin mejora con limite = 10, prof. vert. = 4, prof. conj. = 1. Peso total = 438783488.000000
+Iteraciones sin mejora con limite = 10, prof. vert. = 2, prof. conj. = 4. Peso total = 438553792.000000
+Iteraciones sin mejora con limite = 10, prof. vert. = 2, prof. conj. = 2. Peso total = 438571744.000000
+Iteraciones sin mejora con limite = 10, prof. vert. = 2, prof. conj. = 1. Peso total = 439445600.000000
+Iteraciones sin mejora con limite = 10, prof. vert. = 1, prof. conj. = 4. Peso total = 438458528.000000
+Iteraciones sin mejora con limite = 10, prof. vert. = 1, prof. conj. = 2. Peso total = 438461888.000000
+Iteraciones sin mejora con limite = 10, prof. vert. = 1, prof. conj. = 1. Peso total = 459037888.000000
+Iteraciones sin mejora con limite = 35, prof. vert. = 4, prof. conj. = 4. Peso total = 434105088.000000
+Iteraciones sin mejora con limite = 35, prof. vert. = 4, prof. conj. = 2. Peso total = 434185312.000000
+Iteraciones sin mejora con limite = 35, prof. vert. = 4, prof. conj. = 1. Peso total = 434485824.000000
+Iteraciones sin mejora con limite = 35, prof. vert. = 2, prof. conj. = 4. Peso total = 433992320.000000
+Iteraciones sin mejora con limite = 35, prof. vert. = 2, prof. conj. = 2. Peso total = 434173152.000000
+Iteraciones sin mejora con limite = 35, prof. vert. = 2, prof. conj. = 1. Peso total = 435205152.000000
+Iteraciones sin mejora con limite = 35, prof. vert. = 1, prof. conj. = 4. Peso total = 434113824.000000
+Iteraciones sin mejora con limite = 35, prof. vert. = 1, prof. conj. = 2. Peso total = 434204704.000000
+Iteraciones sin mejora con limite = 35, prof. vert. = 1, prof. conj. = 1. Peso total = 459037888.000000
+Iteraciones sin mejora con limite = 50, prof. vert. = 4, prof. conj. = 4. Peso total = 432936064.000000
+Iteraciones sin mejora con limite = 50, prof. vert. = 4, prof. conj. = 2. Peso total = 433125088.000000
+Iteraciones sin mejora con limite = 50, prof. vert. = 4, prof. conj. = 1. Peso total = 433321216.000000
+Iteraciones sin mejora con limite = 50, prof. vert. = 2, prof. conj. = 4. Peso total = 433052640.000000
+Iteraciones sin mejora con limite = 50, prof. vert. = 2, prof. conj. = 2. Peso total = 433092512.000000
+Iteraciones sin mejora con limite = 50, prof. vert. = 2, prof. conj. = 1. Peso total = 434271712.000000
+Iteraciones sin mejora con limite = 50, prof. vert. = 1, prof. conj. = 4. Peso total = 432995360.000000
+Iteraciones sin mejora con limite = 50, prof. vert. = 1, prof. conj. = 2. Peso total = 433127456.000000
+Iteraciones sin mejora con limite = 50, prof. vert. = 1, prof. conj. = 1. Peso total = 459037888.000000
+Iteraciones sin mejora con limite = 70, prof. vert. = 4, prof. conj. = 4. Peso total = 432113312.000000
+Iteraciones sin mejora con limite = 70, prof. vert. = 4, prof. conj. = 2. Peso total = 432218784.000000
+Iteraciones sin mejora con limite = 70, prof. vert. = 4, prof. conj. = 1. Peso total = 432523232.000000
+Iteraciones sin mejora con limite = 70, prof. vert. = 2, prof. conj. = 4. Peso total = 432198464.000000
+Iteraciones sin mejora con limite = 70, prof. vert. = 2, prof. conj. = 2. Peso total = 432117408.000000
+Iteraciones sin mejora con limite = 70, prof. vert. = 2, prof. conj. = 1. Peso total = 433368064.000000
+Iteraciones sin mejora con limite = 70, prof. vert. = 1, prof. conj. = 4. Peso total = 432218464.000000
+Iteraciones sin mejora con limite = 70, prof. vert. = 1, prof. conj. = 2. Peso total = 432225472.000000
+Iteraciones sin mejora con limite = 70, prof. vert. = 1, prof. conj. = 1. Peso total = 459037888.000000
+Maximo de iteraciones con limite  = 100, prof. vert. = 4, prof. conj. = 4. Peso total = 432546848.000000
+Maximo de iteraciones con limite  = 100, prof. vert. = 4, prof. conj. = 2. Peso total = 432737952.000000
+Maximo de iteraciones con limite  = 100, prof. vert. = 4, prof. conj. = 1. Peso total = 432924608.000000
+Maximo de iteraciones con limite  = 100, prof. vert. = 2, prof. conj. = 4. Peso total = 432538176.000000
+Maximo de iteraciones con limite  = 100, prof. vert. = 2, prof. conj. = 2. Peso total = 432649408.000000
+Maximo de iteraciones con limite  = 100, prof. vert. = 2, prof. conj. = 1. Peso total = 433836576.000000
+Maximo de iteraciones con limite  = 100, prof. vert. = 1, prof. conj. = 4. Peso total = 432512704.000000
+Maximo de iteraciones con limite  = 100, prof. vert. = 1, prof. conj. = 2. Peso total = 432732064.000000
+Maximo de iteraciones con limite  = 100, prof. vert. = 1, prof. conj. = 1. Peso total = 459037888.000000
+
+Parar por maximo de iteraciones gano 11 veces.
+Parar por iteraciones sin mejora gano 87 veces.
 La combinacion de profundidades de eleccion vertice-conjunto 1 1 gano 0 veces.
-La combinacion de profundidades de eleccion vertice-conjunto 1 2 gano 8 veces.
-La combinacion de profundidades de eleccion vertice-conjunto 1 4 gano 23 veces.
-La combinacion de profundidades de eleccion vertice-conjunto 2 1 gano 0 veces.
-La combinacion de profundidades de eleccion vertice-conjunto 2 2 gano 13 veces.
-La combinacion de profundidades de eleccion vertice-conjunto 2 4 gano 20 veces.
+La combinacion de profundidades de eleccion vertice-conjunto 1 2 gano 10 veces.
+La combinacion de profundidades de eleccion vertice-conjunto 1 4 gano 18 veces.
+La combinacion de profundidades de eleccion vertice-conjunto 2 1 gano 1 veces.
+La combinacion de profundidades de eleccion vertice-conjunto 2 2 gano 18 veces.
+La combinacion de profundidades de eleccion vertice-conjunto 2 4 gano 14 veces.
 La combinacion de profundidades de eleccion vertice-conjunto 4 1 gano 1 veces.
-La combinacion de profundidades de eleccion vertice-conjunto 4 2 gano 15 veces.
-La combinacion de profundidades de eleccion vertice-conjunto 4 4 gano 18 veces.
+La combinacion de profundidades de eleccion vertice-conjunto 4 2 gano 11 veces.
+La combinacion de profundidades de eleccion vertice-conjunto 4 4 gano 25 veces.
 
 Mejor configuracion general para el total del conjunto de instancias (es decir, la configuracion que dio menor peso para la suma de todas las instancias):
 Es mejor parar por iteraciones sin mejora.
 Limite de iteraciones = 70
-Profundidad de eleccion de vertices = 2
+Profundidad de eleccion de vertices = 4
 Profundidad de eleccion de conjuntos = 4

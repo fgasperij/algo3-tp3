@@ -16,11 +16,9 @@ int MAX_VERTICES;
 const int CANT_REPETICIONES_CALCULO_INSTANCIA = 1;
 
 void testCalidadVsExacto(int max_vertices) { // Requiere max_vertices <= MAX_VERTICES
-    int profVert = 2;
+    int profVert = 4;
     int profConj = 4;
     vector<int> maximoIteraciones = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512};
-    //for (int i = 10; i <= 100; i+=10) 
-        //maximoIteraciones.push_back(i);
     vector<float> promedios(maximoIteraciones.size());
     
     for (int cantVertices = MIN_VERTICES; cantVertices <= max_vertices; cantVertices++) {
@@ -70,6 +68,7 @@ void testConfiguracion() {
     vector<int> profundidadesEleccionConjunto = {1, 2, 4};
     ofstream logFile("testConfiguracion-log.txt");
     ofstream histProfFile("histograma-rcl.txt");
+    ofstream graficosFile("resultadosTestConfiguracion.txt");
     vector<vector<vector<float>>> resultadosParaMaximoIteraciones(paradasMaximoIteraciones.size(), vector<vector<float>>(profundidadesEleccionVertice.size(), vector<float>(profundidadesEleccionConjunto.size())));
     vector<vector<vector<float>>> resultadosParaIteracionesSinMejora(paradasIteracionesSinMejora.size(), vector<vector<float>>(profundidadesEleccionVertice.size(), vector<float>(profundidadesEleccionConjunto.size())));
     vector<vector<vector<float>>> totalResultadosParaMaximoIteraciones(paradasMaximoIteraciones.size(), vector<vector<float>>(profundidadesEleccionVertice.size(), vector<float>(profundidadesEleccionConjunto.size())));
@@ -78,7 +77,7 @@ void testConfiguracion() {
     vector<vector<int>> ganadasProfundidad(profundidadesEleccionVertice.size(), vector<int>(profundidadesEleccionConjunto.size()));
     logFile << "Corriendo test de configuracion optima de GRASP . . ." << endl;
     for (int cantVertices = MIN_VERTICES; cantVertices <= MAX_VERTICES; cantVertices++) {
-        cout << cantVertices << " ";
+        graficosFile << cantVertices << " ";
         for (int instancia = 1; instancia <= CANT_INSTANCIAS; instancia++) {
             int n, m, k, u, v;
             float w;
@@ -121,8 +120,8 @@ void testConfiguracion() {
         int mejorParada = -1, mejorProfVertice = -1, mejorProfConjunto = -1, indiceMejorProfVert = -1, indiceMejorProfConj = -1;
         float mejorPeso = FLT_MAX;
         for (int iterSinM = 0; iterSinM < paradasIteracionesSinMejora.size(); iterSinM++) {
-            for (int profVert = 0; profVert < profundidadesEleccionVertice.size(); profVert++) {
-                for (int profConj = 0; profConj < profundidadesEleccionConjunto.size(); profConj++) {
+            for (int profVert = profundidadesEleccionVertice.size() - 1; profVert >= 0; profVert--) {
+                for (int profConj = profundidadesEleccionConjunto.size() - 1; profConj >= 0 ; profConj--) {
                     if (resultadosParaIteracionesSinMejora[iterSinM][profVert][profConj] < mejorPeso) {
                         mejorParada = paradasIteracionesSinMejora[iterSinM];
                         mejorProfVertice = profundidadesEleccionVertice[profVert];
@@ -135,8 +134,8 @@ void testConfiguracion() {
             }
         }
         for (int maxIter = 0; maxIter < paradasMaximoIteraciones.size(); maxIter++) {
-            for (int profVert = 0; profVert < profundidadesEleccionVertice.size(); profVert++) {
-                for (int profConj = 0; profConj < profundidadesEleccionConjunto.size(); profConj++) {
+            for (int profVert = profundidadesEleccionVertice.size() - 1; profVert >= 0; profVert--) {
+                for (int profConj = profundidadesEleccionConjunto.size() - 1; profConj >= 0 ; profConj--) {
                     if (resultadosParaMaximoIteraciones[maxIter][profVert][profConj] < mejorPeso) {
                         esMejorIteracionesSinMejora = false;
                         mejorParada = paradasMaximoIteraciones[maxIter];
@@ -162,15 +161,18 @@ void testConfiguracion() {
         resultadosParaMaximoIteraciones = vector<vector<vector<float>>>(paradasMaximoIteraciones.size(), vector<vector<float>>(profundidadesEleccionVertice.size(), vector<float>(profundidadesEleccionConjunto.size())));;
         resultadosParaIteracionesSinMejora = vector<vector<vector<float>>>(paradasIteracionesSinMejora.size(), vector<vector<float>>(profundidadesEleccionVertice.size(), vector<float>(profundidadesEleccionConjunto.size())));;
         // Esto imprime: cantVertices limiteIteracionesGanadora mejorProfVertice|mejorProfConjunto indiceProfundidadParaGraficar
-        cout << mejorParada << " " << mejorProfVertice << mejorProfConjunto;
-        cout << " " << indiceMejorProfVert * profundidadesEleccionVertice.size() + indiceMejorProfConj + 1 << endl;
+        graficosFile << mejorParada << " " << mejorProfVertice << mejorProfConjunto;
+        graficosFile << " " << indiceMejorProfVert * profundidadesEleccionVertice.size() + indiceMejorProfConj + 1 << endl;
     }
     bool esMejorIteracionesSinMejora = true;
     int mejorParada = -1, mejorProfVertice = -1, mejorProfConjunto = -1;
     float mejorPeso = FLT_MAX;
+    logFile << endl << "Resultados" << endl;
+    logFile <<         "==========" << endl << endl;
     for (int iterSinM = 0; iterSinM < paradasIteracionesSinMejora.size(); iterSinM++) {
-        for (int profVert = 0; profVert < profundidadesEleccionVertice.size(); profVert++) {
-            for (int profConj = 0; profConj < profundidadesEleccionConjunto.size(); profConj++) {
+        for (int profVert = profundidadesEleccionVertice.size() - 1; profVert >= 0; profVert--) {
+            for (int profConj = profundidadesEleccionConjunto.size() - 1; profConj >= 0 ; profConj--) {
+                logFile << "Iteraciones sin mejora con limite = " << paradasIteracionesSinMejora[iterSinM] << ", prof. vert. = " << profundidadesEleccionVertice[profVert] << ", prof. conj. = " << profundidadesEleccionConjunto[profConj] << ". Peso total = " << fixed << totalResultadosParaIteracionesSinMejora[iterSinM][profVert][profConj] << endl;
                 if (totalResultadosParaIteracionesSinMejora[iterSinM][profVert][profConj] < mejorPeso) {
                     mejorParada = paradasIteracionesSinMejora[iterSinM];
                     mejorProfVertice = profundidadesEleccionVertice[profVert];
@@ -181,8 +183,9 @@ void testConfiguracion() {
         }
     }
     for (int maxIter = 0; maxIter < paradasMaximoIteraciones.size(); maxIter++) {
-        for (int profVert = 0; profVert < profundidadesEleccionVertice.size(); profVert++) {
-            for (int profConj = 0; profConj < profundidadesEleccionConjunto.size(); profConj++) {
+        for (int profVert = profundidadesEleccionVertice.size() - 1; profVert >= 0; profVert--) {
+            for (int profConj = profundidadesEleccionConjunto.size() - 1; profConj >= 0 ; profConj--) {
+                logFile << "Maximo de iteraciones con limite  = " << paradasMaximoIteraciones[maxIter] << ", prof. vert. = " << profundidadesEleccionVertice[profVert] << ", prof. conj. = " << profundidadesEleccionConjunto[profConj] << ". Peso total = " << fixed << totalResultadosParaMaximoIteraciones[maxIter][profVert][profConj] << endl;
                 if (totalResultadosParaMaximoIteraciones[maxIter][profVert][profConj] < mejorPeso) {
                     esMejorIteracionesSinMejora = false;
                     mejorParada = paradasMaximoIteraciones[maxIter];
@@ -193,14 +196,12 @@ void testConfiguracion() {
             }
         }
     }
-    //int ganadoraTotalProfundidad = 0, indiceMejorProfVert = -1, indiceMejorProfConj = -1;
-    logFile << endl << "Resultados" << endl;
-    logFile <<         "==========" << endl << endl;
-    logFile << "Parar por maximo de iteraciones gano " << ganadasPorMaximo << " veces." << endl;
+    //cout.precision(4);
+    logFile << endl << "Parar por maximo de iteraciones gano " << ganadasPorMaximo << " veces." << endl;
     logFile << "Parar por iteraciones sin mejora gano " << ganadasPorSinMejora << " veces." << endl;
     for (int i = 0; i < ganadasProfundidad.size(); i++) {
         for (int j = 0; j < ganadasProfundidad[i].size(); j++) {
-            histProfFile << profundidadesEleccionVertice[i] << profundidadesEleccionConjunto[j] << " " << ganadasProfundidad[i][j] << endl;
+            histProfFile << "(" << profundidadesEleccionVertice[i] << "," << profundidadesEleccionConjunto[j] << ")" << " " << ganadasProfundidad[i][j] << endl;
             logFile << "La combinacion de profundidades de eleccion vertice-conjunto " << profundidadesEleccionVertice[i] << " " << profundidadesEleccionConjunto[j] << " gano " << ganadasProfundidad[i][j] << " veces." << endl;
         }
     }
@@ -211,6 +212,7 @@ void testConfiguracion() {
     logFile << "Profundidad de eleccion de conjuntos = " << mejorProfConjunto << endl;
     logFile.close();
     histProfFile.close();
+    graficosFile.close();
 }
 
 void testTiempoEjecucionGrasp() {
@@ -290,10 +292,10 @@ int main(int argc, char* argv[]) {
     archivoConfiguracion.close();
     srand(time(NULL));
     cout.precision(4);
-    
+
     //testConfiguracion();
     //testTiempoEjecucionGrasp();
-    testCalidadVsExacto(MAX_VERTICES);
+    //testCalidadVsExacto(MAX_VERTICES);
     
     return 0;
 }
