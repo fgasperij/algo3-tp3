@@ -4,7 +4,7 @@
 
 using namespace std;
 
-float node_weight_in_subset(int node, int subset, const vector<set<int> > &partition, const vector<vector<float> > &adym, int except);
+double node_weight_in_subset(int node, int subset, const vector<set<int> > &partition, const vector<vector<double> > &adym, int except);
 
 int main(int argc, char *argv[])
 {
@@ -12,10 +12,10 @@ int main(int argc, char *argv[])
   cin >> n >> m >> k;
 
   // having w((u, v)) = 0 || (u, v) not in E is the same 
-  vector<vector<float> > adym(n, vector<float> (n, 0));
+  vector<vector<double> > adym(n, vector<double> (n, 0));
   int u, v;
-  float w;
-  float total_weight = 0;
+  double w;
+  double total_weight = 0;
   for(int i = 0; i < m; i++) {
     cin >> u >> v >> w;
     adym[u][v] = w;
@@ -34,16 +34,16 @@ int main(int argc, char *argv[])
   while (has_improved) {
     has_improved = false;
     for (int first_node = 0; first_node < n; ++first_node) {
-      float first_node_current_weight = node_weight_in_subset(first_node, node_indexed_partition[first_node], partition, adym, -1);
+      double first_node_current_weight = node_weight_in_subset(first_node, node_indexed_partition[first_node], partition, adym, -1);
       bool swapped = false;
       int second_node = first_node+1;
       while (!swapped && second_node < n) {
         if (node_indexed_partition[second_node] != node_indexed_partition[first_node]) {
           cout << "Considering swapping node " << first_node << " from subset " << node_indexed_partition[first_node] << 
             " for node" << second_node << " on subset " << node_indexed_partition[second_node] << endl;
-          float second_node_current_weight = node_weight_in_subset(second_node, node_indexed_partition[second_node], partition, adym, -1);
-          float first_node_new_weight = node_weight_in_subset(first_node, node_indexed_partition[second_node], partition, adym, second_node);
-          float second_node_new_weight = node_weight_in_subset(second_node, node_indexed_partition[first_node], partition, adym, first_node);
+          double second_node_current_weight = node_weight_in_subset(second_node, node_indexed_partition[second_node], partition, adym, -1);
+          double first_node_new_weight = node_weight_in_subset(first_node, node_indexed_partition[second_node], partition, adym, second_node);
+          double second_node_new_weight = node_weight_in_subset(second_node, node_indexed_partition[first_node], partition, adym, first_node);
           // if what I remove is greater than what I'm adding
           bool swap_improves = (first_node_current_weight+second_node_current_weight) > (first_node_new_weight+second_node_new_weight);
           if (swap_improves) {
@@ -81,9 +81,9 @@ int main(int argc, char *argv[])
   return 0;
 }
 
-float node_weight_in_subset(int node, int subset, const vector<set<int> > &partition, const vector<vector<float> > &adym, int except)
+double node_weight_in_subset(int node, int subset, const vector<set<int> > &partition, const vector<vector<double> > &adym, int except)
 {
-  float node_weight = 0;
+  double node_weight = 0;
   for (set<int>::iterator it = partition[subset].begin(); it != partition[subset].end(); ++it) {
     if (*it != except) {
       node_weight += adym[node][*it];

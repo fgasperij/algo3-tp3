@@ -4,7 +4,7 @@
 
 using namespace std;
 
-float node_weight_in_subset(int node, int subset, const vector<set<int> > &partition, const vector<vector<float> > &adym);
+double node_weight_in_subset(int node, int subset, const vector<set<int> > &partition, const vector<vector<double> > &adym);
 
 int main(int argc, char *argv[])
 {
@@ -12,10 +12,10 @@ int main(int argc, char *argv[])
   cin >> n >> m >> k;
 
   // having w((u, v)) = 0 || (u, v) not in E is the same 
-  vector<vector<float> > adym(n, vector<float> (n, 0));
+  vector<vector<double> > adym(n, vector<double> (n, 0));
   int u, v;
-  float w;
-  float total_weight = 0;
+  double w;
+  double total_weight = 0;
   for(int i = 0; i < m; i++) {
     cin >> u >> v >> w;
     adym[u][v] = w;
@@ -34,14 +34,14 @@ int main(int argc, char *argv[])
   while (has_improved) {
     has_improved = false;
     for (int i = 0; i < n; ++i) {
-      float node_weight_in_current_subset = 
+      double node_weight_in_current_subset = 
         node_weight_in_subset(i, node_indexed_partition[i], partition, adym);
       bool swapped = false;
       int subset = 0;
       while (!swapped && subset < k) {
         if (subset != node_indexed_partition[i]) {
           cout << "Considering swapping node " << i << " from subset " << node_indexed_partition[i] << " to subset " << subset << endl;
-          float node_weight_in_subset_j = node_weight_in_subset(i, subset, partition, adym);
+          double node_weight_in_subset_j = node_weight_in_subset(i, subset, partition, adym);
           if (node_weight_in_current_subset > node_weight_in_subset_j) {
             cout << "FOUND IMPROVEMENT!" << endl;
             cout << " Swapping node " << i << " from subset " << node_indexed_partition[i] << " to subset " << subset << endl;
@@ -72,9 +72,9 @@ int main(int argc, char *argv[])
   return 0;
 }
 
-float node_weight_in_subset(int node, int subset, const vector<set<int> > &partition, const vector<vector<float> > &adym)
+double node_weight_in_subset(int node, int subset, const vector<set<int> > &partition, const vector<vector<double> > &adym)
 {
-  float node_weight = 0;
+  double node_weight = 0;
   for (set<int>::iterator it = partition[subset].begin(); it != partition[subset].end(); ++it) {
     node_weight += adym[node][*it];
   }

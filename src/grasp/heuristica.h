@@ -15,7 +15,7 @@ class Heuristica
         const Grafo & getGrafo() { return grafo_; }
         void setK(int k);
         int getK() { return k_; }
-        float pesoEnSubconjunto(int vertice, std::set<int> & conjuntoVertices);
+        double pesoEnSubconjunto(int vertice, std::set<int> & conjuntoVertices);
         void setProfundidadEleccionVertice(int profundidadEleccionVertice);
         void setProfundidadEleccionConjunto(int profundidadEleccionConjunto);
         
@@ -27,8 +27,8 @@ class Heuristica
     
         Grafo grafo_{0};
         int k_{1};
-        int profundidadEleccionVertice_{3};
-        int profundidadEleccionConjunto_{3};
+        int profundidadEleccionVertice_{4};
+        int profundidadEleccionConjunto_{4};
 };
 
 #endif /* HEURISTICA_H */ 
