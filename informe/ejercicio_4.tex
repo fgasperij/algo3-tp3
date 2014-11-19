@@ -208,6 +208,68 @@ Contamos con la siguiente solución inicial (entre parentesis el peso de cada no
 
 
 \subsection{Análisis de complejidad temporal}
+Sea $n$ la cantidad de vértices del grafo de entrada, y $k$ el parámetro de k-PMP. Vamos a usar el pseudocódigo ya introducido para el cálculo de complejidad de ambos algoritmos. Hay que mencionar que ésta se calcula para el peor caso de una iteración del ciclo más exterior de los algoritmos (\textit{while(hayMejora)}) ya que no podemos determinar cuantas veces se itera sobre este mismo. Lo que si se afirma es que termina cuando encuentra un óptimo local, es decir ninguno de sus vecinos tiene una mejor solución. Se omite la complejidad de la obtención de la solución inicial y se asume como entrada.
+
+\textbf{(A):}
+
+\begin{itemize}
+    \item Linea $5$: seteamos la variable \textit{hayMejora} en $O(1)$
+    \item Linea $6$: iniciamos un ciclo que se repite n veces.
+    \begin{itemize}
+        \item Lineas $7$ y $8$: seteamos variables en $O(1)$
+        \item Linea $9$: Se inicia otro ciclo sobre los subconjuntos que como peor caso se prueba cambiar el nodo a todos los subconjuntos y recorremos los $k$.
+        \begin{itemize}
+            \item Linea $10$: Checkeo booleano del if en $O(1)$
+            \item Lineas $11$, $12$, $13$ y $14$: borrar e insertar nodos de un conjunto cuesta $O(\log n)$ y las asignaciones de variables $O(1)$. 
+
+            Entonces tenemos $2O(\log n) + 2O(1)$
+
+            Cómo peor caso esto ocurre una vez en las $k$ iteraciones ya que hace que salgamos de él.
+            \item Linea $16$: aumentamos una variable en $O(1)$
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+Entonces tenemos:
+\begin{center}
+    $Complejidad(A) = O(1) + n(O(1)+O(k)+2O(\log n)+2O(1)+O(1))$
+
+    $Complejidad(A) = n(max\{O(k),O(\log n)\})$
+
+    $Complejidad(A) = max\{O(nk),O(n\log n)\}$
+\end{center}
+
+\textbf{(B):}
+
+\begin{itemize}
+    \item Linea $5$: seteamos la variable \textit{hayMejora} en $O(1)$
+    \item Linea $6$: iniciamos un ciclo que se repite n veces.
+    \begin{itemize}
+        \item Lineas $7$ y $8$: seteamos variables en $O(1)$
+        \item Linea $9$: Se inicia otro ciclo sobre los nodos (para checkear con quien swappeo) en peor caso se repita $n$ veces.
+        \begin{itemize}
+            \item Linea $10$: Checkea booleano del if en $O(1)$
+            \item Lineas $11$ y $12$: Calcula el valor del peso del nodo en un subconjunto, como peor caso esto toma $O(n)$
+            \item Linea $13$: Checkea booleano del if en $O(1)$
+            \item Lineas $14$ a $19$: Borra e inserta nodos de un subconjunto a otro, cuesta $O(\log n)$ y las asignaciones de variables $O(1)$. 
+
+            Entonces tenemos $4O(\log n) + 2O(1)$
+
+            Cómo peor caso esto ocurre una vez en las $n$ iteraciones ya que hace que salgamos de él.
+            \item Linea $16$: aumentamos una variable en $O(1)$
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+Entonces tenemos:
+\begin{center}
+    $Complejidad(B) = O(1) + n(O(1)+O(n)+4O(\log n)+2O(1)+O(1))$
+
+    $Complejidad(B) = n(max\{O(n),O(\log n)\})$
+
+    $Complejidad(B) = max\{O(n^2),O(n\log n)\}$
+
+    $Complejidad(B) = O(n^2)$
+\end{center}
 
 \subsection{Test de complejidad}
 
