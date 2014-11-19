@@ -4,7 +4,7 @@
 int main(int argc, char* argv[]) {
     srand(time(NULL));
     int n, m, k, u, v;
-    float w;
+    double w;
     std::cin >> n >> m >> k;
     Grafo g(n);
     for (int i = 0; i < m; i++) {

@@ -8,7 +8,7 @@
 
 using namespace std;
 
-float algoritmo_exacto(const vector<vector<float>> & adym, int k);
+double algoritmo_exacto(const vector<vector<double>> & adym, int k);
 
 int CANT_INSTANCIAS;
 int MIN_VERTICES;
@@ -19,25 +19,25 @@ void testCalidadVsExacto(int max_vertices) { // Requiere max_vertices <= MAX_VER
     int profVert = 4;
     int profConj = 4;
     vector<int> maximoIteraciones = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512};
-    vector<float> promedios(maximoIteraciones.size());
+    vector<double> promedios(maximoIteraciones.size());
     
     for (int cantVertices = MIN_VERTICES; cantVertices <= max_vertices; cantVertices++) {
         cout << cantVertices << " ";
         for (int instancia = 1; instancia <= CANT_INSTANCIAS; instancia++) {
             int n, m, k, u, v;
-            float w;
+            double w;
             std::cin >> n >> m >> k;
             Grafo g(n);
-            vector<vector<float>> adym(n, vector<float> (n, 0));
+            vector<vector<double>> adym(n, vector<double> (n, 0));
             for (int i = 0; i < m; i++) {
                 std::cin >> u >> v >> w;
                 g.setPesoArista(u - 1, v - 1, w);
                 adym[u - 1][v - 1] = w;
                 adym[v - 1][u - 1] = w;
             }
-            float pesoExacto = algoritmo_exacto(adym, k);
-            if (pesoExacto < 0.0001) {
-                pesoExacto = 0.0001; // Para evitar divisiones por cero al hacer pesoGrasp / pesoExacto
+            double pesoExacto = algoritmo_exacto(adym, k);
+            if (pesoExacto < 0.1f) {
+                pesoExacto = 0.1f; // Para evitar divisiones por cero al hacer pesoGrasp / pesoExacto
             }
             Heuristica h(g,k);
             for (int i = 0; i < maximoIteraciones.size(); i++) {
@@ -45,12 +45,15 @@ void testCalidadVsExacto(int max_vertices) { // Requiere max_vertices <= MAX_VER
                 grasp.setParadaIteracionesSinMejora(maximoIteraciones[i]);
                 grasp.setProfundidadEleccionVertice(profVert);
                 grasp.setProfundidadEleccionConjunto(profConj);
-                float pesoGrasp = grasp.ejecutar(Grasp::pararPorIteracionesSinMejora);
-                if (pesoGrasp < 0.0001) {
-                    pesoGrasp = 0.0001; // Si fueran ambos pesos 0.0, con esto me aseguro que pesoGrasp / pesoExacto = 1.0
+                double pesoGrasp = grasp.ejecutar(Grasp::pararPorIteracionesSinMejora);
+                if (pesoGrasp < 0.1f) {
+                    pesoGrasp = 0.1f; // Si fueran ambos pesos 0.0, con esto me aseguro que pesoGrasp / pesoExacto = 1.0
                 }
-                promedios[i] += 100.f * pesoGrasp / pesoExacto - 100.f; // Qué tanto más pesada es la solución de la GRASP en relación a la solución óptima, en porcentaje (si pesoGrasp fuera el doble que pesoExacto, daría 100%)
-                //promedio += (pesoGrasp - pesoExacto);
+                double errorRelativo = 100.0 * (pesoGrasp - pesoExacto) / pesoExacto;
+                if (abs(errorRelativo) < 0.1) {
+                    errorRelativo = abs(errorRelativo); // Con esto nos evitamos sumar errores negativos producto del error cálculo inherente a la aritmética finita.
+                }
+                promedios[i] += errorRelativo; // Qué tanto más pesada es la solución de la GRASP en relación a la solución óptima, en porcentaje (si pesoGrasp fuera el doble que pesoExacto, daría 100%).
             }
         }
         for (auto & p : promedios) {
@@ -69,10 +72,10 @@ void testConfiguracion() {
     ofstream logFile("testConfiguracion-log.txt");
     ofstream histProfFile("histograma-rcl.txt");
     ofstream graficosFile("resultadosTestConfiguracion.txt");
-    vector<vector<vector<float>>> resultadosParaMaximoIteraciones(paradasMaximoIteraciones.size(), vector<vector<float>>(profundidadesEleccionVertice.size(), vector<float>(profundidadesEleccionConjunto.size())));
-    vector<vector<vector<float>>> resultadosParaIteracionesSinMejora(paradasIteracionesSinMejora.size(), vector<vector<float>>(profundidadesEleccionVertice.size(), vector<float>(profundidadesEleccionConjunto.size())));
-    vector<vector<vector<float>>> totalResultadosParaMaximoIteraciones(paradasMaximoIteraciones.size(), vector<vector<float>>(profundidadesEleccionVertice.size(), vector<float>(profundidadesEleccionConjunto.size())));
-    vector<vector<vector<float>>> totalResultadosParaIteracionesSinMejora(paradasIteracionesSinMejora.size(), vector<vector<float>>(profundidadesEleccionVertice.size(), vector<float>(profundidadesEleccionConjunto.size())));
+    vector<vector<vector<double>>> resultadosParaMaximoIteraciones(paradasMaximoIteraciones.size(), vector<vector<double>>(profundidadesEleccionVertice.size(), vector<double>(profundidadesEleccionConjunto.size())));
+    vector<vector<vector<double>>> resultadosParaIteracionesSinMejora(paradasIteracionesSinMejora.size(), vector<vector<double>>(profundidadesEleccionVertice.size(), vector<double>(profundidadesEleccionConjunto.size())));
+    vector<vector<vector<double>>> totalResultadosParaMaximoIteraciones(paradasMaximoIteraciones.size(), vector<vector<double>>(profundidadesEleccionVertice.size(), vector<double>(profundidadesEleccionConjunto.size())));
+    vector<vector<vector<double>>> totalResultadosParaIteracionesSinMejora(paradasIteracionesSinMejora.size(), vector<vector<double>>(profundidadesEleccionVertice.size(), vector<double>(profundidadesEleccionConjunto.size())));
     int ganadasPorMaximo = 0, ganadasPorSinMejora = 0;
     vector<vector<int>> ganadasProfundidad(profundidadesEleccionVertice.size(), vector<int>(profundidadesEleccionConjunto.size()));
     logFile << "Corriendo test de configuracion optima de GRASP . . ." << endl;
@@ -80,7 +83,7 @@ void testConfiguracion() {
         graficosFile << cantVertices << " ";
         for (int instancia = 1; instancia <= CANT_INSTANCIAS; instancia++) {
             int n, m, k, u, v;
-            float w;
+            double w;
             std::cin >> n >> m >> k;
             Grafo g(n);
             for (int i = 0; i < m; i++) {
@@ -95,7 +98,7 @@ void testConfiguracion() {
                         grasp.setParadaMaximoIteraciones(paradasMaximoIteraciones[maxIter]);
                         grasp.setProfundidadEleccionVertice(profundidadesEleccionVertice[profVert]);
                         grasp.setProfundidadEleccionConjunto(profundidadesEleccionConjunto[profConj]);
-                        float peso = grasp.ejecutar(Grasp::pararPorMaximoIteraciones);
+                        double peso = grasp.ejecutar(Grasp::pararPorMaximoIteraciones);
                         resultadosParaMaximoIteraciones[maxIter][profVert][profConj] += peso;
                         totalResultadosParaMaximoIteraciones[maxIter][profVert][profConj] += peso;
                     }
@@ -108,7 +111,7 @@ void testConfiguracion() {
                         grasp.setParadaIteracionesSinMejora(paradasIteracionesSinMejora[iterSinM]);
                         grasp.setProfundidadEleccionVertice(profundidadesEleccionVertice[profVert]);
                         grasp.setProfundidadEleccionConjunto(profundidadesEleccionConjunto[profConj]);
-                        float peso = grasp.ejecutar(Grasp::pararPorIteracionesSinMejora);
+                        double peso = grasp.ejecutar(Grasp::pararPorIteracionesSinMejora);
                         resultadosParaIteracionesSinMejora[iterSinM][profVert][profConj] += peso;
                         totalResultadosParaIteracionesSinMejora[iterSinM][profVert][profConj] += peso;
                     }
@@ -118,7 +121,7 @@ void testConfiguracion() {
         // Ahora buscamos la mejor configuracion, es decir, la que dio menor peso total:
         bool esMejorIteracionesSinMejora = true;
         int mejorParada = -1, mejorProfVertice = -1, mejorProfConjunto = -1, indiceMejorProfVert = -1, indiceMejorProfConj = -1;
-        float mejorPeso = FLT_MAX;
+        double mejorPeso = DBL_MAX;
         for (int iterSinM = 0; iterSinM < paradasIteracionesSinMejora.size(); iterSinM++) {
             for (int profVert = profundidadesEleccionVertice.size() - 1; profVert >= 0; profVert--) {
                 for (int profConj = profundidadesEleccionConjunto.size() - 1; profConj >= 0 ; profConj--) {
@@ -158,15 +161,15 @@ void testConfiguracion() {
         logFile << "Limite de iteraciones = " << mejorParada << endl;
         logFile << "Profundidad de eleccion de vertices = " << mejorProfVertice << endl;
         logFile << "Profundidad de eleccion de conjuntos = " << mejorProfConjunto << endl;
-        resultadosParaMaximoIteraciones = vector<vector<vector<float>>>(paradasMaximoIteraciones.size(), vector<vector<float>>(profundidadesEleccionVertice.size(), vector<float>(profundidadesEleccionConjunto.size())));;
-        resultadosParaIteracionesSinMejora = vector<vector<vector<float>>>(paradasIteracionesSinMejora.size(), vector<vector<float>>(profundidadesEleccionVertice.size(), vector<float>(profundidadesEleccionConjunto.size())));;
+        resultadosParaMaximoIteraciones = vector<vector<vector<double>>>(paradasMaximoIteraciones.size(), vector<vector<double>>(profundidadesEleccionVertice.size(), vector<double>(profundidadesEleccionConjunto.size())));;
+        resultadosParaIteracionesSinMejora = vector<vector<vector<double>>>(paradasIteracionesSinMejora.size(), vector<vector<double>>(profundidadesEleccionVertice.size(), vector<double>(profundidadesEleccionConjunto.size())));;
         // Esto imprime: cantVertices limiteIteracionesGanadora mejorProfVertice|mejorProfConjunto indiceProfundidadParaGraficar
         graficosFile << mejorParada << " " << mejorProfVertice << mejorProfConjunto;
         graficosFile << " " << indiceMejorProfVert * profundidadesEleccionVertice.size() + indiceMejorProfConj + 1 << endl;
     }
     bool esMejorIteracionesSinMejora = true;
     int mejorParada = -1, mejorProfVertice = -1, mejorProfConjunto = -1;
-    float mejorPeso = FLT_MAX;
+    double mejorPeso = DBL_MAX;
     logFile << endl << "Resultados" << endl;
     logFile <<         "==========" << endl << endl;
     for (int iterSinM = 0; iterSinM < paradasIteracionesSinMejora.size(); iterSinM++) {
@@ -225,7 +228,7 @@ void testTiempoEjecucionGrasp() {
         vector<vector<int>> tiemposSinMejora = vector<vector<int>>(paradasIteracionesSinMejora.size(), vector<int>(profundidadesRCL.size()));
         for (int instancia = 1; instancia <= CANT_INSTANCIAS; instancia++) {
             int n, m, k, u, v;
-            float w;
+            double w;
             std::cin >> n >> m >> k;
             Grafo g(n);
             for (int i = 0; i < m; i++) {
@@ -295,7 +298,7 @@ int main(int argc, char* argv[]) {
 
     //testConfiguracion();
     //testTiempoEjecucionGrasp();
-    //testCalidadVsExacto(MAX_VERTICES);
+    testCalidadVsExacto(MAX_VERTICES);
     
     return 0;
 }

@@ -27,9 +27,9 @@ struct Partition {
     }
   };
 
-  int weight_in_subset(const vector<vector<float>> &adym, int node, int subset) const
+  double weight_in_subset(const vector<vector<double>> &adym, int node, int subset) const
   {
-    int weight = 0; 
+    double weight = 0; 
     for(list<int>::const_iterator it = partition[subset].begin(); it != partition[subset].end(); it++) {
       weight += adym[node][*it];
     }
@@ -43,7 +43,7 @@ struct Partition {
   };
 
   vector<list<int>> partition;
-  float weight;
+  double weight;
   int subsets_used;
   int allowed_subsets;
 };
@@ -54,7 +54,7 @@ int nodes_left(int n, int current_node)
   return n - current_node;
 }
 
-void kpmp(const vector<vector<float>> &adym, Partition &partition, Partition &min_partition, int node, map<string, bool> &options)
+void kpmp(const vector<vector<double>> &adym, Partition &partition, Partition &min_partition, int node, map<string, bool> &options)
 {
   // check if has added all nodes
   if (node == adym.size()) {
@@ -78,11 +78,11 @@ void kpmp(const vector<vector<float>> &adym, Partition &partition, Partition &mi
   // poda pesada
   if (options["can_improve"]) {
     if (partition.subsets_used == partition.allowed_subsets) {
-      int min_weight_of_adding_rest = 0;
+      double min_weight_of_adding_rest = 0;
       for (int current_node = node; current_node < adym.size(); current_node++) {
-        float min_weight_in_subset = numeric_limits<float>::max();
+        double min_weight_in_subset = numeric_limits<double>::max();
         for (int subset = 0; subset < partition.subsets_used; ++subset) {
-          float current_weight = partition.weight_in_subset(adym, current_node, subset);
+          double current_weight = partition.weight_in_subset(adym, current_node, subset);
           if (current_weight < min_weight_in_subset) {
             min_weight_in_subset = current_weight;
           }
@@ -98,7 +98,7 @@ void kpmp(const vector<vector<float>> &adym, Partition &partition, Partition &mi
 
   // try adding it to every non-empty subset
   for (int subset = 0; subset < partition.subsets_used; ++subset) {
-    float added_weight = partition.weight_in_subset(adym, node, subset);
+    double added_weight = partition.weight_in_subset(adym, node, subset);
     // poda min_weight
     if (options["min_weight"]) {
       if (partition.weight+added_weight < min_partition.weight) {
@@ -133,13 +133,13 @@ void kpmp(const vector<vector<float>> &adym, Partition &partition, Partition &mi
   }
 }
 
-float algoritmo_exacto(const vector<vector<float>> & adym, int k)
+double algoritmo_exacto(const vector<vector<double>> & adym, int k)
 {
   map<string, bool> options = {{"min_weight", true}, {"k_subsets", true}, {"can_improve", true}};
   Partition partition(k, k);
   partition.push_back_to_subset(0, 0);
   Partition min_partition(k, k);
-  min_partition.weight = numeric_limits<float>::max();
+  min_partition.weight = numeric_limits<double>::max();
   kpmp(adym, partition, min_partition, 1, options);
 
   return min_partition.weight;

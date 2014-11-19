@@ -14,7 +14,7 @@ class Grasp
         void setProfundidadEleccionVertice(int profundidadEleccionVertice);
         void setProfundidadEleccionConjunto(int profundidadEleccionConjunto);
         vector<set<int>> getMejorParticion();
-        float ejecutar(int criterioParada);
+        double ejecutar(int criterioParada);
         
         static void imprimirParticion(const std::vector<std::set<int>> & particion, int n);
         
@@ -23,7 +23,7 @@ class Grasp
         static const int pararPorMaximoYPorSinMejora{2};
     private:
         bool parar(int criterio);
-        float pesoParticion(const vector<set<int>> & particion);
+        double pesoParticion(const vector<set<int>> & particion);
         void busquedaLocalUnNodo();
     
         Heuristica h_;
@@ -33,8 +33,8 @@ class Grasp
         unsigned int paradaIteracionesSinMejora_{100};
         unsigned int iteracionActual_{0};
         unsigned int ultimaIteracionConMejora_{0};
-        float pesoParticionActual_{0.f};
-        float pesoMejorParticion_{0.f};
+        double pesoParticionActual_{0.f};
+        double pesoMejorParticion_{0.f};
 };
 
 #endif /* GRASP_H */ 

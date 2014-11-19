@@ -24,12 +24,12 @@ void Grasp::busquedaLocalUnNodo() {
     while (has_improved) {
         has_improved = false;
         for (int i = 0; i < n; ++i) {
-            float node_weight_in_current_subset = h_.pesoEnSubconjunto(i, particionActual_[node_indexed_partition[i]]);
+            double node_weight_in_current_subset = h_.pesoEnSubconjunto(i, particionActual_[node_indexed_partition[i]]);
             bool swapped = false;
             int subset = 0;
             while (!swapped && subset < k) {
                 if (subset != node_indexed_partition[i]) {
-                    float node_weight_in_subset_j = h_.pesoEnSubconjunto(i, particionActual_[subset]);
+                    double node_weight_in_subset_j = h_.pesoEnSubconjunto(i, particionActual_[subset]);
                     if (node_weight_in_current_subset > node_weight_in_subset_j) {
                         particionActual_[node_indexed_partition[i]].erase(i);
                         particionActual_[subset].insert(i);
@@ -58,8 +58,8 @@ bool Grasp::parar(int criterio) {
     }
 }
 
-float Grasp::pesoParticion(const vector<set<int>> & particion) {
-    float res = 0;
+double Grasp::pesoParticion(const vector<set<int>> & particion) {
+    double res = 0;
     for (auto & conjunto : particion) {
         for (auto i = conjunto.begin(); i != conjunto.end(); i++) {
             int v = *i;
@@ -94,7 +94,7 @@ vector<set<int>> Grasp::getMejorParticion() {
     return mejorParticion_;
 }
 
-float Grasp::ejecutar(int criterioParada) { // Ejecuta GRASP hasta que se llegue al criterio de parada y devuelve el minimo peso
+double Grasp::ejecutar(int criterioParada) { // Ejecuta GRASP hasta que se llegue al criterio de parada y devuelve el minimo peso
     cout.precision(4);
     iteracionActual_ = 0;
     ultimaIteracionConMejora_ = 0;

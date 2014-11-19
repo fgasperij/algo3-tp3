@@ -32,12 +32,12 @@ void Heuristica::setProfundidadEleccionConjunto(int profundidadEleccionConjunto)
 
 // Ordena los vertices en el grafo de mayor a menor segun su peso, donde peso de un vertice es la suma de las aristas incidentes
 std::vector<int> Heuristica::ordenarPorPesoEnGrafo() {
-    std::vector<std::pair<int,float>> infoVertices; // Esto guarda las tuplas <vertice, peso(vertice)>
+    std::vector<std::pair<int,double>> infoVertices; // Esto guarda las tuplas <vertice, peso(vertice)>
     int n = grafo_.getCantidadVertices();
     for (int i = 0; i < n; i++) {
         infoVertices.push_back(std::make_pair(i, grafo_.getPesoAristasIncidentes(i)));
     }
-    std::sort(infoVertices.begin(), infoVertices.end(), [](const std::pair<int,float> & a, const std::pair<int,float> & b) { return a.second > b.second; });
+    std::sort(infoVertices.begin(), infoVertices.end(), [](const std::pair<int,double> & a, const std::pair<int,double> & b) { return a.second > b.second; });
     std::vector<int> res;
     for (auto & v : infoVertices) {
         res.push_back(v.first);
@@ -45,8 +45,8 @@ std::vector<int> Heuristica::ordenarPorPesoEnGrafo() {
     return res;
 }
 
-float Heuristica::pesoEnSubconjunto(int vertice, std::set<int> & conjuntoVertices) {
-    float peso = 0;
+double Heuristica::pesoEnSubconjunto(int vertice, std::set<int> & conjuntoVertices) {
+    double peso = 0;
     for (auto & otroVertice : conjuntoVertices) {
         peso += grafo_.getPesoArista(vertice, otroVertice);
     }
@@ -63,7 +63,7 @@ std::vector<std::set<int>> Heuristica::resolverGolosoPuro() {
     } else {
         std::vector<int> verticesOrdenadosPorPeso = ordenarPorPesoEnGrafo();
         for (auto & v : verticesOrdenadosPorPeso) {
-            float mejorPeso = pesoEnSubconjunto(v, res[0]);
+            double mejorPeso = pesoEnSubconjunto(v, res[0]);
             int mejorSubconjunto = 0;
             for (int i = 1; i < k_; i++) {
                 int pesoEnSubconj = pesoEnSubconjunto(v, res[i]);
@@ -87,11 +87,11 @@ std::vector<std::set<int>> Heuristica::resolver() {
         int indicePorRemover = rand() % cantidadVerticesCandidatos;
         int verticeNuevo = verticesOrdenadosPorPeso[indicePorRemover];
         verticesOrdenadosPorPeso.erase(verticesOrdenadosPorPeso.begin() + indicePorRemover);
-        std::vector<std::pair<int,float>> infoConjuntos; // Esto guarda las tuplas <conjunto i, peso del vertice en conjunto i>
+        std::vector<std::pair<int,double>> infoConjuntos; // Esto guarda las tuplas <conjunto i, peso del vertice en conjunto i>
         for (int i = 0; i < k_; i++) {
             infoConjuntos.push_back(std::make_pair(i, pesoEnSubconjunto(verticeNuevo, res[i])));
         }
-        std::sort(infoConjuntos.begin(), infoConjuntos.end(), [] (const std::pair<int,float> & a, const std::pair<int,float> & b) { return a.second < b.second; });
+        std::sort(infoConjuntos.begin(), infoConjuntos.end(), [] (const std::pair<int,double> & a, const std::pair<int,double> & b) { return a.second < b.second; });
         res[infoConjuntos[rand() % cantidadConjuntosCandidatos].first].insert(verticeNuevo);
     }
     return res;
