@@ -19,7 +19,7 @@ typedef int Vertice;
 int CANT_INSTANCIAS;
 int MIN_VERTICES;
 int MAX_VERTICES;
-float MAX_COSTO_ARISTA;
+double MAX_COSTO_ARISTA;
 
 Vertice seleccionarVerticeRandom(const set<Vertice> & conjunto) {
     int i = rand() % conjunto.size();
@@ -64,7 +64,7 @@ int main(int argc, const char* argv[]) {
                     Vertice w = seleccionarVerticeRandom(vecinosPosibles[v]);
                     vecinosPosibles[v].erase(w);
                     vecinosPosibles[w].erase(v);
-                    float weight = MAX_COSTO_ARISTA * (static_cast<float>(rand()) / static_cast<float>(RAND_MAX));
+                    double weight = MAX_COSTO_ARISTA * (static_cast<double>(rand()) / static_cast<double>(RAND_MAX));
                     if (weight == 0.f) { // 0.f es equivalente a no tener arista, hay que arreglarlo
                         weight += 0.0001; // Esto sólo tiene sentido para cout.precision(r) con r >= 4
                     }

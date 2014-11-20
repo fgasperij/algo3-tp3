@@ -51,7 +51,7 @@ void testCalidadVsExacto(int max_vertices) { // Requiere max_vertices <= MAX_VER
                 }
                 double errorRelativo = 100.0 * (pesoGrasp - pesoExacto) / pesoExacto;
                 if (abs(errorRelativo) < 0.1) {
-                    errorRelativo = abs(errorRelativo); // Con esto nos evitamos sumar errores negativos producto del error cálculo inherente a la aritmética finita.
+                    errorRelativo = abs(errorRelativo); // Con esto nos evitamos sumar errores negativos producto del error de cálculo inherente a la aritmética finita.
                 }
                 promedios[i] += errorRelativo; // Qué tanto más pesada es la solución de la GRASP en relación a la solución óptima, en porcentaje (si pesoGrasp fuera el doble que pesoExacto, daría 100%).
             }
@@ -221,7 +221,7 @@ void testConfiguracion() {
 void testTiempoEjecucionGrasp() {
     vector<int> paradasMaximoIteraciones = {100};
     vector<int> paradasIteracionesSinMejora = {70};
-    vector<int> profundidadesRCL = {2, 4}; // Esto pone profundidad vertice-conjunto en 2-2 o en 4-4
+    vector<int> profundidadesRCL = {2, 4}; // Esto pone profundidad vertice-conjunto en (2,2) o en (4,4)
     for (int cantVertices = MIN_VERTICES; cantVertices <= MAX_VERTICES; cantVertices++) {
         cout << cantVertices << " ";
         vector<vector<int>> tiemposMaximo = vector<vector<int>>(paradasMaximoIteraciones.size(), vector<int>(profundidadesRCL.size()));

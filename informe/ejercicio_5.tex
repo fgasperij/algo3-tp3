@@ -96,7 +96,7 @@ La primera observación es que usar de profundidad $(x,1)$ no es conveniente. En
 		\label{fig:ejercicio-5-configuracion-profundidad-conjunto-1}
     \end{minipage}
 \end{figure}
-Podemos ver en el gráfico que $(4,4)$ gana de manera consistente, excepto para los $n$ más altos, para los cuales no parece haber claramente un ganador, ya que ganan casi todas las configuraciones. Hay un problema más: no sabemos exactamente por cuánto gana una profundidad. Vamos a usar el cálculo paralelo que hicimos, la suma de los pesos de cada configuración para las 10.000 instancias, para ver qué tan alejadas están verdaderamente las configuraciones de profundidad.
+Podemos ver en el gráfico que $(4,4)$ gana de manera consistente, excepto para los $n$ más altos, para los cuales no parece haber claramente un ganador, ya que ganan casi todas las configuraciones. Hay un problema más: no sabemos exactamente por cuánto gana una profundidad. Vamos a usar el cálculo paralelo que hicimos, la suma de los pesos de cada configuración para las 10.000 instancias, para ver qué tan alejadas están verdaderamente las configuraciones de profundidad. Veamos los pesos acumulados de iteraciones sin mejora con valor 70 para cada profundidad $(x,y)$:
 \begin{center}
     \begin{tabular}{ | l | l | l | l |}
     \hline
@@ -115,11 +115,54 @@ Por todo lo anterior, decidimos usar la configuración siguiente:
     \item Profundidad elección vértice-conjunto: $(4,4)$.
 \end{itemize}
 
-
 \subsubsection{Test de calidad}
 
-% ESTOY COMPLETANDO ESTO. --Sebastian
+En este test comparamos los pesos de las soluciones dadas por la GRASP con la configuración que elegimos (iteraciones sin mejora y profundidad $(4,4)$), contra los pesos de las soluciones óptimas obtenidas del algoritmo exacto. Lo hicimos hasta $n = 23$ por la complejidad temporal no polinomial del algoritmo exacto. 
+
+Variamos el límite de iteraciones en potencias de 2: tomamos los valores $2^i$ con $i = \{0,1,...,9\}$. Para cada uno, calculamos el promedio de los errores relativos (en porcentaje) de las intancias de $n$ nodos, para $n = \{3,4,...,23\}$. Veamos los resultados:
+
+\begin{figure}[H]
+    \begin{minipage}[t]{\linewidth}
+		\centering
+		\frame{\includegraphics[width=\textwidth]{ejercicio-5-calidad-todos-conjunto-1.jpg}}
+		\label{fig:ejercicio-5-calidad-todos-conjunto-1}
+    \end{minipage}
+\end{figure}
+
+Como era de esperar, a mayor límite de iteraciones, mejor solución devuelve la GRASP. Tomar como límite una sola iteración tiene la peor performance, superando en el peor caso el $17\%$. Además, podemos ver que el error relativo para cualquier valor de iteraciones aumenta con el $n$, lo cual sugiere que no alcanza con fijar un cierto límite si no se sabe la máxima cantidad de vértices que van a tener los grafos de las instancias de entrada.
+
+Veamos más en detalle lo que ocurre con los límites de iteraciones más altos, que dan los mejores resultados:
+
+\begin{figure}[H]
+    \begin{minipage}[t]{\linewidth}
+		\centering
+		\frame{\includegraphics[width=\textwidth]{ejercicio-5-calidad-mejores-conjunto-1.jpg}}
+		\label{fig:ejercicio-5-calidad-mejores-conjunto-1}
+    \end{minipage}
+\end{figure}
+
+Nuevamente notamos que sigue valiendo la observación anterior para los mejores límites, esto es, tienden a crecer con $n$, incluso lo más altos. Solamente usar 512 iteraciones se mantiene por debajo del $0.1\%$, pero conjeturamos que al aumentar $n$, también crecerá y deberá usarse más de 512 iteraciones de límite para obtener una calidad menor a esa cota.
 
 \subsubsection{Test de tiempo de ejecución}
 
-% ESTOY COMPLETANDO ESTO. --Sebastian
+Calculamos los promedios de los tiempos de ejecución para las instancias de cada $n$, con $n = \{3,4,...,100\}$. Lo hicimos para los dos criterios de parada que usamos en el test de configuración, es decir, usamos máximo de iteraciones con límite $100$, e iteraciones sin mejora con límite $70$; y para cada uno, usamos dos profundidades: $(2,2)$ y $(4,4)$. Con esto queremos ver si como supusimos, usar el criterio de iteraciones sin mejora efectivamente hace menos iteraciones para valores bajos $n$, y hace más para valores altos. Además queremos testear si aumentar la profundidad también aumenta los tiempos.
+
+\begin{figure}[H]
+    \begin{minipage}[t]{\linewidth}
+		\centering
+		\frame{\includegraphics[width=\textwidth]{ejercicio-5-tiempos-grasp-conjunto-1.jpg}}
+		\label{fig:ejercicio-5-tiempos-grasp-conjunto-1}
+    \end{minipage}
+\end{figure}
+
+Vemos por un lado que a mayor $n$, el criterio de iteraciones sin mejora con ambas profundidades toma más tiempo que el criterio de iteraciones máximas, y que para cada una de ellas, usar más profundidad lleva también más tiempo. Lo primero lo explicamos con nuestra hipótesis: iteraciones sin mejora hace más iteraciones que el máximo a mayor $n$, y esta es una de las razones por las que termina dando mejores soluciones. Por otro lado, usar más profundidad hace que la golosa aleatorizada provea soluciones más distantes, y que haya más probabilidad de que la búsqueda local las mejore para superar a la mejor partición hasta el momento. Esto sugiere que usar más profundidad genera mejores soluciones. Falta ver qué ocurre para los primeros $n$:
+
+\begin{figure}[H]
+    \begin{minipage}[t]{\linewidth}
+		\centering
+		\frame{\includegraphics[width=\textwidth]{ejercicio-5-tiempos-grasp-primeros-nodos-conjunto-1.jpg}}
+		\label{fig:ejercicio-5-tiempos-grasp-primeros-nodos-conjunto-1}
+    \end{minipage}
+\end{figure}
+
+Como preveíamos, para grafos pequeños termina antes usar iteraciones sin mejora, aunque rápidamente iteraciones sin mejora comienza a superar las 100 iteraciones, y por esto es mayor para $n \geq 9$. La razón por la cual la diferencia es poco apreciable es que estamos usando como límite de iteraciones sin mejora a 70, pero ya vimos en el test de configuración que para valores menores a 15 podríamos usar 10, 35 ó 50 y así ---sin perder calidad--- obtener mayores diferencias en el tiempo de ejecución.
