@@ -128,14 +128,14 @@ El objetivo de esta experimentación es revisar las cotas de complejidad obtenid
 a la luz de resultados empíricos y comparar las diferentes podas para ver cuáles son más eficientes y si 
 resulta beneficioso componerlas. Por composición de podas nos referimos a aplicar más de una, lo cual no necesariamente
 es mejor que aplicar sólo una ya que quizás realizan podas parecidas duplicando el trabajo para podar lo mismo.
-En primer lugar, ejecutamos el algoritmo sin podas para instancias de hasta 12 nodos, ya que con más nodos
+En primer lugar, ejecutamos el algoritmo sin podas para instancias de hasta 11 nodos, ya que con más nodos
 tomaba demasiado tiempo, y dividimos el tiempo por $\sum_{i=0}^ni!$ que era la cota que habíamos
 obtenido para el algoritmo sin podas. Esperamos que la curva se asemeje a una recta constante. Cada instancia
 la corrimos 10 veces y nos quedamos con el tiempo mínimo de las 10 corridas. Para cada $1 \leq n \leq 12$ corrimos
 100 instancias generadas pseudoaleatoriamente y nos quedamos con el promedio de las 100:
 \begin{center}
   \begin{tabular}{ c | c | c | c | c | c}
-    $n$ & sin podas & k subconjuntos & mínimo peso & hay mejora & compuestas \tabularnewline \hline
+    $n$ & sin podas & $k$ subconjuntos & mínimo peso & hay mejora & compuestas \tabularnewline \hline
     3 & 86 & 74 & 70 & 74 & 64 \tabularnewline \hline
     4 & 199 & 148 & 125 & 130 & 118 \tabularnewline \hline
     5 & 525 & 276 & 204 & 203 & 183 \tabularnewline \hline
@@ -147,19 +147,63 @@ la corrimos 10 veces y nos quedamos con el tiempo mínimo de las 10 corridas. Pa
     11 & 4561726 & 160775 & 13322 & 17324 & 6527
   \end{tabular}
 \end{center}
+Donde:
+\begin{description}
+  \item[sin podas] backtracking sin podas.
+  \item[$k$ subconjuntos] aplicamos simultáneamente las podas de no seguir agregando nuevos subconjuntos si ya tenemos
+    $k$ y no generar particiones con menos de $k$ subconjuntos.
+  \item[hay mejora] se refiere a la poda en la que evaluamos si colocando a todos los nodos que restan en sus respectivos
+    subconjuntos en los que aportan el mínimo peso posible se mejoraría el mínimo peso obtenido hasta el momento.
+  \item[compuestas] se efectuaron las 4 podas simultáneamente.
+\end{description}
+
+En esta primer tabla presentamos los tiempos obtenidos en microsegundos ($\mu s$). Decidimos presentar estos resultados
+en forma de tabla y no como un gráfico ya que al sólo poder comparar con pocos valores de $n$, por las restricciones de
+tiempo impuestas por la variante del backtracking \textit{sin podas}, los gráficos reflejan de forma pobre las relaciones
+entre las diferentes podas. Ordenándolas por su performance en estas instancias obtenemos:
+
+\begin{displaymath}
+  compuestas < minimo\text{ }peso < hay\text{ }mejora << k\text{ }subconjuntos << sin\text{ }podas
+\end{displaymath}
+
+Los mayores saltos los encontramos entre \textit{sin podas} y el resto de las podas y entre la poda \textit{k subconjuntos}
+y el resto. Una posible explicación al segundo salto considerado es que la restricción de sólo contar con $k$ subconjutos
+queda implícita en el resto de las podas ya que, como vimos en la sección en la que analizamos cada una por separado,
+necesariamente una solución en la mayoría de los casos cuenta con exactamente $k$ subconjuntos y no con menos. Además, 
+podemos ver que la composición de podas obtuvo la mejor performance, este es un buen indicio de que las podas mejoran
+su performance si se ejecutan en simultáneo. Sin embargo, es necesario realizar comparaciones de a pares para ver 
+si todas realmente mejoran entre sí. Por ejemplo, tomamos \textit{mínimo peso} y \textit{hay mejora}, las corremos 
+en simultáneo y por separado. Luego, comparamos los tiempos para ver si efectivamente se mejoran entre sí. Este
+procedimiento se debería realizar para todos los pares posibles para extraer de alguna forma las podas que de alguna
+forma podan de manera más disjunta posible, es decir que las ramas que podan prácticamente no se superponen.
+
 \begin{center}
   \begin{tabular}{ c | c | c | c | c | c}
-    $n$ & $sin podas - \sum_{i=0}^ni!$ & k subconjuntos & mínimo peso & hay mejora & compuestas \tabularnewline \hline
-    3 & 86 - 9 & 74 & 70 & 74 & 64 \tabularnewline \hline
-    4 & 199 - 24 & 148 & 125 & 130 & 118 \tabularnewline \hline
-    5 & 525 - 153& 276 & 204 & 203 & 183 \tabularnewline \hline
-    6 & 1760 - 873& 557 & 372 & 359 & 324 \tabularnewline \hline 
-    7 & 6906 - 5913 & 1096 & 651 & 561 & 516 \tabularnewline \hline 
-    8 & 30305 - 46233 & 2177 & 1175 & 936 & 886 \tabularnewline \hline
-    9 & 149877 - 409113 & 21016 & 3240 & 5034 & 2133 \tabularnewline \hline
-    10 & 819763 - 4037913 & 62888 & 7192 & 10064 & 4026 \tabularnewline \hline
-    11 & 4561726 - 43954713 & 160775 & 13322 & 17324 & 6527
+    $n$ & sin podas$ / \sum_{i=0}^ni!$ & k subconjuntos (\%) & compuestas (\%) \tabularnewline \hline
+    3 & 9 & 86 & 74 \tabularnewline \hline
+    4 & 8 & 74 & 59 \tabularnewline \hline
+    5 & 3 & 52 & 34 \tabularnewline \hline
+    6 & 2 & 31 & 18 \tabularnewline \hline 
+    7 & 1.16 & 15 & 7 \tabularnewline \hline 
+    8 & 0.6 & 7 & 3 \tabularnewline \hline
+    9 & 0.3 & 14 & 1 \tabularnewline \hline
+    10 & 0.2  & 7 & 0.5 \tabularnewline \hline
+    11 & 0.1 & 3 & 0.1
   \end{tabular}
 \end{center}
-Podemos ver que la curva parece constante pero no  
 
+En esta segunda tabla, en la primer columna tenemos los tiempos de \textit{sin podas} divididos por la cota
+de complejidad obtenida. Vemos que los valores decrecen pero de forma muy lenta. Con tan pocos valores
+no estamos seguros si esto se debe a que la cota de complejidad es demasiado holgada o simplemente es un comportamiento
+que sólo se observa en estos primeros valores de $n$ y luego se mantiene constante. Para obtener más información es necesario
+correr el algoritmo para más valores de $n$. En la segunda y tercer columna tenemos el porcentaje del tiempo entre el tomado
+por una cota con respecto al sin podas:
+\begin{displaymath}
+  \frac{t(con\text{ }poda) \times 100}{t(sin\text{ }podas)}
+\end{displaymath}
+el objetivo de presentar esta información es doble. Por un lado, queríamos ver la gran mejora que puede representar
+aplicar aunque sea sólo una cota con respecto a correr el algoritmo sin ellas y por otro ver más claramente como diferentes
+podas tiene mejor performance que otras. En este caso en particular elegimos comparar \textit{compuestas} porque nos parece
+que lo más interesante es generar más podas e ir comparandolas con las ya obtenidas de a pares como ya explicamos. Si 
+la comparación es favorable querrá decir que agregarla a nuestro set de podas redundará en una mejora de la performance
+y por lo tanto habremos enriquecido nuestra poda compuesta.
