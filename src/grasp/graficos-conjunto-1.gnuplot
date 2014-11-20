@@ -91,7 +91,7 @@ set ytics 1
 set grid ytics
 set xlabel "Cantidad de vértices (n)"
 set ylabel "Error relativo en porcentaje"
-set title "Calidad de GRASP en función de n y del límite de instancias\nTodos los límites"
+set title "Calidad de GRASP en función de n y del límite de iteraciones\nTodos los límites"
 plot 'calidadVsExacto-conjunto-1.txt' using 1:2 with lines title "Límite = 1", \
      'calidadVsExacto-conjunto-1.txt' using 1:3 with lines title "Límite = 2", \
      'calidadVsExacto-conjunto-1.txt' using 1:4 with lines title "Límite = 4", \
@@ -113,7 +113,7 @@ set ytics 0.1
 set grid ytics
 set xlabel "Cantidad de vértices (n)"
 set ylabel "Error relativo en porcentaje"
-set title "Calidad de GRASP en función de n y del límite de instancias\nMejores límites"
+set title "Calidad de GRASP en función de n y del límite de iteraciones\nMejores límites"
 plot 'calidadVsExacto-conjunto-1.txt' using 1:7 with lines title "Límite = 32", \
      'calidadVsExacto-conjunto-1.txt' using 1:8 with lines title "Límite = 64", \
      'calidadVsExacto-conjunto-1.txt' using 1:9 with lines title "Límite = 128", \
