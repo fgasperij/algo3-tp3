@@ -97,19 +97,35 @@ La primera observación es que usar de profundidad $(x,1)$ no es conveniente. En
     \end{minipage}
 \end{figure}
 Podemos ver en el gráfico que $(4,4)$ gana de manera consistente, excepto para los $n$ más altos, para los cuales no parece haber claramente un ganador, ya que ganan casi todas las configuraciones. Hay un problema más: no sabemos exactamente por cuánto gana una profundidad. Vamos a usar el cálculo paralelo que hicimos, la suma de los pesos de cada configuración para las 10.000 instancias, para ver qué tan alejadas están verdaderamente las configuraciones de profundidad. Veamos los pesos acumulados de iteraciones sin mejora con valor 70 para cada profundidad $(x,y)$:
-\begin{center}
-    \begin{tabular}{ | l | l | l | l |}
-    \hline
-    (x,y)   & 1                 & 2                 & 4 \\ \hline
-    1       & 459037888         & 432225472         & 432218464 \\ \hline
-    2       & 433368064         & 432117408         & 432198464 \\ \hline
-    4       & 432523232         & 432218784         & 432113312 \\
-    \hline
-    \end{tabular}
-\end{center}
-$(4,4)$ logra el menor peso, y $(1,1)$ el peor (siendo $6.23\%$ más pesada). En particular, la primera columna, es decir, las profundidades $(x,1)$ son las tres peores. Pero el resto de las configuraciones no son mucho más pesadas que $(4,4)$ (la más pesada de éstas, $(1,2)$, sólo es un $0.026\%$ más pesada. En particular, $(2,2)$ es la más cercana siendo sólamente $0.0009479\%$ más pesada. Podemos sacar como conclusión que aleatorizar la elección del conjunto es más importante que aleatorizar la elección del vértice a insertar.
+\begin{table}[H]
+    \begin{center}
+        \begin{tabular}{ | l | l | l | l |}
+        \hline
+        (x,y)   & 1                 & 2                 & 4 \\ \hline
+        1       & 459037888         & 432225472         & 432218464 \\ \hline
+        2       & 433368064         & 432117408         & 432198464 \\ \hline
+        4       & 432523232         & 432218784         & 432113312 \\
+        \hline
+        \end{tabular}
+        \caption{Peso acumulado para cada configuración}
+    \end{center}
+\end{table}
+\begin{table}[H]
+    \begin{center}
+        \begin{tabular}{ | l | l | l | l |}
+        \hline
+        (x,y)   & 1                 & 2                 & 4 \\ \hline
+        1       & 6.2309\%         & 0.0259\%         & 0.0243\% \\ \hline
+        2       & 0.2903\%         & 0.0009\%         & 0.0197\% \\ \hline
+        4       & 0.0948\%         & 0.0244\%         & 0.0000\% \\
+        \hline
+        \end{tabular}
+        \caption{Error relativo de cada configuración contra el peso de la configuración $(4,4)$}
+    \end{center}
+\end{table}
+$(4,4)$ logra el menor peso, y $(1,1)$ el peor (siendo $6.23\%$ más pesada). En particular, la primera columna, es decir, las profundidades $(x,1)$ son las tres peores. Pero el resto de las configuraciones no son mucho más pesadas que $(4,4)$ (la más pesada de éstas, $(1,2)$, sólo es un $0.026\%$ más pesada. En particular, $(2,2)$ es la más cercana siendo sólamente $0.0009479\%$ más pesada. Si tuviéramos que elegir entre fijar alguna profundidad en 1, y poder variar la otra, claramente podemos sacar como conclusión que aleatorizar la elección del conjunto es más importante que aleatorizar la elección del vértice a insertar. Aunque por otro lado, vemos que aumentar la profundidad de la elección de vértices también mejora las soluciones.
 
-Por todo lo anterior, decidimos usar la configuración siguiente:
+\noindent Por todo lo anterior, decidimos usar la configuración siguiente:
 \begin{itemize}
     \item Criterio de parada: iteraciones sin mejora.
     \item Profundidad elección vértice-conjunto: $(4,4)$.
