@@ -1,0 +1,51 @@
+\section{Introduccion}
+
+\subsection{Objetivos}
+
+El objetivo de este TP es analizar el problema de grafos conocido como K-PMP y algunas t\'ecnicas algor\'itmicas que existen para resolver bien un conjunto de instancias o el problema en general.
+A lo largo de este TP, vamos a analizar primero que es el problema enunciado y luego que formas encontramos para aproximarnos a una soluci\'on para ese problema.
+
+\subsection{Descripci\'on del problema}
+
+El enunciado del problema lo describe as\'i:
+
+Dado un grafo G = (V,E), una funci\'on F:G.V->Reales, funci\'on de peso asociados a sus ejes y dada una particion P del conjunto de nodos, se define las aristas intrapartici\'on como el conjunto de aristas que tienen ambos extremos en un mismo conjunto de alguno de los elementos de P.
+Una k-partici\'on es un partici\'on de los nodos de G, que tiene exactamente k subconjuntos, los cuales podrian ser vacios. Luego el peso de un k-partici\'on es la suma de los pesos de las aristas intrapartici\'on.
+El problema k-PMP pide encontrar un k-partici\'on en G de peso m\'inimo.
+
+\subsubsection{Formalizaci\'on del problema a resolver}
+
+
+Dado un grafo G=(V,E)
+
+Dada una funci\'on F:G.E$\rightarrow$$\mathbb{R} \geq 0$
+
+Dado un k:Nat, k $\geq$ 1.
+
+Se define una particion $S$:Conj(Conj(Nodo)) en k-conjuntos de nodos de G como:
+\begin{align*}
+KP(G,k,S)==TRUE \implies
+|S|=k \wedge (\forall v \in G.V)(\exists S'\in S)(v \in S') \wedge \\
+(\forall p,p':Conj(Nodo))(p \neq p' \wedge p \in S \wedge p' \in S \implies p \cap p' = \emptyset \wedge p \subset G.V \wedge p' \subset G.V)   
+\end{align*}
+
+Se definen el conjunto de aristas intrapartici\'on $C$ de un un k-partici\'on $S$ de G como:
+\begin{align*}
+AI(S) == C \wedge
+(\forall e = (v1,v2), \{v1,v2\} \subseteq G.E)(e \in C \implies \exists s' \in S /  (\{v1,v2\} \subseteq s') 
+\end{align*}
+
+Luego el peso P de una k-partici\'on $S$ es la sumatoria de los pesos del conjunto $C$ de aristas intraparticion.
+\begin{align*}
+AI(S) = C \implies P(C) = \sum_{i}^{|C|}F(C_{i})
+\end{align*}
+
+
+Se solicita hallar S, una k-partici\'on de G tal que sea de peso m\'inimo:
+\begin{align*}
+(\forall S', KP(G,k,S') \implies P(AI(S'))\geq P(AI(S)))
+\end{align*}
+
+\newpage
+
+
