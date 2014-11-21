@@ -2,6 +2,8 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include <chrono>
+#include <climits>
 #include "grafo.h"
 #include "heuristica.h"
 
