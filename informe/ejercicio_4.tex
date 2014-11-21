@@ -90,8 +90,6 @@ Contamos con la siguiente solución inicial (entre parentesis el peso de cada no
   \textbf{Costo total:} 5
 \end{center}
 
-
-
 \begin{minipage}[t]{0.5\linewidth}
     \center{\textbf{(A)}} \\
     \raggedright{
@@ -209,6 +207,7 @@ Contamos con la siguiente solución inicial (entre parentesis el peso de cada no
 
 \subsection{Análisis de complejidad temporal}
 Sea $n$ la cantidad de vértices del grafo de entrada, y $k$ el parámetro de k-PMP. Vamos a usar el pseudocódigo ya introducido para el cálculo de complejidad de ambos algoritmos. Hay que mencionar que ésta se calcula para el peor caso de una iteración del ciclo más exterior de los algoritmos (\textit{while(hayMejora)}) ya que no podemos determinar cuantas veces se itera sobre este mismo. Lo que si se afirma es que termina cuando encuentra un óptimo local, es decir ninguno de sus vecinos tiene una mejor solución. Se omite la complejidad de la obtención de la solución inicial y se asume como entrada.
+\\
 
 \textbf{(A):}
 
@@ -216,7 +215,7 @@ Sea $n$ la cantidad de vértices del grafo de entrada, y $k$ el parámetro de k-
     \item Linea $5$: seteamos la variable \textit{hayMejora} en $O(1)$
     \item Linea $6$: iniciamos un ciclo que se repite n veces.
     \begin{itemize}
-        \item Lineas $7$ y $8$: seteamos variables en $O(1)$
+        \item Lineas $7$ y $8$: seteamos variables en $O(1)$ y calculamos el peso del nodo en cuestión en el subconjunto esto cuesta $O(n)$ (NO EXPLICITO EN EL PSEUDOCODIGO, esto lo hacemos para no calcularlo dentro del siguiente ciclo ya que aumentaria la complejidad.)
         \item Linea $9$: Se inicia otro ciclo sobre los subconjuntos que como peor caso se prueba cambiar el nodo a todos los subconjuntos y recorremos los $k$.
         \begin{itemize}
             \item Linea $10$: Checkeo booleano del if en $O(1)$
@@ -231,11 +230,13 @@ Sea $n$ la cantidad de vértices del grafo de entrada, y $k$ el parámetro de k-
 \end{itemize}
 Entonces tenemos:
 \begin{center}
-    $Complejidad(A) = O(1) + n(O(1)+O(k)+2O(\log n)+2O(1)+O(1))$
+    $Complejidad(A) = O(1) + n(O(1)+O(n)+O(k)+2O(\log n)+2O(1)+O(1))$
 
-    $Complejidad(A) = n(max\{O(k),O(\log n)\})$
+    $Complejidad(A) = n(max\{O(n),O(k),O(\log n)\})$
 
-    $Complejidad(A) = max\{O(nk),O(n\log n)\}$
+    $Complejidad(A) = max\{O(n^2),O(nk),O(n\log n)\}$
+
+    $Complejidad(A) = O(n^2)$
 \end{center}
 
 \textbf{(B):}
@@ -244,7 +245,7 @@ Entonces tenemos:
     \item Linea $5$: seteamos la variable \textit{hayMejora} en $O(1)$
     \item Linea $6$: iniciamos un ciclo que se repite n veces.
     \begin{itemize}
-        \item Lineas $7$ y $8$: seteamos variables en $O(1)$
+        \item Lineas $7$ y $8$: seteamos variables en $O(1)$ y calculamos los pesos de ambos nodos en los dos subconjuntos, esto cuesta $4O(n)$ (esto lo hacemos para no calcularlos dentro del siguiente ciclo.)
         \item Linea $9$: Se inicia otro ciclo sobre los nodos (para checkear con quien swappeo) en peor caso se repita $n$ veces.
         \begin{itemize}
             \item Linea $10$: Checkea booleano del if en $O(1)$
@@ -262,7 +263,7 @@ Entonces tenemos:
 
 Entonces tenemos:
 \begin{center}
-    $Complejidad(B) = O(1) + n(O(1)+O(n)+4O(\log n)+2O(1)+O(1))$
+    $Complejidad(B) = O(1) + n(O(1)+4O(n)+O(n)+4O(\log n)+2O(1)+O(1))$
 
     $Complejidad(B) = n(max\{O(n),O(\log n)\})$
 

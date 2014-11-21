@@ -1,7 +1,68 @@
 \section{Ejercicio 5}
+\subsection{Descripción del algoritmo}
+Una heuristica GRASP es un proceso iterativo, en el cual cada iteración consiste en dos fases, una constructiva, en la cual una posible solución es producida y otra fase con una busqueda local en la cual se encuentra un óptimo local en una vecindad definida por la solución construida en la primera fase.
+La mejor solución obtenida se devuelve como resultado.
+El siguiente pseudocodigo describe el procedimiento de GRASP.
+
+\subsubsection{Pseudocódigo de GRASP}
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+\caption{GRASP(Grafo G, Nat k, Nat maxIter)}
+\STATE mejorSolucion $\leftarrow$ $\infty$
+\WHILE {criterioDeParada(maxIter)}
+    \STATE solucionGolosa $\leftarrow$ HeuristicaGolosaAleatorizada(G,k, etc.)
+    \STATE solucionLocal $\leftarrow$ busquedaLocal(G,k,solucionGolosa,etc.)
+    \IF{solucionLocal $<$ mejorSolucion}
+        \STATE mejorSolucion $\leftarrow$ solucionLocal 
+    \ENDIF
+\ENDWHILE
+\RETURN mejorSolucion
+\end{algorithmic}
+\end{algorithm}
+
+\textit{criterioDeParada} es una función que devuelve cuando para el algoritmo. Las utilizamos para evitar que corra infinitamente y para garantizar una solución en tiempo razonable. 
+
+Implementamos dos criterios:
+\begin{enumerate}
+    \item \textit{Cantidad Máxima de Iteraciones}: el ciclo termina cuando llega a hacer una prefijada cantidad de iteraciones 
+    \item \textit{Iteraciones sin Mejora}: el ciclo termina cuando hace una prefijada cantidad de iteraciones sin mejorar la \textit{mejorSolucion} hasta el momento.
+\end{enumerate} 
+También se puede implementar una combinación de ambas, entonces el ciclo termina cuando ocurre alguna de las dos cosas. (estos criterios son analizados en mayor profundidad en la sección de \textit{Testing}).
+
+GRASP También hace la función \textit{HeuristicaGolosaAleatorizada} para obtener una solución inicial para la posterior optimización de la busqueda local.
+Esta es una modificación de la Heuristica Golosa presentada anteriormente, con ciertas decisiones aleatorizadas.
+
+Presentamos el pseudocódigo de la misma:
+
+\subsubsection{Pseudocódigo de la heurística golosa aleatorizada}
+\begin{algorithm}[H]
+\begin{algorithmic}[1]
+\caption{HeuristicaGolosaAleatorizada(Grafo G, Nat k, Nat profundidadVertice, Nat profundidadConjunto)}
+\STATE Vector$<$Conjunto$<$Nat$>>$ \textbf{conjuntos}(k, vacío)
+\STATE Vector$<$Nat$>$ \textbf{nodosOrdenados} $\leftarrow$ OrdenarNodosPorPesoMayorAMenor(G)
+\STATE Nat $cantidadConjuntosCandidatos$ $\leftarrow$ minimo(k, profundidadConjunto)
+\WHILE {\NOT \textbf{nodosOrdenados}.vacio()}
+    \STATE Nat $cantidadVerticesCandidatos$ $\leftarrow$ minimo(\textbf{nodosOrdenados}.size(), profundidadVertice)
+    \STATE $verticeNuevo$ $\leftarrow$ Elegir de manera aleatoria un nodo de \textbf{nodosOrdenados} entre las primeras $cantidadVerticesCandidatos$ posiciones
+    \STATE Borrar a $verticeNuevo$ de \textbf{nodosOrdenados}
+    \STATE Ordenar \textbf{conjuntos} por el peso del $verticeNuevo$ en ellos de menor a mayor
+    \STATE Elegir de manera aleatoria un $conjunto$ de \textbf{conjuntos} entre los primeras $cantidadConjuntosCandidatos$ posiciones
+    \STATE Insertar $nuevoVertice$ en $conjunto$
+\ENDWHILE
+\RETURN conjuntos
+\end{algorithmic}
+\end{algorithm}
+
+Los puntos claves del algoritmo anterior son en la randomización de elecciones:
+\begin{enumerate}
+    \item \textit{Profundidad de la elección de nodos}: el algoritmo goloso sin randomización ordena decrecientemente los nodos por peso y luego elige siempre el primero para colocarlo en algún subconjunto, pero aquí determinamos un entero $v$ que va a servir como parámetro para elegir aleatoriamente entre los $v$ primeros nodos.
+    \item \textit{Profundidad de la elección de conjuntos}: en la versión sin aleatoriedad siempre se elige colocar el nodo en cuestión dentro del subconjunto en el cual tenga peso mínimo, en cambio en este se determina un entero $s$ que sirve como parámentro para elegir aleatoriamente entre los $s$ subconjuntos donde el nodo tenga el menor peso.
+\end{enumerate} 
+Ademas de que uno elige sobre nodos y el otro sobre conjuntos, la diferencia entre los dos puntos anteriores es que el orden del primer punto se determina al principio del algoritmo y no cambia a lo largo de la ejecución, a diferencia del segundo punto que su orden varia en tiempo de ejecución. Estos items son profundizados en la siguiente sección de \textit{testing}.
+
 
 \subsection{Tests}
-Mostraremos los resultados de varios tests realizados a la GRASP, que introducimos brevemente a continuación:
+Mostraremos los resultados de varios tests realizados a la GRASP, los cuales introducimos brevemente:
 \begin{itemize}
     \item \textbf{Test de configuración}: Dado un conjunto de instancias, busca la mejor configuración de la GRASP, variando criterios de parada y de selección de la lista de candidatos (RCL) de la heurística golosa aleatorizada.
     \item \textbf{Test de calidad}: Para un conjunto reducido de instancias, se compara cuánto más pesada es la solución de la GRASP en relación a la solución óptima, usando la configuración ganadora del test anterior.
