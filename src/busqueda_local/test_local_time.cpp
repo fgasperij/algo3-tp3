@@ -5,7 +5,7 @@
 #include "grafo.h"
 #include "heuristica.h"
 
-#define MAX_N 30
+#define MAX_N 75
 #define MIN_N 3 // this depends on the test.in
 #define INSTANCES_BY_SIZE 100
 
@@ -45,30 +45,30 @@ int main()
       std::chrono::microseconds minTiempoA(INT_MAX);
       for (int i = 0; i < 10; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
-        double peso_a_10n = busqueda_local_nodo_pasa(adym, greedy_partition, 100);
+        busqueda_local_nodo_pasa(adym, greedy_partition, 100);
         auto end_time = std::chrono::high_resolution_clock::now();
         std::chrono::microseconds tiempoRep = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
         if (tiempoRep < minTiempoA) {
             minTiempoA = tiempoRep;
         }
       }
-      tiempos["A"] += minTiempoA;
+      tiempos["A"] += minTiempoA.count();
 
       // ejecutamos B con 10n iteraciones
       std::chrono::microseconds minTiempoB(INT_MAX);
       for (int i = 0; i < 10; ++i) {
         auto start_time = std::chrono::high_resolution_clock::now();
-        double peso_b_10n = busqueda_local_swap(adym, greedy_partition, 100);
+        busqueda_local_swap(adym, greedy_partition, 100);
         auto end_time = std::chrono::high_resolution_clock::now();
         std::chrono::microseconds tiempoRep = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
         if (tiempoRep < minTiempoB) {
             minTiempoB = tiempoRep;
         }
       }
-      tiempos["B"] += minTiempoB;
+      tiempos["B"] += minTiempoB.count();
 
     }
-    ofs_pesos << tiempos["A"]/INSTANCES_BY_SIZE << ' ' <<
+    ofs << tiempos["A"]/INSTANCES_BY_SIZE << ' ' <<
       tiempos["B"]/INSTANCES_BY_SIZE <<  endl;
   }
 

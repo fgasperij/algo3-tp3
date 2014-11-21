@@ -274,11 +274,94 @@ Entonces tenemos:
 
 \subsection{Experimentación de calidad}
 Con esta experimentación nos interesan ver dos cosas:
+
 \begin{enumerate}
   \item cuál de las dos vecindades obtiene soluciones de mejor calidad.
   \item cuál de las dos vecindades \textit{gana} más veces que la otra. 
     Por ganar nos referimos a que obtiene una partición de menor peso.
 \end{enumerate}
 
+Para evaluarlo generamos un set de instancias que se compone de 100 instancias por $n$, siendo
+$n$ la cantidad de nodos de la instancia, con $3 \leq n \leq 22$. La limitante para aumentar más
+el $n$ es que el tiempo del exacto, incluso con todas las podas, crece demasiado rápido y para
+poder saber cuán lejos estaban los pesos obtenidos por las heurísticas de búsqueda local era necesario
+correr el algoritmo exacto. En todas las instancias las búsquedas para las dos vecindades parten de
+la misma partición inicial que es la generada por el goloso sin aleatorización. Creemos que 
+empezar desde la solución obtenida por la golosa se acerca un más al uso real que va a tener en 
+comparación con empezar con una partición completamente aleatoria, por lo cual los resultados que
+obtengamos serán más representativos del comportamiento que vayan a tener en su contexto de uso.
+Los valores graficados se corresponden con los promedios de pesos por instancia. Es necesario
+aclarar que limitamos el número de iteraciones de las dos búsquedas locales a 100. Creemos
+que esto es importante ya que no sólo nos interesa controlar que la calidad de las soluciones que 
+estamos comparando hayan sido obtenidas dentro de el mismo número de iteraciones. De no haber hecho esto
+una de las dos podría haber superado a la otra pero realizando muchas más iteraciones. Sumamos los pesos
+obtenidos para las 100 instancias de cada $n$ y luego tomamos el promedio. El promedio no es un buen 
+indicador en muchos casos ya que no nos habla en general de la dispersión de los resultados. Para
+darnos una idea de cuán estable son los resultados que obtienen cada una de las vecindades necesitaríamos
+obtener también el desvío estándar. Sin embargo, los promedios de las dos vecindades han quedado con error
+relativo pequeño con respecto al peso obtenido por el algoritmo exacto por lo cual el desvío estándar debe ser pequeño
+ya que no pueden haber valores por debajo del exacto para compensar otros muy altos.
+
+\begin{figure}[H]
+		\centering
+		\includegraphics[width=\textwidth]{calidad_trendline.png}
+		\caption{Pesos promedio.}
+		\label{fig:ej3_ejemplo}
+\end{figure}
+
+La distancia entre los pesos obtenidos por las vecindades y el exacto se mantiene parece estar creciendo.
+No obstante, la distancia entre las dos vecindades se mantiene, a simple vista, constante. La vecindad A, que
+corresponde a la que cambia de subconjunto a un nodo, siempre se ubica por debajo de la vecindad B, correspondiente
+a la de swap, pero por un margen muy pequeño. Sobre todo para las instancias donde el $n$ es más grande, superior
+a 15, los resultados dejan de seguir una curva suave lo cual interpretamos que se debe a que 100 instancias a medida
+que el $n$ aumenta deja de ser un valor representativo.
+Además, realizamos un histograma que muestra para cada $n$ qué vecindad obtuvo el menor peso de las dos para cada una
+de las 100 instancias. De esta forma podemos ver más claramente cuál ganó más veces, otro indicador de cuál podría
+llegar a ser superior.
+
+\begin{figure}[H]
+		\centering
+		\includegraphics[width=\textwidth]{calidad_histograma.png}
+		\caption{Instancias ganadas.}
+		\label{fig:ej3_ejemplo}
+\end{figure}
+
+Vemos que la vecindad A comienza con una ampli ventaja sobre la vecindad B pero a medida que el $n$ aumenta
+se va emparejando cada vez más. Ésta es una tendendia que no habíamos podido apreciar en el gráfico de pesos.
+No estamos seguros si se debe a como ya mencionamos la falta de representatividad de las 100 instancias para
+los $n$ más grandes o a que efectivamente la vecindad A obtiene soluciones de mejor calidad en la mayoría de los
+casos.
 
 \subsection{Experimentación de complejidad}
+En esta experimentación simplemente queremos ganar confianza en las cotas de complejidad
+calculadas teóricamente. Recordamos que para la vecindad A (cambio de subconjunto) la cota obtenida
+había sido $O(n^2)$. Lo que hicimos fue correr el mismo conjunto de instancias que para la experimentación
+de calidad pero aumentando el rango de valores de que toma $n$ ya que en este caso no es necesario correr
+el algoritmo exacto que nos limitaba anteriormente. Los tiempos están divididos por $n$.
+
+\begin{figure}[H]
+		\centering
+		\includegraphics[width=\textwidth]{tiempos_vecindad_a.png}
+		\caption{Instancias ganadas.}
+		\label{fig:ej3_ejemplo}
+\end{figure}
+
+Los tiempos parecen presentar un comportamiento bastante definido incluso para valores de $n$ más grandes
+por lo cual creemos que la cota de complejidad se acerca lo suficiente a la real.
+Realizamos lo mismo para la vecindad B (swap). Recordamos que la cota obtenida para ésta vecindad era $O(n^3)$
+por lo cual dividimos los tiempos por $n^2$.
+
+\begin{figure}[H]
+		\centering
+		\includegraphics[width=\textwidth]{tiempos_vecindad_b.png}
+		\caption{Instancias ganadas.}
+		\label{fig:ej3_ejemplo}
+\end{figure}
+
+En este caso vemos que si bien parece que los valores exhiben un crecimiento lineal, a partir de $n = 40$
+esta tendencia se vuelve cada vez más endeble ya que los valores empiezan a presentar turbulencia. Creemos
+que una vez más esto puede deberse a la falta de representatividad de un valor de sólo 100 instancias para
+un número de nodos tan grandes, lo cual podría resultar en instancias muy densas y otras muy simples.
+Concluimos que la vecindad A por tener una complejidad menor y mostrarse levemente superior en cuanto
+a calidad de las soluciones obtenidas con respecto a la vecindad B será una mejor elección para nuestra
+implementación de la metaheurística GRASP.
