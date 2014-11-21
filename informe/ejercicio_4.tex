@@ -263,13 +263,11 @@ Entonces tenemos:
 
 Entonces tenemos:
 \begin{center}
-    $Complejidad(B) = O(1) + n(O(1)+4O(n)+O(n)+4O(\log n)+2O(1)+O(1))$
+  $Complejidad(B) = O(1) + n(O(1)+4O(n)+n(O(n)+4O(\log n)+2O(1))+O(1))$
 
-    $Complejidad(B) = n(max\{O(n),O(\log n)\})$
+  $Complejidad(B) = n(O(n)+O(n^2))$ 
 
-    $Complejidad(B) = max\{O(n^2),O(n\log n)\}$
-
-    $Complejidad(B) = O(n^2)$
+  $Complejidad(B) = O(n^3)$
 \end{center}
 
 \subsection{Experimentación de calidad}
