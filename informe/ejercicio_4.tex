@@ -215,7 +215,7 @@ Sea $n$ la cantidad de vértices del grafo de entrada, y $k$ el parámetro de k-
     \item Linea $5$: seteamos la variable \textit{hayMejora} en $O(1)$
     \item Linea $6$: iniciamos un ciclo que se repite n veces.
     \begin{itemize}
-        \item Lineas $7$ y $8$: seteamos variables en $O(1)$ y calculamos el peso del nodo en cuestión en el subconjunto esto cuesta $O(n)$ (NO EXPLICITO EN EL PSEUDOCODIGO, esto lo hacemos para no calcularlo dentro del siguiente ciclo ya que aumentaria la complejidad.)
+        \item Lineas $7$ y $8$: seteamos variables en $O(1)$ y calculamos el peso del nodo en cuestión en el subconjunto esto cuesta $O(n)$ (si bien no está explícito en el pseudocódigo, realizamos este preproceso para no realizarlo dentro del ciclo siguiente y así aumentar su complejidad innecesariamente.)
         \item Linea $9$: Se inicia otro ciclo sobre los subconjuntos que como peor caso se prueba cambiar el nodo a todos los subconjuntos y recorremos los $k$.
         \begin{itemize}
             \item Linea $10$: Checkeo booleano del if en $O(1)$
