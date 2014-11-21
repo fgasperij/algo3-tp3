@@ -98,7 +98,6 @@ double Grasp::ejecutar(int criterioParada) { // Ejecuta GRASP hasta que se llegu
     cout.precision(4);
     iteracionActual_ = 0;
     ultimaIteracionConMejora_ = 0;
-    //cout << "Peso total del grafo: " << fixed << pesoParticionActual_ << endl;
     while( ! parar(criterioParada) ) {
         iteracionActual_++;
         particionActual_ = h_.resolver();
@@ -110,8 +109,6 @@ double Grasp::ejecutar(int criterioParada) { // Ejecuta GRASP hasta que se llegu
             ultimaIteracionConMejora_ = iteracionActual_;
         }
     }
-    //cout << "Criterio de parada: " << (criterioParada == Grasp::pararPorMaximoIteraciones ? "maximo de iteraciones" : "iteraciones sin mejora") << " - Ultima iteracion: " << iteracionActual_ << endl;
-    //cout << "Mejor peso: " << fixed << pesoMejorParticion_ << endl;
     return pesoMejorParticion_;
 }
 
