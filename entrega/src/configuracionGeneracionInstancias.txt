@@ -1,0 +1,11 @@
+100
+3
+100
+1000.0
+
+Uso (significado de cada valor por linea):
+=========================================
+Cantidad de instancias para cada n
+Minima cantidad de vertices
+Maxima cantidad de vertices
+Maximo costo de las aristas (en float)
