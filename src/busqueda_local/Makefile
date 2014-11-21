@@ -1,18 +1,31 @@
-CC=g++
-SRC=busqueda_local_swap.cpp busqueda_local.cpp
-OBJ=$(SRC:cpp=o)
-OUT=$(SRC:.cpp=)
-.PHONY: clean build
+CXXFLAGS = -std=c++0x -Wall -O3
+CC = clang++
 
-all: clean build
+all: test_local test_time
+	
+test_local: grafo.o heuristica.o test_local.o algoritmo_exacto.o busqueda_local_aislado.o
+	$(CC) $(CXXFLAGS) grafo.o heuristica.o test_local.o algoritmo_exacto.o busqueda_local_aislado.o -o test_local
 
-build: $(OUT)
+test_local: grafo.o heuristica.o test_local.o busqueda_local_aislado.o test_local_time.o
+	$(CC) $(CXXFLAGS) grafo.o heuristica.o test_local.o busqueda_local_aislado.o -o test_time
 
-%: %.o
-	$(CC) -o $<
+test_local_time.o:
+	$(CC) -c $(CXXFLAGS) test_local_time.cpp
 
-%.o: %.cpp
-	$(CC) -c $<
+algoritmo_exacto.o:
+	$(CC) -c $(CXXFLAGS) algoritmo_exacto.cpp
 
-clean: 
-	rm -rf $(OBJ) $(OUT)
+grafo.o: grafo.cpp
+	$(CC) -c $(CXXFLAGS) grafo.cpp
+
+heuristica.o: heuristica.cpp
+	$(CC) -c $(CXXFLAGS) heuristica.cpp
+
+test_local.o: test_local.cpp
+	$(CC) -c $(CXXFLAGS) test_local.cpp
+
+busqueda_local_aislado.o: busqueda_local_aislado.cpp
+	$(CC) -c $(CXXFLAGS) busqueda_local_aislado.cpp
+
+clean:
+	rm -rf *.o

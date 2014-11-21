@@ -272,17 +272,13 @@ Entonces tenemos:
     $Complejidad(B) = O(n^2)$
 \end{center}
 
-\subsection{Test de complejidad}
+\subsection{Experimentación de calidad}
+Con esta experimentación nos interesan ver dos cosas:
+\begin{enumerate}
+  \item cuál de las dos vecindades obtiene soluciones de mejor calidad.
+  \item cuál de las dos vecindades \textit{gana} más veces que la otra. 
+    Por ganar nos referimos a que obtiene una partición de menor peso.
+\end{enumerate}
 
-Construimos 100 instancias aleatorias de grafos de $n$ vértices, para cada $n = {1, ... , 100}$. Para cada instancia, se calculó el tiempo de ejecución de la heurística con parámetro $k = {10, 20, ..., 100}$ cinco veces (tomando el mínimo), para luego calcular el promedio para cada $n$ separando por $k$. Así, para cada $n$ tenemos el tiempo de ejecución promedio de cada $k$. Como esperamos que la complejidad temporal sea $O(n^2)$ se dividió la muestra por $n$, esperando ver una recta, que es lo que efectivamente ocurre. Veamos el gráfico de los resultados del test:
 
-%\begin{figure}[H]
-%    \begin{minipage}[t]{\linewidth}
-%		\centering
-%		\frame{\includegraphics[width=\textwidth]{ejercicio-3-%complejidad-dividida-n.jpg}}
-%		\label{fig:ejercicio_3_complejidad_dividida_n}
-%    \end{minipage}
-%\end{figure}
-%
-%Podemos observar que para cada $n \leq k$, el tiempo dividido por $n$ es una constante, lo cual tiene sentido porque habíamos acotado por $O(k)$ construir la solución trivial, y $O(n) \subseteq O(k)$ porque $n \leq k$. Recién a partir de $n = k+1$ el tiempo dividido $n$ se vuelve apreciable, y como esperábamos es una recta, lo que indica que es $O(n^2)$ como era nuestra hipótesis.
-
+\subsection{Experimentación de complejidad}
