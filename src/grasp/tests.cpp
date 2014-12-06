@@ -5,14 +5,33 @@
 #include <cfloat>
 #include <chrono>
 #include <climits>
+#include <set>
+#include <vector>
 
 using namespace std;
 
 double algoritmo_exacto(const vector<vector<double>> & adym, int k);
 
+double pesoParticion(const Grafo & grafo, vector<set<int>> & particion) {
+    double res = 0;
+    for (auto & conjunto : particion) {
+        for (auto i = conjunto.begin(); i != conjunto.end(); i++) {
+            int v = *i;
+            auto j = i;
+            j++;
+            while (j != conjunto.end()) {
+                res += grafo.getPesoArista(v, *j);
+                j++;
+            }
+        }
+    }
+    return res;
+}
+
 int CANT_INSTANCIAS;
 int MIN_VERTICES;
 int MAX_VERTICES;
+const int EXACTO_MAX_VERTICES = 23;
 const int CANT_REPETICIONES_CALCULO_INSTANCIA = 1;
 
 void testCalidadVsExacto(int max_vertices) { // Requiere max_vertices <= MAX_VERTICES
@@ -289,6 +308,156 @@ void testTiempoEjecucionGrasp() {
     }
 }
 
+void busquedaLocalUnNodo(Heuristica & h, vector<set<int>> particion, double & pesoParticion) {
+    int k = h.getK();
+    int n = h.getGrafo().getCantidadVertices();
+    vector<int> node_indexed_partition(n, 0);
+    for ( int i = 0; i < k; i++) {
+        for (auto & v : particion[i]) {
+            node_indexed_partition[v] = i;
+        }
+    }
+    bool has_improved = true;
+    while (has_improved) {
+        has_improved = false;
+        for (int i = 0; i < n; ++i) {
+            double node_weight_in_current_subset = h.pesoEnSubconjunto(i, particion[node_indexed_partition[i]]);
+            bool swapped = false;
+            int subset = 0;
+            while (!swapped && subset < k) {
+                if (subset != node_indexed_partition[i]) {
+                    double node_weight_in_subset_j = h.pesoEnSubconjunto(i, particion[subset]);
+                    if (node_weight_in_current_subset > node_weight_in_subset_j) {
+                        particion[node_indexed_partition[i]].erase(i);
+                        particion[subset].insert(i);
+                        node_indexed_partition[i] = subset;
+                        pesoParticion = pesoParticion - node_weight_in_current_subset + node_weight_in_subset_j;
+                        has_improved = true;
+                        swapped = true;
+                    }
+                }
+                ++subset;
+            }
+        }
+    }
+}
+
+void testsEjercicioSeis() {
+    int profVert = 4;
+    int profConj = 4;
+    //vector<int> maximoIteraciones = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512};
+    const int limiteIteraciones = 70;
+    double totalPesosExacto = 0.0;
+    double totalPesosGreedyPura = 0.0;
+    double totalPesosGreedyMasLocal = 0.0;
+    double totalPesosGRASP = 0.0;
+    int totalTiemposExacto = 0.0;
+    int totalTiemposGreedyPura = 0.0;
+    int totalTiemposGreedyMasLocal = 0.0;
+    int totalTiemposGRASP = 0.0;
+    
+    for (int cantVertices = MIN_VERTICES; cantVertices <= MAX_VERTICES; cantVertices++) {
+        totalPesosExacto = 0.0;
+        totalPesosGreedyPura = 0.0;
+        totalPesosGreedyMasLocal = 0.0;
+        totalPesosGRASP = 0.0;
+        totalTiemposExacto = 0.0;
+        totalTiemposGreedyPura = 0.0;
+        totalTiemposGreedyMasLocal = 0.0;
+        totalTiemposGRASP = 0.0;
+        
+        cout << cantVertices << " ";
+        
+        for (int instancia = 1; instancia <= CANT_INSTANCIAS; instancia++) {
+            int n, m, k, u, v;
+            double w;
+            std::cin >> n >> m >> k;
+            Grafo g(n);
+            vector<vector<double>> adym(n, vector<double> (n, 0));
+            for (int i = 0; i < m; i++) {
+                std::cin >> u >> v >> w;
+                g.setPesoArista(u - 1, v - 1, w);
+                adym[u - 1][v - 1] = w;
+                adym[v - 1][u - 1] = w;
+            }
+            
+            // Calculo de tiempo de ejecucion y peso del algoritmo exacto:
+            if (cantVertices <= EXACTO_MAX_VERTICES) {
+                double pesoExacto;
+                chrono::microseconds minTiempo(INT_MAX);
+                for (int rep = 1; rep <= CANT_REPETICIONES_CALCULO_INSTANCIA; rep++) {
+                    auto start_time = std::chrono::high_resolution_clock::now();
+                    pesoExacto = algoritmo_exacto(adym, k);
+                    auto end_time = std::chrono::high_resolution_clock::now();
+                    auto tiempoRep = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
+                    if (tiempoRep < minTiempo)
+                        minTiempo = tiempoRep;
+                }
+                totalTiemposExacto += minTiempo.count();
+                totalPesosExacto += pesoExacto;
+            }
+            
+            // Calculo de tiempo de ejecucion y peso de la heuristica golosa constructiva:
+            Heuristica h(g,k);
+            {
+                double pesoGolosaPura;
+                chrono::microseconds minTiempo(INT_MAX);
+                for (int rep = 1; rep <= CANT_REPETICIONES_CALCULO_INSTANCIA; rep++) {
+                    auto start_time = std::chrono::high_resolution_clock::now();
+                    vector<set<int>> solucionGolosaPura = h.resolverGolosoPuro();
+                    pesoGolosaPura = pesoParticion(h.getGrafo(), solucionGolosaPura);
+                    auto end_time = std::chrono::high_resolution_clock::now();
+                    auto tiempoRep = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
+                    if (tiempoRep < minTiempo)
+                        minTiempo = tiempoRep;
+                }
+                totalTiemposGreedyPura += minTiempo.count();
+                totalPesosGreedyPura += pesoGolosaPura;
+            }
+            
+            // Calculo de tiempo de ejecucion y peso de golosa + busqueda local:
+            {
+                double pesoGolosaMasLocal;
+                chrono::microseconds minTiempo(INT_MAX);
+                for (int rep = 1; rep <= CANT_REPETICIONES_CALCULO_INSTANCIA; rep++) {
+                    auto start_time = std::chrono::high_resolution_clock::now();
+                    vector<set<int>> solucionGolosaPura = h.resolverGolosoPuro();
+                    double peso = pesoParticion(h.getGrafo(), solucionGolosaPura);
+                    busquedaLocalUnNodo(h, solucionGolosaPura, peso);
+                    pesoGolosaMasLocal = peso;
+                    auto end_time = std::chrono::high_resolution_clock::now();
+                    auto tiempoRep = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
+                    if (tiempoRep < minTiempo)
+                        minTiempo = tiempoRep;
+                }
+                totalTiemposGreedyMasLocal += minTiempo.count();
+                totalPesosGreedyMasLocal += pesoGolosaMasLocal;
+            }
+            
+            // Calculo de tiempo de ejecucion y peso de GRASP:
+            {
+                double pesoGRASP;
+                chrono::microseconds minTiempo(INT_MAX);
+                for (int rep = 1; rep <= CANT_REPETICIONES_CALCULO_INSTANCIA; rep++) {
+                    auto start_time = std::chrono::high_resolution_clock::now();
+                    Grasp grasp(h);
+                    grasp.setParadaIteracionesSinMejora(limiteIteraciones);
+                    grasp.setProfundidadEleccionVertice(profVert);
+                    grasp.setProfundidadEleccionConjunto(profConj);
+                    pesoGRASP = grasp.ejecutar(Grasp::pararPorIteracionesSinMejora);
+                    auto end_time = std::chrono::high_resolution_clock::now();
+                    auto tiempoRep = std::chrono::duration_cast<std::chrono::microseconds>(end_time - start_time);
+                    if (tiempoRep < minTiempo)
+                        minTiempo = tiempoRep;
+                }
+                totalTiemposGRASP += minTiempo.count();
+                totalPesosGRASP += pesoGRASP;
+            }
+        }
+        cout << fixed << totalPesosExacto << " " << totalPesosGreedyPura << " " << totalPesosGreedyMasLocal << " " << totalPesosGRASP << " " << totalTiemposExacto << " " << totalTiemposGreedyPura << " " << totalTiemposGreedyMasLocal << " " << totalTiemposGRASP << endl;
+    }
+}
+
 int main(int argc, char* argv[]) {
     std::ifstream archivoConfiguracion("../configuracionGeneracionInstancias.txt");
     archivoConfiguracion >> CANT_INSTANCIAS >> MIN_VERTICES >> MAX_VERTICES;
@@ -298,7 +467,8 @@ int main(int argc, char* argv[]) {
 
     //testConfiguracion();
     //testTiempoEjecucionGrasp();
-    testCalidadVsExacto(MAX_VERTICES);
+    //testCalidadVsExacto(MAX_VERTICES);
+    testsEjercicioSeis();
     
     return 0;
 }
