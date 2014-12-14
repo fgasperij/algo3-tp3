@@ -11,7 +11,7 @@
 El único de ellos que nos garantiza que la solución obtenida es óptima, exacta en este caso, es el algoritmo exacto.
 El resto no exploran todo el espacio de soluciones sino que intentan recorrer un subconjunto acotado del mismo,
 guiados por alguna heurística, y extraer la mejor del subconjunto explorado. El algoritmo exacto y el goloso
-no requieren de configuración alguna. La búsqueda local y el GRASP sí requieren configuración y por lo tanto
+no requieren de configuración alguna, en cambio la búsqueda local y el GRASP sí requieren configuración y por lo tanto
 dependiendo de la configuración que se utilice pueden devolver resultados diferentes para la misma instancia.
 % recordar cuáles fueron las mejores configuraciones obtenidas para los configurables
 Por esta razón, en sus respectivas secciones, nos dedicamos a analizar cuáles eran las mejores configuraciones.
@@ -28,7 +28,7 @@ generamos un nuevo conjunto de instancias, diferente al conjunto con el cual fue
 con el cual realizamos las experimentaciones para conseguir las mejores configuraciones. El conjunto de
 instancias con el cual cada uno de los algoritmos fue entrenado no es necesariamente representativo, con
 esto queremos decir que si bien obtuvimos una configuración superior en ese conjunto de instancias, esa
-configuración no será necesariamente superior en otro conjunto de instancias o específicamente en 
+configuración no será necesariamente superior en otro conjunto de instancias o en 
 familias particulares de grafos (instancias). Un claro ejemplo de esto es la familia de instancias
 patológicas que describimos para el algoritmo goloso.
 % aclarar cómo fue generado el nuevo conjunto de instancias
@@ -43,7 +43,7 @@ sobre 100 instancias con una misma cantidad de vértices. El algoritmo exacto s�
 aparece graficado hasta $n=23$ porque para valores mayores toma demasiado tiempo.
 % describir nuestras estimaciones
 Nosotros estimamos que el exacto será el más lento por varios órdenes de magnitud y luego
-vendrán GRASP, el goloso con la búsqueda local y luego el goloso. Creemos que será así
+vendrán GRASP, el goloso con la búsqueda local y por último el goloso sin búsqueda local. Creemos que será así
 porque en cierta forma unos están incluidos en los otros. GRASP ejecuta un goloso aleatorizados
 varias veces y a cada uno le aplica la heurística de búsqueda local, por lo cual en términos
 de costos realiza el mismo trabajo que la heurística de búsqueda local pero muchas veces.
@@ -82,8 +82,8 @@ ya que comparándolos con GRASP parecen constantes.
     \end{minipage}
 \end{figure}
 Finalmente podemos apreciar la diferencia entre el goloso con y sin la búsqueda local. Vemos
-que la búsqueda local no agrega sólo una constante al crecimiento del goloso, más bien aumenta 
-su orden de magnitud ya que su crecimiento es claramente más veloz.
+que la búsqueda local no agrega sólo una constante al crecimiento del goloso, mas bien aumenta por
+lo menos en $n$ su costo ya que  el goloso parece lineal y el goloso con la búsqueda local al menos cuadrático.
 % análisis de los gráficos
 El orden de méritos no presentó sorpresas pero los gráficos sí nos dejaron apreciar las diferencias entre 
 uno y el siguiente. Podemos concluir que los tiempos de ejecución son órdenes de magnitud superiores entre
@@ -114,7 +114,7 @@ mejor las diferencias en este rango en el que contamos con la respuesta exacta.
 Sorprendentemente podemos ver que GRASP, al menos para éste rango de valores, tiene una calidad
 igual que la del exacto. El orden es el que esperábamos pero no así la diferencia entre uno y el otro.
 Sin embargo, parece que la tendencia es que la diferencia entre GRASP y goloso con búsqueda local y
-goloso con búsqueda local y sin aumente junto con $n$.
+goloso con y sin búsqueda local aumente junto con $n$.
 
 \begin{figure}[H]
     \begin{minipage}[t]{\linewidth}
